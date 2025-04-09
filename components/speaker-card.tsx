@@ -10,9 +10,10 @@ interface SpeakerCardProps {
   name: string
   title: string
   organization: string
-  imageUrl: string
+  imageUrl?: string
   websiteUrl?: string
   keynoteTitle: string
+  keynoteDescription?: string
 }
 
 export default function SpeakerCard({
@@ -22,6 +23,7 @@ export default function SpeakerCard({
   imageUrl,
   websiteUrl,
   keynoteTitle,
+  keynoteDescription,
 }: SpeakerCardProps) {
   const [expanded, setExpanded] = useState(false)
 
@@ -46,7 +48,12 @@ export default function SpeakerCard({
 
           <div className="p-6 text-center">
             <div className="relative w-32 h-32 mx-auto mb-4 overflow-hidden rounded-full">
-              <Image src={imageUrl || "/placeholder.svg"} alt={name} fill className="object-cover" />
+              <Image
+                src={imageUrl || "/placeholder.svg?height=128&width=128"}
+                alt={name}
+                fill
+                className="object-cover"
+              />
             </div>
 
             <div className="space-y-1">
@@ -73,6 +80,7 @@ export default function SpeakerCard({
             <div className="p-6 bg-gray-50 border-t">
               <h4 className="font-semibold mb-2">KEYNOTE:</h4>
               <p className="text-sm text-gray-700">{keynoteTitle}</p>
+              {keynoteDescription && <p className="text-sm text-gray-600 mt-2">{keynoteDescription}</p>}
               <div className="mt-4 text-center">
                 <Button variant="outline" size="sm" asChild>
                   <a href="#" className="text-emerald-700">

@@ -1,92 +1,225 @@
 import Image from "next/image"
 
-export default function SponsorSection() {
+interface Sponsor {
+  _id: string
+  name: string
+  logoUrl: string
+  websiteUrl?: string
+  tier: string
+}
+
+interface Partner {
+  _id: string
+  name: string
+  logoUrl: string
+  websiteUrl?: string
+}
+
+interface SponsorSectionProps {
+  sponsors?: Sponsor[]
+  partners?: Partner[]
+}
+
+export default function SponsorSection({ sponsors, partners }: SponsorSectionProps) {
+  // Group sponsors by tier
+  const sponsorsByTier =
+    sponsors?.reduce(
+      (acc, sponsor) => {
+        const tier = sponsor.tier || "other"
+        if (!acc[tier]) {
+          acc[tier] = []
+        }
+        acc[tier].push(sponsor)
+        return acc
+      },
+      {} as Record<string, Sponsor[]>,
+    ) || {}
+
   return (
     <div className="mt-12">
       <h3 className="text-2xl font-bold text-center mb-8">Sponsors</h3>
 
-      <div className="flex flex-wrap justify-center gap-8 mb-12">
-        <a
-          href="https://www.con-terra.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="relative w-40 h-40">
-            <Image src="/images/sponsors/conterra.png" alt="con terra" fill className="object-contain p-2" />
-          </div>
-        </a>
+      {sponsors && sponsors.length > 0 ? (
+        <div className="space-y-8">
+          {/* Platinum Sponsors */}
+          {sponsorsByTier.platinum && sponsorsByTier.platinum.length > 0 && (
+            <div>
+              <h4 className="text-xl font-semibold text-center mb-4">Platinum</h4>
+              <div className="flex flex-wrap justify-center gap-8">
+                {sponsorsByTier.platinum.map((sponsor) => (
+                  <SponsorLogo
+                    key={sponsor._id}
+                    name={sponsor.name}
+                    logoUrl={sponsor.logoUrl}
+                    websiteUrl={sponsor.websiteUrl}
+                    size="large"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
-        <a
-          href="https://www.esri.de/de-de/home"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="relative w-40 h-40">
-            <Image src="/images/sponsors/esri-germany.png" alt="ESRI Germany" fill className="object-contain p-2" />
-          </div>
-        </a>
+          {/* Gold Sponsors */}
+          {sponsorsByTier.gold && sponsorsByTier.gold.length > 0 && (
+            <div>
+              <h4 className="text-xl font-semibold text-center mb-4">Gold</h4>
+              <div className="flex flex-wrap justify-center gap-8">
+                {sponsorsByTier.gold.map((sponsor) => (
+                  <SponsorLogo
+                    key={sponsor._id}
+                    name={sponsor.name}
+                    logoUrl={sponsor.logoUrl}
+                    websiteUrl={sponsor.websiteUrl}
+                    size="large"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
-        <a
-          href="https://52north.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="relative w-40 h-40">
-            <Image src="/images/sponsors/52north.png" alt="52North" fill className="object-contain p-2" />
-          </div>
-        </a>
-      </div>
+          {/* Silver Sponsors */}
+          {sponsorsByTier.silver && sponsorsByTier.silver.length > 0 && (
+            <div>
+              <h4 className="text-xl font-semibold text-center mb-4">Silver</h4>
+              <div className="flex flex-wrap justify-center gap-8">
+                {sponsorsByTier.silver.map((sponsor) => (
+                  <SponsorLogo
+                    key={sponsor._id}
+                    name={sponsor.name}
+                    logoUrl={sponsor.logoUrl}
+                    websiteUrl={sponsor.websiteUrl}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
-      <h3 className="text-2xl font-bold text-center mb-8">Partners</h3>
+          {/* Bronze Sponsors */}
+          {sponsorsByTier.bronze && sponsorsByTier.bronze.length > 0 && (
+            <div>
+              <h4 className="text-xl font-semibold text-center mb-4">Bronze</h4>
+              <div className="flex flex-wrap justify-center gap-8">
+                {sponsorsByTier.bronze.map((sponsor) => (
+                  <SponsorLogo
+                    key={sponsor._id}
+                    name={sponsor.name}
+                    logoUrl={sponsor.logoUrl}
+                    websiteUrl={sponsor.websiteUrl}
+                    size="small"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
-      <div className="flex flex-wrap justify-center gap-8">
-        <a
-          href="https://mastergeotech.info/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="relative w-32 h-32">
-            <Image src="/images/partners/master-geotech.png" alt="Master Geotech" fill className="object-contain" />
-          </div>
-        </a>
+          {/* Other Sponsors */}
+          {sponsorsByTier.other && sponsorsByTier.other.length > 0 && (
+            <div>
+              <h4 className="text-xl font-semibold text-center mb-4">Sponsors</h4>
+              <div className="flex flex-wrap justify-center gap-8">
+                {sponsorsByTier.other.map((sponsor) => (
+                  <SponsorLogo
+                    key={sponsor._id}
+                    name={sponsor.name}
+                    logoUrl={sponsor.logoUrl}
+                    websiteUrl={sponsor.websiteUrl}
+                    size="small"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        // Fallback sponsors if no data from Sanity
+        <div className="flex flex-wrap justify-center gap-8 mb-12">
+          <SponsorLogo
+            name="con terra"
+            logoUrl="/images/sponsors/conterra.png"
+            websiteUrl="https://www.con-terra.com/"
+          />
+          <SponsorLogo
+            name="ESRI Germany"
+            logoUrl="/images/sponsors/esri-germany.png"
+            websiteUrl="https://www.esri.de/de-de/home"
+          />
+          <SponsorLogo name="52North" logoUrl="/images/sponsors/52north.png" websiteUrl="https://52north.org/" />
+        </div>
+      )}
 
-        <a
-          href="http://www.init.uji.es/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="relative w-32 h-32">
-            <Image src="/images/partners/init.png" alt="INIT" fill className="object-contain" />
-          </div>
-        </a>
+      <h3 className="text-2xl font-bold text-center mb-8 mt-16">Partners</h3>
 
-        <a
-          href="https://www.novaims.unl.pt/geotech"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="relative w-32 h-32">
-            <Image src="/images/partners/ims.png" alt="NOVA IMS" fill className="object-contain" />
-          </div>
-        </a>
-
-        <a
-          href="https://www.uni-muenster.de/Geoinformatics/en/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-        >
-          <div className="relative w-32 h-32">
-            <Image src="/images/partners/ifgi.png" alt="IFGI" fill className="object-contain" />
-          </div>
-        </a>
-      </div>
+      {partners && partners.length > 0 ? (
+        <div className="flex flex-wrap justify-center gap-8">
+          {partners.map((partner) => (
+            <SponsorLogo
+              key={partner._id}
+              name={partner.name}
+              logoUrl={partner.logoUrl}
+              websiteUrl={partner.websiteUrl}
+              size="small"
+            />
+          ))}
+        </div>
+      ) : (
+        // Fallback partners if no data from Sanity
+        <div className="flex flex-wrap justify-center gap-8">
+          <SponsorLogo
+            name="Master Geotech"
+            logoUrl="/images/partners/master-geotech.png"
+            websiteUrl="https://mastergeotech.info/"
+            size="small"
+          />
+          <SponsorLogo
+            name="INIT"
+            logoUrl="/images/partners/init.png"
+            websiteUrl="http://www.init.uji.es/"
+            size="small"
+          />
+          <SponsorLogo
+            name="NOVA IMS"
+            logoUrl="/images/partners/ims.png"
+            websiteUrl="https://www.novaims.unl.pt/geotech"
+            size="small"
+          />
+          <SponsorLogo
+            name="IFGI"
+            logoUrl="/images/partners/ifgi.png"
+            websiteUrl="https://www.uni-muenster.de/Geoinformatics/en/"
+            size="small"
+          />
+        </div>
+      )}
     </div>
+  )
+}
+
+interface SponsorLogoProps {
+  name: string
+  logoUrl: string
+  websiteUrl?: string
+  size?: "small" | "medium" | "large"
+}
+
+function SponsorLogo({ name, logoUrl, websiteUrl, size = "medium" }: SponsorLogoProps) {
+  const dimensions = {
+    small: { width: 32, height: 32 },
+    medium: { width: 40, height: 40 },
+    large: { width: 48, height: 48 },
+  }
+
+  const { width, height } = dimensions[size]
+
+  return (
+    <a
+      href={websiteUrl || "#"}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
+    >
+      <div className={`relative w-${width} h-${height}`} style={{ width: `${width * 4}px`, height: `${height * 4}px` }}>
+        <Image src={logoUrl || "/placeholder.svg"} alt={name} fill className="object-contain p-2" />
+      </div>
+    </a>
   )
 }
