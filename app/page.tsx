@@ -74,11 +74,11 @@ export default async function Home() {
           </div>
           <div className="flex items-center justify-center gap-2 mb-6">
             <MapPin className="h-5 w-5" />
-            <h3 className="text-lg md:text-xl font-bold">{siteSettings?.conferenceLocation || "Münster, Germany"}</h3>
+            <h3 className="text-lg md:text-xl font-bold">{siteSettings?.conferenceLocation || "Lisbon, Portugal"}</h3>
           </div>
           <h3 className="text-lg md:text-xl mb-8">
             {siteSettings?.heroMessage || "To our participants all over the globe, "}
-            <span className="text-yellow-300">See you in Germany!</span>
+            <span className="text-yellow-300">See you in Portugal!</span>
           </h3>
           <Button asChild size="lg" className="bg-white text-emerald-800 hover:bg-gray-100">
             <Link href="#info">
