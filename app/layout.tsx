@@ -2,33 +2,31 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "@/components/navbar"
+import { cachedClient } from "@/lib/sanity.client"
+import { siteSettingsQuery } from "@/lib/sanity.queries"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "GeoMundus 2024",
+  title: "GeoMundus",
   description: "A Conference on Geospatial Technologies, Geoinformatics & GI Applications",
-    generator: 'v0.dev'
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+
+  const siteSettings = (await cachedClient(siteSettingsQuery))
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Navbar />
+          <Navbar siteSettings={siteSettings}/>
           {children}
-        </ThemeProvider>
       </body>
     </html>
   )
 }
-
-
-import './globals.css'

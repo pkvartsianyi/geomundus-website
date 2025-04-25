@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 
 interface Sponsor {
   _id: string
@@ -211,7 +212,7 @@ function SponsorLogo({ name, logoUrl, websiteUrl, size = "medium" }: SponsorLogo
   const { width, height } = dimensions[size]
 
   return (
-    <a
+    <Link
       href={websiteUrl || "#"}
       target="_blank"
       rel="noopener noreferrer"
@@ -220,6 +221,6 @@ function SponsorLogo({ name, logoUrl, websiteUrl, size = "medium" }: SponsorLogo
       <div className={`relative w-${width} h-${height}`} style={{ width: `${width * 4}px`, height: `${height * 4}px` }}>
         <Image src={logoUrl || "/placeholder.svg"} alt={name} fill className="object-contain p-2" />
       </div>
-    </a>
+    </Link>
   )
 }

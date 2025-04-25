@@ -3,7 +3,7 @@ The GeoMundus Conference is a free international conference organized by student
 
 The conference brings together students, researchers, and professionals from the broader geospatial community for a unique collaborative experience. The aim is to share state of the art scientific research, knowledge, and skills in the fields of Geospatial Technologies, Geoinformatics, and Geosciences.
 
-This repository contains all the code of the <a href = "https://geomundus.org/2024/"> website of the 16th GeoMundus Conference</a>, which will be hosted at IFGI by students of the M.Sc. in Geospatial Technologies on October 25th and 26th, 2024.
+This repository contains all the code of the <Link href = "https://geomundus.org/2024/"> website of the 16th GeoMundus Conference</Link>, which will be hosted at IFGI by students of the M.Sc. in Geospatial Technologies on October 25th and 26th, 2024.
 
 ## 2025 Web Team
 

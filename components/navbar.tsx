@@ -1,33 +1,41 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+interface SiteSettings {
+  logo: any;
+  title: string;
+}
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+interface NavbarProps {
+  siteSettings: SiteSettings | null;
+}
+
+export default function Navbar({ siteSettings }: NavbarProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
-        setIsScrolled(true)
+        setIsScrolled(true);
       } else {
-        setIsScrolled(false)
+        setIsScrolled(false);
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <header
@@ -38,13 +46,23 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <Image
-              src={isScrolled ? "/images/logo.png" : "/images/white-logo.png"}
-              alt="GeoMundus Logo"
-              width={150}
-              height={50}
-              className="h-10 w-auto"
-            />
+            {siteSettings && siteSettings.logo ? (
+              <Image
+                src={siteSettings.logo || "/images/white-logo.png"}
+                alt={siteSettings?.title || "GeoMundus Logo"}
+                width={150}
+                height={50}
+                className="h-10 w-auto"
+              />
+            ) : (
+              <Image
+                src={"/images/white-logo.png"}
+                alt={"GeoMundus Logo"}
+                width={150}
+                height={50}
+                className="h-10 w-auto"
+              />
+            )}
           </Link>
 
           {/* Desktop Navigation */}
@@ -113,30 +131,32 @@ export default function Navbar() {
         </div>
       )}
     </header>
-  )
+  );
 }
 
 interface NavLinkProps {
-  href: string
-  children: React.ReactNode
-  isScrolled: boolean
+  href: string;
+  children: React.ReactNode;
+  isScrolled: boolean;
 }
 
 function NavLink({ href, children, isScrolled }: NavLinkProps) {
   return (
     <Link
       href={href}
-      className={`font-medium hover:text-emerald-700 transition-colors ${isScrolled ? "text-gray-800" : "text-white"}`}
+      className={`font-medium hover:text-emerald-700 transition-colors ${
+        isScrolled ? "text-gray-800" : "text-white"
+      }`}
     >
       {children}
     </Link>
-  )
+  );
 }
 
 interface MobileNavLinkProps {
-  href: string
-  children: React.ReactNode
-  onClick: () => void
+  href: string;
+  children: React.ReactNode;
+  onClick: () => void;
 }
 
 function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
@@ -148,5 +168,5 @@ function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
     >
       {children}
     </Link>
-  )
+  );
 }

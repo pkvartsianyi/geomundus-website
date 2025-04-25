@@ -5,6 +5,7 @@ import Image from "next/image"
 import { ExternalLink, Plus, Minus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import Link from "next/link"
 
 interface SpeakerCardProps {
   name: string
@@ -60,7 +61,7 @@ export default function SpeakerCard({
               <h3 className="font-semibold text-lg flex items-center justify-center gap-1">
                 {name}
                 {websiteUrl && (
-                  <a
+                  <Link
                     href={websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -68,7 +69,7 @@ export default function SpeakerCard({
                   >
                     <ExternalLink className="h-4 w-4" />
                     <span className="sr-only">Website</span>
-                  </a>
+                  </Link>
                 )}
               </h3>
               <p className="text-sm text-gray-600">{title}</p>
@@ -83,9 +84,9 @@ export default function SpeakerCard({
               {keynoteDescription && <p className="text-sm text-gray-600 mt-2">{keynoteDescription}</p>}
               <div className="mt-4 text-center">
                 <Button variant="outline" size="sm" asChild>
-                  <a href="#" className="text-emerald-700">
+                  <Link href="#" className="text-emerald-700">
                     Read details
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>
