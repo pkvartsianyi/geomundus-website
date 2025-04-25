@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ExternalLink, Plus, Minus } from "lucide-react"
+import { LuExternalLink, LuPlus, LuMinus } from "react-icons/lu"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
@@ -28,6 +28,9 @@ export default function SpeakerCard({
 }: SpeakerCardProps) {
   const [expanded, setExpanded] = useState(false)
 
+  // Use a placeholder or handle missing imageUrl more gracefully
+  const resolvedImageUrl = imageUrl || "/placeholder.svg?height=128&width=128"; // You should have a placeholder image
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
@@ -40,9 +43,9 @@ export default function SpeakerCard({
               onClick={() => setExpanded(!expanded)}
             >
               {expanded ? (
-                <Minus className="h-4 w-4 text-emerald-700" />
+                <LuMinus className="h-4 w-4 text-emerald-700" />
               ) : (
-                <Plus className="h-4 w-4 text-emerald-700" />
+                <LuPlus className="h-4 w-4 text-emerald-700" />
               )}
             </Button>
           </div>
@@ -50,7 +53,7 @@ export default function SpeakerCard({
           <div className="p-6 text-center">
             <div className="relative w-32 h-32 mx-auto mb-4 overflow-hidden rounded-full">
               <Image
-                src={imageUrl || "/placeholder.svg?height=128&width=128"}
+                src={resolvedImageUrl}
                 alt={name}
                 fill
                 className="object-cover"
@@ -67,7 +70,7 @@ export default function SpeakerCard({
                     rel="noopener noreferrer"
                     className="text-emerald-700 hover:text-emerald-800"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <LuExternalLink className="h-4 w-4" />
                     <span className="sr-only">Website</span>
                   </Link>
                 )}

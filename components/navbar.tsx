@@ -4,7 +4,7 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { LuMenu, LuX } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 
 interface SiteSettings {
@@ -95,9 +95,9 @@ export default function Navbar({ siteSettings }: NavbarProps) {
           {/* Mobile Menu Button */}
           <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
             {isOpen ? (
-              <X className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
+              <LuX className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
             ) : (
-              <Menu className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
+              <LuMenu className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
             )}
           </Button>
         </div>

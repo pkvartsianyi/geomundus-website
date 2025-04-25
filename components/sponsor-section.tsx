@@ -132,19 +132,9 @@ export default function SponsorSection({ sponsors, partners }: SponsorSectionPro
           )}
         </div>
       ) : (
-        // Fallback sponsors if no data from Sanity
-        <div className="flex flex-wrap justify-center gap-8 mb-12">
-          <SponsorLogo
-            name="con terra"
-            logoUrl="/images/sponsors/conterra.png"
-            websiteUrl="https://www.con-terra.com/"
-          />
-          <SponsorLogo
-            name="ESRI Germany"
-            logoUrl="/images/sponsors/esri-germany.png"
-            websiteUrl="https://www.esri.de/de-de/home"
-          />
-          <SponsorLogo name="52North" logoUrl="/images/sponsors/52north.png" websiteUrl="https://52north.org/" />
+        // Display a message when no sponsors are available
+        <div className="flex justify-center items-center h-24">
+          <p className="text-gray-500 italic">No sponsors available at the moment.</p>
         </div>
       )}
 
@@ -163,32 +153,9 @@ export default function SponsorSection({ sponsors, partners }: SponsorSectionPro
           ))}
         </div>
       ) : (
-        // Fallback partners if no data from Sanity
-        <div className="flex flex-wrap justify-center gap-8">
-          <SponsorLogo
-            name="Master Geotech"
-            logoUrl="/images/partners/master-geotech.png"
-            websiteUrl="https://mastergeotech.info/"
-            size="small"
-          />
-          <SponsorLogo
-            name="INIT"
-            logoUrl="/images/partners/init.png"
-            websiteUrl="http://www.init.uji.es/"
-            size="small"
-          />
-          <SponsorLogo
-            name="NOVA IMS"
-            logoUrl="/images/partners/ims.png"
-            websiteUrl="https://www.novaims.unl.pt/geotech"
-            size="small"
-          />
-          <SponsorLogo
-            name="IFGI"
-            logoUrl="/images/partners/ifgi.png"
-            websiteUrl="https://www.uni-muenster.de/Geoinformatics/en/"
-            size="small"
-          />
+        // Display a message when no partners are available
+        <div className="flex justify-center items-center h-24">
+          <p className="text-gray-500 italic">No partners available at the moment.</p>
         </div>
       )}
     </div>
@@ -211,6 +178,8 @@ function SponsorLogo({ name, logoUrl, websiteUrl, size = "medium" }: SponsorLogo
 
   const { width, height } = dimensions[size]
 
+  // Use a placeholder or handle missing logoUrl more gracefully
+  const resolvedLogoUrl = logoUrl || "/placeholder.svg"; // You should have a placeholder image
   return (
     <Link
       href={websiteUrl || "#"}
@@ -219,7 +188,7 @@ function SponsorLogo({ name, logoUrl, websiteUrl, size = "medium" }: SponsorLogo
       className="block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
     >
       <div className={`relative w-${width} h-${height}`} style={{ width: `${width * 4}px`, height: `${height * 4}px` }}>
-        <Image src={logoUrl || "/placeholder.svg"} alt={name} fill className="object-contain p-2" />
+        <Image src={resolvedLogoUrl} alt={name} fill className="object-contain p-2" />
       </div>
     </Link>
   )

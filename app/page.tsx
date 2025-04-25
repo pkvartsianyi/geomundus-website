@@ -34,12 +34,6 @@ export default async function Home() {
   const speakers = (await cachedClient(speakersQuery))
   const sponsors = (await cachedClient(sponsorsQuery))
   const partners = (await cachedClient(partnersQuery))
-  console.log("Site Settings:", siteSettings);
-  console.log("About Section:", aboutSection);
-  console.log("Focus Topic:", focusTopic);
-  console.log("Speakers:", speakers);
-  console.log("Sponsors:", sponsors);
-  console.log("Partners:", partners);
 
   // Format conference date for display
   const formatDate = (dateString: string) => {
@@ -230,7 +224,7 @@ export default async function Home() {
                   href={`mailto:${siteSettings?.contactEmail || "budget@geomundus.org"}`}
                   className="text-emerald-700 hover:underline"
                 >
-                  {siteSettings?.contactEmail || "budget@geomundus.org"}
+                  {siteSettings?.contactEmail}
                 </Link>
                 for more information on how to be a part of this unique conference! We will be glad to discuss your ideas
                 to sponsor the GeoMundus Conference 2024.
