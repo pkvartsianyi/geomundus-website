@@ -66,7 +66,8 @@ export default defineType({
     defineField({
       name: "mailingAddress",
       title: "Mailing Address",
-      type: "text",
+      type: "array",
+      of: [{ type: "block" }],
     }),
     defineField({
       name: "socialLinks",
@@ -114,6 +115,17 @@ export default defineType({
       name: "arrivalInfoPdfUrl",
       title: "Arrival Information PDF URL",
       type: "url",
+    }),
+    defineField({
+      name: "registrationOpen",
+      title: "Registration Open",
+      type: "boolean",
+      initialValue: false,
+    }),
+    defineField({
+      name: "registrationDeadline",
+      title: "Registration Deadline",
+      type: "date",
     }),
   ],
   preview: {

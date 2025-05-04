@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 import {
   AiOutlineCalendar,
   AiOutlineEnvironment,
@@ -10,13 +10,13 @@ import {
   AiOutlineInstagram,
   AiOutlineLinkedin,
   AiOutlineGithub,
-} from "react-icons/ai";
-import CountdownTimer from "@/components/countdown-timer";
-import SpeakerCard from "@/components/speaker-card";
-import SponsorSection from "@/components/sponsor-section";
-import CookieConsent from "@/components/cookie-consent";
-import { PortableText } from "@portabletext/react";
-import { cachedClient } from "@/lib/sanity.client";
+} from "react-icons/ai"
+import CountdownTimer from "@/components/countdown-timer"
+import SpeakerCard from "@/components/speaker-card"
+import SponsorSection from "@/components/sponsor-section"
+import CookieConsent from "@/components/cookie-consent"
+import { PortableText } from "@portabletext/react"
+import { cachedClient } from "@/lib/sanity.client"
 import {
   siteSettingsQuery,
   aboutSectionQuery,
@@ -24,33 +24,42 @@ import {
   speakersQuery,
   sponsorsQuery,
   partnersQuery,
-} from "@/lib/sanity.queries";
-
+  scheduleQuery,
+  faqsQuery,
+  currentConferenceYearQuery,
+} from "@/lib/sanity.queries"
+import ScheduleSection from "@/components/schedule-section"
+import FaqSection from "@/components/faq-section"
+import { RegisterButton } from "@/components/register-button"
 
 export default async function Home() {
-  const siteSettings = (await cachedClient(siteSettingsQuery))
-  const aboutSection = (await cachedClient(aboutSectionQuery))
-  const focusTopic = (await cachedClient(focusTopicQuery))
-  const speakers = (await cachedClient(speakersQuery))
-  const sponsors = (await cachedClient(sponsorsQuery))
-  const partners = (await cachedClient(partnersQuery))
+  const siteSettings = await cachedClient(siteSettingsQuery)
+  const aboutSection = await cachedClient(aboutSectionQuery)
+  const focusTopic = await cachedClient(focusTopicQuery)
+  const speakers = await cachedClient(speakersQuery)
+  const sponsors = await cachedClient(sponsorsQuery)
+  const partners = await cachedClient(partnersQuery)
+  const schedule = await cachedClient(scheduleQuery)
+  const faqs = await cachedClient(faqsQuery)
+  const currentYear = await cachedClient(currentConferenceYearQuery)
 
   // Format conference date for display
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+    const date = new Date(dateString)
     return new Intl.DateTimeFormat("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
-    }).format(date);
-  };
+    }).format(date)
+  }
 
-  const startDate = siteSettings?.conferenceDate ? new Date(siteSettings.conferenceDate) : null;
-  const endDate = siteSettings?.conferenceEndDate ? new Date(siteSettings.conferenceEndDate) : null;
+  const startDate = siteSettings?.conferenceDate ? new Date(siteSettings.conferenceDate) : null
+  const endDate = siteSettings?.conferenceEndDate ? new Date(siteSettings.conferenceEndDate) : null
 
-  const startDay = startDate?.getDate();
-  const endDay = endDate?.getDate();
-  const month = startDate?.toLocaleString("default", { month: "long" });
+  const startDay = startDate?.getDate()
+  const endDay = endDate?.getDate()
+  const month = startDate?.toLocaleString("default", { month: "long" })
+  const year = startDate?.getFullYear()
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -61,7 +70,7 @@ export default async function Home() {
             <div className="mb-8">
               {siteSettings?.logo && (
                 <Image
-                  src={siteSettings.whiteLogo}
+                  src={siteSettings.whiteLogo || "/placeholder.svg"}
                   alt={siteSettings.title || "GeoMundus Logo"}
                   width={300}
                   height={150}
@@ -69,19 +78,15 @@ export default async function Home() {
                 />
               )}
             </div>
-            <h2 className="text-xl md:text-2xl font-medium mb-4">
-              {siteSettings?.heroSubtitle}
-            </h2>
-            <h3 className="text-lg md:text-xl mb-4">
-              {siteSettings?.description}
-            </h3>
+            <h2 className="text-xl md:text-2xl font-medium mb-4">{siteSettings?.heroSubtitle}</h2>
+            <h3 className="text-lg md:text-xl mb-4">{siteSettings?.description}</h3>
             {startDate && endDate && (
               <div className="flex items-center justify-center gap-2 mb-4">
                 <AiOutlineCalendar className="h-5 w-5" />
                 <h3 className="text-lg md:text-xl">
                   {startDay}
                   <sup>th</sup> and {endDay}
-                  <sup>th</sup> {month}
+                  <sup>th</sup> {month} {year}
                 </h3>
               </div>
             )}
@@ -89,16 +94,20 @@ export default async function Home() {
               <AiOutlineEnvironment className="h-5 w-5" />
               <h3 className="text-lg md:text-xl font-bold">{siteSettings?.conferenceLocation}</h3>
             </div>
-            <h3 className="text-lg md:text-xl mb-8">
+            <h3 className="text-lg md:text-xl mb-8 bg-emerald-700/50 inline-block px-4 py-2 rounded-md">
               {siteSettings?.heroMessage}
-              <span className="text-yellow-300">See you in Portugal!</span>
+              <span className="text-yellow-300 font-bold ml-2">See you in Portugal!</span>
             </h3>
-            <Button asChild size="lg" className="bg-white text-emerald-800 hover:bg-gray-100">
-              <Link href="#info">
-                Discover
-                <AiOutlineCaretDown className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button asChild size="lg" className="bg-white text-emerald-800 hover:bg-gray-100">
+                <Link href="#info">
+                  Discover
+                  <AiOutlineCaretDown className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+
+             <RegisterButton registrationOpen={siteSettings?.registrationOpen} />
+            </div>
           </div>
         </section>
       )}
@@ -107,13 +116,9 @@ export default async function Home() {
       {aboutSection && (
         <section id="info" className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-4">
-            {siteSettings?.conferenceDate && (
-              <CountdownTimer targetDate={siteSettings.conferenceDate} />
-            )}
+            {siteSettings?.conferenceDate && <CountdownTimer targetDate={siteSettings.conferenceDate} />}
 
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-              {aboutSection?.title}
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">{aboutSection?.title}</h2>
 
             <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
               {aboutSection?.content && (
@@ -137,9 +142,7 @@ export default async function Home() {
 
             {focusTopic && (
               <div className="mt-16 max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-                  {focusTopic?.title}
-                </h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">{focusTopic?.title}</h2>
 
                 {focusTopic?.description && (
                   <div className="prose max-w-none">
@@ -160,15 +163,25 @@ export default async function Home() {
         </section>
       )}
 
+      {/* Schedule Section */}
+      {schedule && schedule.days && schedule.days.length > 0 && (
+        <section id="schedule" className="py-16 md:py-24 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">Conference Schedule</h2>
+            <ScheduleSection schedule={schedule} />
+          </div>
+        </section>
+      )}
+
       {/* Speakers Section */}
       {speakers && (
-        <section id="speakers" className="py-16 md:py-24 bg-gray-50">
+        <section id="speakers" className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">Keynote Speakers</h2>
 
             <p className="text-justify text-gray-700 max-w-4xl mx-auto mb-12">
-              Geomundus will feature a broad landscape of expertise and areas of action within
-              the GIS field, such as academic figures, NGO advisors, government officials, and private sector actors.
+              Geomundus will feature a broad landscape of expertise and areas of action within the GIS field, such as
+              academic figures, NGO advisors, government officials, and private sector actors.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -197,25 +210,15 @@ export default async function Home() {
 
       {/* Sponsors Section */}
       {sponsors && partners && (
-        <section id="sponsors" className="py-16 md:py-24 bg-white">
+        <section id="sponsors" className="py-16 md:py-24 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">Sponsors & Partners</h2>
 
             <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
               <p className="text-justify">
                 GeoMundus is seeking partners from public and private entities including, but not limited to, spatial,
-                technological, scientific, governmental, and academic fields. We will be thrilled to have your support and
-                participation in this international event.
-              </p>
-
-              <p className="text-justify">
-                Are you interested in placing your logo on our website? Maybe you want to sponsor a specific event at the
-                conference? There are endless ways to contribute to enhancing both Geomundus and your business. See our
-                sponsorship tier levels{" "}
-                <Link href="#" className="text-emerald-700 hover:underline">
-                  here
-                </Link>
-                .
+                technological, scientific, governmental, and academic fields. We will be thrilled to have your support
+                and participation in this international event.
               </p>
 
               <p className="text-justify">
@@ -226,15 +229,22 @@ export default async function Home() {
                 >
                   {siteSettings?.contactEmail}
                 </Link>
-                for more information on how to be a part of this unique conference! We will be glad to discuss your ideas
-                to sponsor the GeoMundus Conference 2024.
+                for more information on how to be a part of this unique conference! We will be glad to discuss your
+                ideas to sponsor the GeoMundus Conference {currentYear}.
               </p>
             </div>
 
-            <SponsorSection
-              sponsors={sponsors}
-              partners={partners}
-            />
+            <SponsorSection sponsors={sponsors} partners={partners} />
+          </div>
+        </section>
+      )}
+
+      {/* FAQ Section */}
+      {faqs && faqs.length > 0 && (
+        <section id="faq" className="py-16 md:py-24 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">Frequently Asked Questions</h2>
+            <FaqSection faqs={faqs} />
           </div>
         </section>
       )}
@@ -290,19 +300,14 @@ export default async function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="text-center">
                 <h4 className="text-xl font-bold mb-4">Email</h4>
-                <Link
-                  href={`mailto:${siteSettings?.contactEmail}`}
-                  className="text-emerald-700 hover:underline"
-                >
+                <Link href={`mailto:${siteSettings?.contactEmail}`} className="text-emerald-700 hover:underline">
                   {siteSettings?.contactEmail}
                 </Link>
               </div>
 
               <div className="text-center">
                 <h4 className="text-xl font-bold mb-4">Mailing address</h4>
-                {siteSettings?.mailingAddress && (
-                  <PortableText value={siteSettings.mailingAddress} />
-                )}
+                {siteSettings?.mailingAddress && <PortableText value={siteSettings.mailingAddress} />}
               </div>
 
               <div className="text-center">
@@ -370,6 +375,24 @@ export default async function Home() {
         </section>
       )}
 
+      {/* Past Conferences Section */}
+      <section className="py-16 md:py-24 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">Past Conferences</h2>
+
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-lg mb-8">
+              GeoMundus has a rich history of bringing together students, researchers, and professionals in the
+              geospatial community since 2009.
+            </p>
+
+            <Button asChild size="lg" className="bg-emerald-700 hover:bg-emerald-800">
+              <Link href="/archive">Explore Past Conferences</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-emerald-800 text-white py-8">
         <div className="container mx-auto px-4 text-center">
@@ -381,7 +404,7 @@ export default async function Home() {
                 rel="noopener noreferrer"
                 className="hover:underline"
               >
-                © GeoMundus 2024
+                © GeoMundus {currentYear}
               </Link>
             </li>
             <li>Designed and Developed by GeoMundus Web Team</li>
@@ -392,5 +415,5 @@ export default async function Home() {
       {/* Cookie Consent */}
       <CookieConsent />
     </main>
-  );
+  )
 }
