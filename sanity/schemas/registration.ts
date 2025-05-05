@@ -71,6 +71,12 @@ export default defineType({
       },
       initialValue: "pending",
     }),
+    defineField({
+      name: "qrCode",
+      title: "QR Code",
+      type: "string",
+      description: "QR code data URL for guest verification",
+    }),
   ],
   preview: {
     select: {

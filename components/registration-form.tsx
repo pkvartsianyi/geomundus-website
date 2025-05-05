@@ -30,7 +30,7 @@ const formSchema = z.object({
     required_error: "Please select your role.",
   }),
   dietaryRequirements: z.string().optional(),
-  attendingDinner: z.boolean().default(false),
+  attendingDinner: z.boolean(),
   abstract: z.string().optional(),
 })
 
