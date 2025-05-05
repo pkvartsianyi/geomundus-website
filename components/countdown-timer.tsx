@@ -7,6 +7,7 @@ interface CountdownTimerProps {
 }
 
 export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
+  console.log("CountdownTimer component rendered with targetDate:", targetDate)
   const [days, setDays] = useState(0)
   const [hours, setHours] = useState(0)
   const [minutes, setMinutes] = useState(0)
@@ -14,12 +15,17 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
   const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
+    const countDownDate = new Date(targetDate)
+    if (isNaN(countDownDate.getTime())) {
+      console.error("Invalid targetDate:", targetDate)
+      return
+    }
+  
+    const countDown = countDownDate.getTime()
     const second = 1000
     const minute = second * 60
     const hour = minute * 60
     const day = hour * 24
-
-    const countDown = new Date(targetDate).getTime()
 
     const interval = setInterval(() => {
       const now = new Date().getTime()

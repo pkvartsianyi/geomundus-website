@@ -42,17 +42,6 @@ export default async function Home() {
   const schedule = await cachedClient(scheduleQuery)
   const faqs = await cachedClient(faqsQuery)
   const currentYear = await cachedClient(currentConferenceYearQuery)
-
-  // Format conference date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat("en-US", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(date)
-  }
-
   const startDate = siteSettings?.conferenceDate ? new Date(siteSettings.conferenceDate) : null
   const endDate = siteSettings?.conferenceEndDate ? new Date(siteSettings.conferenceEndDate) : null
 
@@ -70,7 +59,7 @@ export default async function Home() {
             <div className="mb-8">
               {siteSettings?.logo && (
                 <Image
-                  src={siteSettings.whiteLogo || "/placeholder.svg"}
+                  src={siteSettings.logo || "/placeholder.svg"}
                   alt={siteSettings.title || "GeoMundus Logo"}
                   width={300}
                   height={150}
@@ -99,13 +88,6 @@ export default async function Home() {
               <span className="text-yellow-300 font-bold ml-2">See you in Portugal!</span>
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild size="lg" className="bg-white text-emerald-800 hover:bg-gray-100">
-                <Link href="#info">
-                  Discover
-                  <AiOutlineCaretDown className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-
              <RegisterButton registrationOpen={siteSettings?.registrationOpen} />
             </div>
           </div>
