@@ -1,0 +1,43 @@
+apiVersion: k8s.wwu.io/v1alpha1
+kind: Project
+spec:
+  name: "GeoMundus Website"
+
+  description: "GeoMundus conference website"
+
+  faculty: 14
+
+  serviceProvider: "ivv6"
+
+  organisationalUnit: "geomundus"
+
+  contacts:
+    executive: "pkvartsi"
+    technical: "pkvartsi"
+
+  services:
+    - name: webserver
+      program: nodejs
+
+  personalData: false
+
+  acceptRegulations: true
+
+  resources:
+    - environment: "prod"
+      regions: ["ms1"]
+      namespace: "geomundus-prod"
+      dnsEntries: ["geomundus.org"]
+      admins: ["pkvartsi"]
+      adminGroups: []
+      limits:
+        cpu: 1
+        memory: 2
+        nvidia.com/gpu: 0
+        ephemeralStorage: 1
+        persistentStorage:
+          - storageClass: "manilabronze"
+            persistentVolumes: 1
+            size: 5
+      requests:
+        cpu: 0.5
