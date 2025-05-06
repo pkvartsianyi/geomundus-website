@@ -1,1 +1,0 @@
-I temporary added media from the old website here, but we'll be using cms for that in the future.
