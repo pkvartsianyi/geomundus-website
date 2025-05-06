@@ -12,7 +12,8 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const conference = await cachedClient(conferenceByYearQuery, { year: Number.parseInt(params.year) })
+  const { year } = await params
+  const conference = await cachedClient(conferenceByYearQuery, { year: Number.parseInt(year) })
 
   if (!conference) {
     return {

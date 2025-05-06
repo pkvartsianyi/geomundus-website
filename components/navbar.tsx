@@ -12,6 +12,7 @@ import { RegisterButton } from "./register-button"
 
 interface SiteSettings {
   logo: any
+  whiteLogo: any
   title: string
   registrationOpen?: boolean
 }
@@ -21,6 +22,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ siteSettings }: NavbarProps) {
+  console.log("siteSettings", siteSettings)
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -50,23 +52,16 @@ export default function Navbar({ siteSettings }: NavbarProps) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            {siteSettings && siteSettings.logo ? (
+            {siteSettings && siteSettings.logo && isScrolled? (
               <Image
-                src={siteSettings.logo || "/images/white-logo.png"}
+                src={siteSettings.whiteLogo || "/images/white-logo.png"}
                 alt={siteSettings?.title || "GeoMundus Logo"}
-                width={150}
-                height={50}
+                width={300}
+                height={100}
                 className="h-10 w-auto"
               />
-            ) : (
-              <Image
-                src={"/images/white-logo.png"}
-                alt={"GeoMundus Logo"}
-                width={150}
-                height={50}
-                className="h-10 w-auto"
-              />
-            )}
+            )
+            : null}
           </Link>
 
           {/* Desktop Navigation */}

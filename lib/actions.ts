@@ -3,6 +3,15 @@
 import { revalidatePath } from "next/cache"
 import { client } from "@/lib/sanity.client"
 import QRCode from "qrcode"
+import { Readable } from "stream"
+
+// Helper to convert buffer to a readable stream
+function bufferToStream(buffer: Buffer): Readable {
+  const stream = new Readable()
+  stream.push(buffer)
+  stream.push(null)
+  return stream
+}
 
 export async function submitRegistration(formData: {
   firstName: string
@@ -14,12 +23,13 @@ export async function submitRegistration(formData: {
   attendingDinner: boolean
   abstract?: string
 }) {
-  try {
-    // Generate QR code that points to the guest page
     const guestUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://geomundus.org"}/guests/${encodeURIComponent(formData.email)}`
-    const qrCode = await QRCode.toDataURL(guestUrl)
+    const qrBuffer = await QRCode.toBuffer(guestUrl)
+    const qrImageAsset = await client.assets.upload("image", qrBuffer, {
+      filename: `qr-${formData.email}.png`,
+      contentType: "image/png",
+    })
 
-    // Create a new registration document in Sanity
     const result = await client.create({
       _type: "registration",
       firstName: formData.firstName,
@@ -31,21 +41,25 @@ export async function submitRegistration(formData: {
       attendingDinner: formData.attendingDinner,
       abstract: formData.abstract || "",
       status: "pending",
-      qrCode: qrCode,
+      qrCode: {
+        _type: "image",
+        asset: {
+          _type: "reference",
+          _ref: qrImageAsset._id,
+        },
+      },
     })
 
-    // Revalidate the registrations page in the admin
     revalidatePath("/admin/registrations")
-
     return { success: true, data: result }
-  } catch (error) {
-    console.error("Error submitting registration:", error)
-    return { success: false, error: "Failed to submit registration" }
-  }
 }
 
-// Function to verify admin token
 export async function verifyAdminToken(token: string) {
-  const adminToken = process.env.ADMIN_TOKEN
-  return token === adminToken
+  const result = token === process.env.ADMIN_TOKEN
+
+  if (!result) {
+    throw new Error("Invalid token")
+  }
+
+  return result
 }

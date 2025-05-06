@@ -74,7 +74,7 @@ export default defineType({
     defineField({
       name: "qrCode",
       title: "QR Code",
-      type: "string",
+      type: "image",
       description: "QR code data URL for guest verification",
     }),
   ],

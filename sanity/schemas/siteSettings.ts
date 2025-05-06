@@ -24,6 +24,14 @@ export default defineType({
       },
     }),
     defineField({
+      name: "whiteLogo",
+      title: "Site Logo (White)",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
       name: "conferenceDate",
       title: "Conference Date",
       type: "date",
