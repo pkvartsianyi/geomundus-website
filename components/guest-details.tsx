@@ -171,23 +171,6 @@ export default function GuestDetails({ registration }: GuestDetailsProps) {
                 </div>
               </dl>
             </div>
-
-            <div>
-              {registration.qrCode && (
-                <div className="flex flex-col items-center">
-                  <h3 className="text-lg font-semibold mb-2">QR Code</h3>
-                  <div className="border p-2 bg-white">
-                    <Image
-                      src={registration.qrCode || "/placeholder.svg"}
-                      alt="Registration QR Code"
-                      width={150}
-                      height={150}
-                    />
-                  </div>
-                  <p className="text-sm text-gray-500 mt-2">Scan for verification</p>
-                </div>
-              )}
-            </div>
           </div>
 
           {registration.abstract && (
