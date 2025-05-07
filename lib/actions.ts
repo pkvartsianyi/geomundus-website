@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache"
 import { client } from "@/lib/sanity.client"
 import QRCode from "qrcode"
-import { Readable } from "stream"
 
 export async function submitRegistration(formData: {
   firstName: string
@@ -15,44 +14,45 @@ export async function submitRegistration(formData: {
   attendingDinner: boolean
   abstract?: string
 }) {
-    const guestUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://geomundus.org"}/guests/${encodeURIComponent(formData.email)}`
-    const qrBuffer = await QRCode.toBuffer(guestUrl)
-    const qrImageAsset = await client.assets.upload("image", qrBuffer, {
-      filename: `qr-${formData.email}.png`,
-      contentType: "image/png",
-    })
+  const guestUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://geomundus.org"}/guests/${encodeURIComponent(formData.email)}`
+  const qrBuffer = await QRCode.toBuffer(guestUrl)
+  const qrImageAsset = await client.assets.upload("image", qrBuffer, {
+    filename: `qr-${formData.email}.png`,
+    contentType: "image/png",
+  })
 
-    const result = await client.create({
-      _type: "registration",
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      affiliation: formData.affiliation || "",
-      role: formData.role,
-      dietaryRequirements: formData.dietaryRequirements || "",
-      attendingDinner: formData.attendingDinner,
-      abstract: formData.abstract || "",
-      status: "pending",
-      qrCode: {
-        _type: "image",
-        asset: {
-          _type: "reference",
-          _ref: qrImageAsset._id,
-        },
+
+  const result = await client.create({
+    _type: "registration",
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    email: formData.email,
+    affiliation: formData.affiliation || "",
+    role: formData.role,
+    dietaryRequirements: formData.dietaryRequirements || "",
+    attendingDinner: formData.attendingDinner,
+    abstract: formData.abstract || "",
+    status: "pending",
+    qrCode: {
+      _type: "image",
+      asset: {
+        _type: "reference",
+        _ref: qrImageAsset._id,
       },
-    })
+    },
+  })
 
-    // Send notification to Teams/Discord
-    await sendWebhookNotification({
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      affiliation: formData.affiliation || "Not specified",
-      role: formData.role,
-    })
+  // Send notification to Teams/Discord
+  await sendWebhookNotification({
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    email: formData.email,
+    affiliation: formData.affiliation || "Not specified",
+    role: formData.role,
+  })
 
-    revalidatePath("/admin/registrations")
-    return { success: true, data: result }
+  revalidatePath("/admin/registrations")
+  return { success: true, data: result }
 }
 
 export async function verifyAdminToken(token: string) {
