@@ -8,11 +8,9 @@ import { LuMenu, LuX } from "react-icons/lu"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react"
-import { RegisterButton } from "./register-button"
 
 interface SiteSettings {
   logo: any
-  whiteLogo: any
   title: string
   registrationOpen?: boolean
 }
@@ -22,7 +20,6 @@ interface NavbarProps {
 }
 
 export default function Navbar({ siteSettings }: NavbarProps) {
-  console.log("siteSettings", siteSettings)
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -52,16 +49,23 @@ export default function Navbar({ siteSettings }: NavbarProps) {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            {siteSettings && siteSettings.logo && isScrolled? (
+            {siteSettings && siteSettings.logo ? (
               <Image
-                src={siteSettings.whiteLogo || "/images/white-logo.png"}
+                src={siteSettings.logo || "/images/white-logo.png"}
                 alt={siteSettings?.title || "GeoMundus Logo"}
-                width={300}
-                height={100}
+                width={150}
+                height={50}
                 className="h-10 w-auto"
               />
-            )
-            : null}
+            ) : (
+              <Image
+                src={"/images/white-logo.png"}
+                alt={"GeoMundus Logo"}
+                width={150}
+                height={50}
+                className="h-10 w-auto"
+              />
+            )}
           </Link>
 
           {/* Desktop Navigation */}
@@ -72,21 +76,24 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             <NavLink href="/#speakers" isScrolled={isScrolled}>
               Speakers
             </NavLink>
-            <NavLink href="/#sponsors" isScrolled={isScrolled}>
+            <NavLink href="/sponsors" isScrolled={isScrolled}>
               Sponsors
+            </NavLink>
+            <NavLink href="/submissions" isScrolled={isScrolled}>
+              Submissions
             </NavLink>
 
             {/* Archive Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              {/* <DropdownMenuTrigger asChild>
                 <button
                   className={`font-medium hover:text-emerald-700 transition-colors flex items-center gap-1 ${
                     isScrolled ? "text-gray-800" : "text-white"
-                  }`}
+                  } px-3 py-2 rounded-md hover:bg-white/10`}
                 >
                   Archive <ChevronDown className="h-4 w-4" />
                 </button>
-              </DropdownMenuTrigger>
+              </DropdownMenuTrigger> */}
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
                   <Link href="/archive">All Past Conferences</Link>
@@ -104,7 +111,28 @@ export default function Navbar({ siteSettings }: NavbarProps) {
               Contact
             </NavLink>
 
-             <RegisterButton registrationOpen={siteSettings?.registrationOpen} />
+            {siteSettings?.registrationOpen ? (
+              <Button
+                asChild
+                className={
+                  isScrolled ? "bg-emerald-700 hover:bg-emerald-800" : "bg-white text-emerald-800 hover:bg-gray-100"
+                }
+              >
+                <Link href="/registration">Register</Link>
+              </Button>
+            ) : (
+              <Button
+                asChild
+                variant="outline"
+                className={
+                  isScrolled
+                    ? "border-emerald-700 text-emerald-700 hover:bg-emerald-50"
+                    : "border-white text-white hover:bg-white/10"
+                }
+              >
+                <Link href="/registration">Registration Coming Soon</Link>
+              </Button>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -128,8 +156,11 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             <MobileNavLink href="/#speakers" onClick={toggleMenu}>
               Speakers
             </MobileNavLink>
-            <MobileNavLink href="/#sponsors" onClick={toggleMenu}>
+            <MobileNavLink href="/sponsors" onClick={toggleMenu}>
               Sponsors
+            </MobileNavLink>
+            <MobileNavLink href="/submissions" onClick={toggleMenu}>
+              Submissions
             </MobileNavLink>
             <MobileNavLink href="/archive" onClick={toggleMenu}>
               Archive

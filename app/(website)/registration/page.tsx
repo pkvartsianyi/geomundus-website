@@ -1,9 +1,11 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { cachedClient } from "@/lib/sanity.client"
 import { siteSettingsQuery } from "@/lib/sanity.queries"
 import RegistrationForm from "@/components/registration-form"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { CalendarIcon, InfoIcon } from "lucide-react"
+import { CalendarIcon, InfoIcon, ArrowRightIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
   title: "GeoMundus - Registration",
@@ -60,6 +62,20 @@ export default async function RegistrationPage() {
               <RegistrationForm />
             </div>
           )}
+
+          {/* Submissions Link */}
+          <div className="max-w-3xl mx-auto mt-12 text-center">
+            <h3 className="text-xl font-bold mb-4">Interested in presenting your work?</h3>
+            <p className="mb-6">
+              GeoMundus is accepting short papers and posters from young professionals in the field of Geospatial
+              Technologies.
+            </p>
+            <Button asChild className="bg-emerald-700 hover:bg-emerald-800">
+              <Link href="/submissions" className="flex items-center gap-2">
+                View Submission Guidelines <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </main>
