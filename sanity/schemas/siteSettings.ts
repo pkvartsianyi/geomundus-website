@@ -135,6 +135,53 @@ export default defineType({
       title: "Registration Deadline",
       type: "date",
     }),
+    // Banner Configuration
+    defineField({
+      name: "banner",
+      title: "Site Banner",
+      type: "object",
+      fields: [
+        defineField({
+          name: "enabled",
+          title: "Enable Banner",
+          type: "boolean",
+          initialValue: false,
+        }),
+        defineField({
+          name: "text",
+          title: "Banner Text",
+          type: "string",
+          description: "The text to display in the banner",
+        }),
+        defineField({
+          name: "color",
+          title: "Banner Color",
+          type: "string",
+          options: {
+            list: [
+              { title: "Blue", value: "blue" },
+              { title: "Green", value: "green" },
+              { title: "Red", value: "red" },
+              { title: "Yellow", value: "yellow" },
+              { title: "Purple", value: "purple" },
+            ],
+          },
+          initialValue: "blue",
+        }),
+        defineField({
+          name: "linkText",
+          title: "Link Text (Optional)",
+          type: "string",
+          description: "Text for the optional link button",
+        }),
+        defineField({
+          name: "linkUrl",
+          title: "Link URL (Optional)",
+          type: "string",
+          description: "URL for the optional link button",
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {

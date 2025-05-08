@@ -2,13 +2,13 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { PostHogProvider } from "../components/PostHogProvider"
+import { PostHogProvider } from "@/components/PostHogProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "GeoMundus",
-  description: "A Conference on Geospatial Technologies, Geoinformatics & GI Applications",
+  title: "GeoMundus Conference",
+  description: "International Symposium on Earth Observation and Geoinformation Sciences",
 }
 
 export default async function RootLayout({
@@ -16,13 +16,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-
   return (
     <html lang="en">
       <body className={inter.className}>
-          <PostHogProvider>
-              {children}
-          </PostHogProvider>
+        <PostHogProvider>
+          {children}
+        </PostHogProvider>
       </body>
     </html>
   )

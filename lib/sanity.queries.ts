@@ -19,7 +19,8 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
   storyMapUrl,
   arrivalInfoPdfUrl,
   registrationOpen,
-  registrationDeadline
+  registrationDeadline,
+  banner
 }`
 
 export const aboutSectionQuery = groq`*[_type == "aboutSection"][0]{
