@@ -1,4 +1,4 @@
-name: Build, Push, Redeploy via SSH
+name: Build, Push
 
 on:
   push:
@@ -28,23 +28,3 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Redeploy stack via SSH + Portainer API
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            curl -k -X POST \
-              -H "Authorization: Bearer ${{ secrets.PORTAINER_KEY }}" \
-              https://localhost:9000/api/stacks/${{ secrets.PORTAINER_STACK_ID }}/redeploy
