@@ -1,30 +1,45 @@
-name: Build, Push
+name: Build and Deploy Geomundus Website
 
 on:
   push:
-    tags: [v*]
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+    branches: [main]
 
 jobs:
-  build-push-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
+
+    env:
+      RAW_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/geomundus-website
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set lowercase image name
+        run: echo "IMAGE_NAME=$(echo $RAW_IMAGE_NAME | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Build Docker image with build-time secrets
+        run: |
+          docker build \
+            --build-arg SANITY_PROJECT_ID=${{ secrets.SANITY_PROJECT_ID }} \
+            --build-arg SANITY_DATASET=${{ secrets.SANITY_DATASET }} \
+            --build-arg SANITY_AUTH_TOKEN=${{ secrets.SANITY_AUTH_TOKEN }} \
+            --build-arg NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }} \
+            --build-arg ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }} \
+            --build-arg NEXT_PUBLIC_POSTHOG_KEY=${{ vars.NEXT_PUBLIC_POSTHOG_KEY }} \
+            --build-arg NEXT_PUBLIC_POSTHOG_HOST=${{ vars.NEXT_PUBLIC_POSTHOG_HOST }} \
+            --build-arg NOTIFICATION_WEBHOOK_URL=${{ secrets.NOTIFICATION_WEBHOOK_URL }} \
+            -t $IMAGE_NAME:latest .
+
+      - name: Push Docker image
+        run: docker push $IMAGE_NAME:latest
+
+    environment:
+      name: Production
