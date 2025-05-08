@@ -2,21 +2,45 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileTextIcon, ImageIcon, AwardIcon, ExternalLinkIcon } from "lucide-react"
+import { FileTextIcon, ImageIcon, AwardIcon, ExternalLinkIcon, CalendarIcon } from "lucide-react"
+import { PortableText } from "@portabletext/react"
+import { cachedClient } from "@/lib/sanity.client"
+import { submissionInfoQuery } from "@/lib/sanity.queries"
+import { format } from "date-fns"
 
-export const metadata: Metadata = {
-  title: "GeoMundus - Submissions",
-  description: "Submit your papers and posters to the GeoMundus Conference",
+export async function generateMetadata(): Promise<Metadata> {
+  const submissionInfo = await cachedClient(submissionInfoQuery)
+
+  return {
+    title: `GeoMundus - ${submissionInfo?.title || "Submissions"}`,
+    description: submissionInfo?.description || "Submit your papers and posters to the GeoMundus Conference",
+  }
 }
 
-export default function SubmissionsPage() {
+export default async function SubmissionsPage() {
+  const submissionInfo = await cachedClient(submissionInfoQuery)
+
+  // Format submission deadline if available
+  const formattedDeadline = submissionInfo?.submissionDeadline
+    ? format(new Date(submissionInfo.submissionDeadline), "MMMM do, yyyy")
+    : null
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Submissions</h1>
-          <p className="text-lg md:text-xl mb-4">Submit your papers and posters to the GeoMundus Conference</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">{submissionInfo?.title || "Submissions"}</h1>
+          <p className="text-lg md:text-xl mb-4">
+            {submissionInfo?.description || "Submit your papers and posters to the GeoMundus Conference"}
+          </p>
+
+          {formattedDeadline && (
+            <p className="flex items-center justify-center gap-2 text-lg mt-4">
+              <CalendarIcon className="h-5 w-5" />
+              Submission deadline: {formattedDeadline}
+            </p>
+          )}
         </div>
       </section>
 
@@ -24,48 +48,29 @@ export default function SubmissionsPage() {
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-8">Call for Short Paper and Poster</h2>
+            <h2 className="text-3xl font-bold text-center mb-8">
+              {submissionInfo?.callForPapersTitle || "Call for Short Paper and Poster"}
+            </h2>
 
-            <div className="prose max-w-none text-gray-700 space-y-4">
-              <p>
-                The Geomundus Conference is opening its forum to young professionals looking to present their work in
-                the field of Geospatial Technologies, Geoinformatics & GI Applications during our 16th edition on
-                October 25th and 26th of 2024.
-              </p>
+            {submissionInfo?.callForPapersContent ? (
+              <div className="prose max-w-none text-gray-700">
+                <PortableText value={submissionInfo.callForPapersContent} />
+              </div>
+            ) : (
+              <div className="prose max-w-none text-gray-700 space-y-4">
+                <p>
+                  The Geomundus Conference is opening its forum to young professionals looking to present their work in
+                  the field of Geospatial Technologies, Geoinformatics & GI Applications.
+                </p>
+                <p>
+                  Our unique approach as a student organized congress gives the opportunity to young academics to
+                  receive feedback to their work from experienced actors of the scientific community and interact with
+                  other likeminded professionals working with geographic applications.
+                </p>
+              </div>
+            )}
 
-              <p>
-                Our unique approach as a student organized congress gives the opportunity to young academics to receive
-                feedback to their work from experienced actors of the scientific community and interact with other
-                likeminded professionals working with geographic applications.
-              </p>
-
-              <p>
-                To be considered please apply before the <strong>4th of August</strong> by submitting your extended
-                abstract* in accordance with the guidelines. Our jury will select the papers that most prominently use
-                GI applications, Geoinformatics and Geospatial Technologies.
-              </p>
-
-              <p>
-                Papers addressing Environmental challenges through the GI lens are encouraged to participate and submit
-                your work.
-              </p>
-
-              <p>
-                In the application don't forget to mention your motivation to participate in GeoMundus and describe your
-                work.
-              </p>
-
-              <p>
-                Please find our submission guidelines at the links below to view our submission guidelines and
-                requirements. All selected papers will be published at the conference website.
-              </p>
-
-              <p className="font-medium">We'll be happy to hear from you!</p>
-
-              <p className="text-sm text-gray-500 italic">
-                * This process does not exclude the author to submit the paper to other papers, journals, or conferences
-              </p>
-            </div>
+            {submissionInfo?.footnote && <p className="text-sm text-gray-500 italic mt-6">{submissionInfo.footnote}</p>}
           </div>
         </div>
       </section>
@@ -89,7 +94,12 @@ export default function SubmissionsPage() {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <Button asChild variant="outline" className="w-full">
-                    <Link href="#" className="flex items-center justify-center gap-2">
+                    <Link
+                      href={submissionInfo?.shortPaperGuidelineUrl || "#"}
+                      className="flex items-center justify-center gap-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Download <ExternalLinkIcon className="h-4 w-4" />
                     </Link>
                   </Button>
@@ -103,7 +113,12 @@ export default function SubmissionsPage() {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <Button asChild variant="outline" className="w-full">
-                    <Link href="#" className="flex items-center justify-center gap-2">
+                    <Link
+                      href={submissionInfo?.shortPaperTemplateUrl || "#"}
+                      className="flex items-center justify-center gap-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Download <ExternalLinkIcon className="h-4 w-4" />
                     </Link>
                   </Button>
@@ -117,7 +132,12 @@ export default function SubmissionsPage() {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <Button asChild variant="outline" className="w-full">
-                    <Link href="#" className="flex items-center justify-center gap-2">
+                    <Link
+                      href={submissionInfo?.posterGuidelineUrl || "#"}
+                      className="flex items-center justify-center gap-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Download <ExternalLinkIcon className="h-4 w-4" />
                     </Link>
                   </Button>
@@ -131,7 +151,12 @@ export default function SubmissionsPage() {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <Button asChild variant="outline" className="w-full">
-                    <Link href="#" className="flex items-center justify-center gap-2">
+                    <Link
+                      href={submissionInfo?.mobilityGrantGuidelineUrl || "#"}
+                      className="flex items-center justify-center gap-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Download <ExternalLinkIcon className="h-4 w-4" />
                     </Link>
                   </Button>
@@ -139,30 +164,47 @@ export default function SubmissionsPage() {
               </Card>
             </div>
 
-            <p className="text-center mb-6 text-sm text-gray-600">
-              Note: The presenter will pay the cost of printing the poster. The cost of printing a poster and the way of
-              sending the cost of printing will be published soon.
-            </p>
+            {submissionInfo?.posterPrintingNote && (
+              <p className="text-center mb-6 text-sm text-gray-600">{submissionInfo.posterPrintingNote}</p>
+            )}
 
             <div className="space-y-4">
-              <Button asChild size="lg" className="w-full bg-emerald-700 hover:bg-emerald-800">
-                <Link href="#">SUBMIT YOUR SHORT PAPER AND POSTER ABSTRACT</Link>
+              <Button
+                asChild
+                size="lg"
+                className="w-full bg-emerald-700 hover:bg-emerald-800"
+                disabled={!submissionInfo?.submissionFormUrl}
+              >
+                <Link href={submissionInfo?.submissionFormUrl || "#"} target="_blank" rel="noopener noreferrer">
+                  SUBMIT YOUR SHORT PAPER AND POSTER ABSTRACT
+                </Link>
               </Button>
 
-              <Button asChild size="lg" variant="outline" className="w-full">
-                <Link href="#">APPLY FOR MOBILITY GRANT</Link>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="w-full"
+                disabled={!submissionInfo?.mobilityGrantFormUrl}
+              >
+                <Link href={submissionInfo?.mobilityGrantFormUrl || "#"} target="_blank" rel="noopener noreferrer">
+                  APPLY FOR MOBILITY GRANT
+                </Link>
               </Button>
             </div>
 
             <div className="mt-10 text-center p-6 bg-gray-100 rounded-lg">
               <p>
-                If you have further queries about the short paper and abstract submission, please contact the conference
-                organizing committee at{" "}
-                <Link href="mailto:program@geomundus.org" className="text-emerald-700 font-medium hover:underline">
-                  program@geomundus.org
-                </Link>
-                . You are requested to keep an eye on our website and social networks regularly to get the latest
-                updates.
+                {submissionInfo?.contactNote ||
+                  "If you have further queries about the short paper and abstract submission, please contact the conference organizing committee."}{" "}
+                {submissionInfo?.contactEmail && (
+                  <Link
+                    href={`mailto:${submissionInfo.contactEmail}`}
+                    className="text-emerald-700 font-medium hover:underline"
+                  >
+                    {submissionInfo.contactEmail}
+                  </Link>
+                )}
               </p>
             </div>
           </div>

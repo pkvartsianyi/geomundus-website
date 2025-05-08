@@ -118,3 +118,22 @@ export const registrationsQuery = groq`*[_type == "registration"] | order(_creat
   attendingDinner,
   _createdAt
 }`
+
+// Query for submission information
+export const submissionInfoQuery = groq`*[_type == "submission"][0] {
+  title,
+  description,
+  callForPapersTitle,
+  callForPapersContent,
+  submissionDeadline,
+  shortPaperGuidelineUrl,
+  shortPaperTemplateUrl,
+  posterGuidelineUrl,
+  mobilityGrantGuidelineUrl,
+  submissionFormUrl,
+  mobilityGrantFormUrl,
+  posterPrintingNote,
+  contactEmail,
+  contactNote,
+  footnote
+}`
