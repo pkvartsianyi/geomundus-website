@@ -6,8 +6,8 @@ import { schema } from "../schemaTypes"
 export const config = defineConfig({
   name: "default",
   title: "GeoMundus CMS",
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  projectId: process.env.SANITY_PROJECT_ID || "",
+  dataset: process.env.SANITY_DATASET || "production",
   plugins: [structureTool(), visionTool()],
   schema,
   basePath: "/studio",
