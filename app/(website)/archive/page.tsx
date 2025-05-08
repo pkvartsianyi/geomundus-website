@@ -22,8 +22,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ArchivePage() {
-  const conferences = await cachedClient(conferencesQuery);
-  const currentYear = await cachedClient(currentConferenceYearQuery);
+  const conferences = await cachedClient(conferencesQuery.query);
+  const currentYear = await cachedClient(currentConferenceYearQuery.query);
 
   // Filter out the current year from the archive
   const pastConferences = conferences.filter(

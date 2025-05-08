@@ -15,7 +15,7 @@ import { submissionInfoQuery } from "@/lib/sanity.queries";
 import { format } from "date-fns";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const submissionInfo = await cachedClient(submissionInfoQuery);
+  const submissionInfo = await cachedClient(submissionInfoQuery.query);
 
   return {
     title: `GeoMundus - ${submissionInfo?.title || "Submissions"}`,
@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SubmissionsPage() {
-  const submissionInfo = await cachedClient(submissionInfoQuery);
+  const submissionInfo = await cachedClient(submissionInfoQuery.query);
 
   // Format submission deadline if available
   const formattedDeadline = submissionInfo?.submissionDeadline

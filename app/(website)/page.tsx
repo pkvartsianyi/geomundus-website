@@ -33,15 +33,15 @@ import FaqSection from "@/components/faq-section";
 import { RegisterButton } from "@/components/register-button";
 
 export default async function Home() {
-  const siteSettings = await cachedClient(siteSettingsQuery);
-  const aboutSection = await cachedClient(aboutSectionQuery);
-  const focusTopic = await cachedClient(focusTopicQuery);
-  const speakers = await cachedClient(speakersQuery);
-  const sponsors = await cachedClient(sponsorsQuery);
-  const partners = await cachedClient(partnersQuery);
-  const schedule = await cachedClient(scheduleQuery);
-  const faqs = await cachedClient(faqsQuery);
-  const currentYear = await cachedClient(currentConferenceYearQuery);
+  const siteSettings = await cachedClient(siteSettingsQuery.query);
+  const aboutSection = await cachedClient(aboutSectionQuery.query);
+  const focusTopic = await cachedClient(focusTopicQuery.query);
+  const speakers = await cachedClient(speakersQuery.query);
+  const sponsors = await cachedClient(sponsorsQuery.query);
+  const partners = await cachedClient(partnersQuery.query);
+  const schedule = await cachedClient(scheduleQuery.query);
+  const faqs = await cachedClient(faqsQuery.query);
+  const currentYear = await cachedClient(currentConferenceYearQuery.query);
   const startDate = siteSettings?.conferenceDate
     ? new Date(siteSettings.conferenceDate)
     : null;

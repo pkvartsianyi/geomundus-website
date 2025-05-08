@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RegistrationPage() {
-  const siteSettings = await cachedClient(siteSettingsQuery);
+  const siteSettings = await cachedClient(siteSettingsQuery.query);
 
   // Format registration deadline
   const formattedDeadline = siteSettings?.registrationDeadline

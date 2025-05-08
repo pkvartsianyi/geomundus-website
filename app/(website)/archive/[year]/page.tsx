@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ConferenceYearPage({ params }: Props) {
   const year = Number.parseInt(params.year);
   const conference = await cachedClient(conferenceByYearQuery, { year });
-  const currentYear = await cachedClient(currentConferenceYearQuery);
+  const currentYear = await cachedClient(currentConferenceYearQuery.query);
 
   if (!conference) {
     notFound();

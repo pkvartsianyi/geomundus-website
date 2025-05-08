@@ -13,11 +13,7 @@ export const client = createClient({
 export const cachedClient = cache(client.fetch.bind(client));
 
 // Helper function to add tags to queries for revalidation
-export function tagQuery(query: string, type: string, id?: string) {
-  // If an ID is provided, tag with both the type and the specific document
-  if (id) {
-    return `${query} [#${type} #${type}:${id}]`;
-  }
-  // Otherwise just tag with the document type
-  return `${query} [#${type}]`;
+export function tagQuery(query: string, tag: string, id?: string) {
+  const fullTag = id ? [`${tag}`, `${tag}:${id}`] : [tag];
+  return { query, token: fullTag };
 }

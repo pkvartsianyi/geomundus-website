@@ -82,14 +82,6 @@ export default function SiteBanner({
             <Link href={linkUrl}>{linkText}</Link>
           </Button>
         )}
-
-        <button
-          onClick={() => setIsVisible(false)}
-          className="absolute right-2 top-2 p-1 rounded-full hover:bg-black/10 transition-colors"
-          aria-label="Close banner"
-        >
-          <X className="h-4 w-4" />
-        </button>
       </div>
     </div>
   );

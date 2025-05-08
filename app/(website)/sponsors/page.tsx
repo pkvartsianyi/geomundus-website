@@ -26,9 +26,9 @@ export const metadata: Metadata = {
 };
 
 export default async function SponsorsPage() {
-  const siteSettings = await cachedClient(siteSettingsQuery);
-  const sponsors = await cachedClient(sponsorsQuery);
-  const partners = await cachedClient(partnersQuery);
+  const siteSettings = await cachedClient(siteSettingsQuery.query);
+  const sponsors = await cachedClient(sponsorsQuery.query);
+  const partners = await cachedClient(partnersQuery.query);
 
   return (
     <main className="flex min-h-screen flex-col">

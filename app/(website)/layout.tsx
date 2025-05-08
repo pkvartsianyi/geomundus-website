@@ -9,7 +9,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteSettings = await cachedClient(siteSettingsQuery);
+  const siteSettings = await cachedClient(siteSettingsQuery.query);
 
   return (
     <>
