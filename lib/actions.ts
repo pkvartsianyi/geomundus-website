@@ -1,26 +1,25 @@
-"use server"
+"use server";
 
-import { revalidatePath } from "next/cache"
-import { client } from "@/lib/sanity.client"
-import QRCode from "qrcode"
+import { revalidatePath } from "next/cache";
+import { client } from "@/lib/sanity.client";
+import QRCode from "qrcode";
 
 export async function submitRegistration(formData: {
-  firstName: string
-  lastName: string
-  email: string
-  affiliation?: string
-  role: string
-  dietaryRequirements?: string
-  attendingDinner: boolean
-  abstract?: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  affiliation?: string;
+  role: string;
+  dietaryRequirements?: string;
+  attendingDinner: boolean;
+  abstract?: string;
 }) {
-  const guestUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://geomundus.org"}/guests/${encodeURIComponent(formData.email)}`
-  const qrBuffer = await QRCode.toBuffer(guestUrl)
+  const guestUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://geomundus.org"}/guests/${encodeURIComponent(formData.email)}`;
+  const qrBuffer = await QRCode.toBuffer(guestUrl);
   const qrImageAsset = await client.assets.upload("image", qrBuffer, {
     filename: `qr-${formData.email}.png`,
     contentType: "image/png",
-  })
-
+  });
 
   const result = await client.create({
     _type: "registration",
@@ -40,7 +39,7 @@ export async function submitRegistration(formData: {
         _ref: qrImageAsset._id,
       },
     },
-  })
+  });
 
   // Send notification to Teams/Discord
   await sendWebhookNotification({
@@ -49,39 +48,44 @@ export async function submitRegistration(formData: {
     email: formData.email,
     affiliation: formData.affiliation || "Not specified",
     role: formData.role,
-  })
+  });
 
-  revalidatePath("/admin/registrations")
-  return { success: true, data: result }
+  revalidatePath("/admin/registrations");
+  return { success: true, data: result };
 }
 
 export async function verifyAdminToken(token: string) {
-  const result = token === process.env.ADMIN_TOKEN
+  const result = token === process.env.ADMIN_TOKEN;
 
   if (!result) {
-    throw new Error("Invalid token")
+    throw new Error("Invalid token");
   }
 
-  return result
+  return result;
 }
 
 // Function to send webhook notification to Teams/Discord
 async function sendWebhookNotification(registrationData: {
-  firstName: string
-  lastName: string
-  email: string
-  affiliation: string
-  role: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  affiliation: string;
+  role: string;
 }) {
-  const webhookUrl = process.env.NOTIFICATION_WEBHOOK_URL
+  const webhookUrl = process.env.NOTIFICATION_WEBHOOK_URL;
 
   if (!webhookUrl) {
-    console.warn("Notification webhook URL not configured. Skipping notification.")
-    return
+    console.warn(
+      "Notification webhook URL not configured. Skipping notification.",
+    );
+    return;
   }
 
   try {
-    if (webhookUrl.includes("office.com") || webhookUrl.includes("outlook.com")) {
+    if (
+      webhookUrl.includes("office.com") ||
+      webhookUrl.includes("outlook.com")
+    ) {
       const teamsPayload = {
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",
@@ -124,7 +128,7 @@ async function sendWebhookNotification(registrationData: {
             ],
           },
         ],
-      }
+      };
 
       await fetch(webhookUrl, {
         method: "POST",
@@ -132,7 +136,7 @@ async function sendWebhookNotification(registrationData: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(teamsPayload),
-      })
+      });
     }
     // Format for Discord
     else {
@@ -165,7 +169,7 @@ async function sendWebhookNotification(registrationData: {
             },
           },
         ],
-      }
+      };
 
       await fetch(webhookUrl, {
         method: "POST",
@@ -173,12 +177,12 @@ async function sendWebhookNotification(registrationData: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(discordPayload),
-      })
+      });
     }
 
-    console.log("Registration notification sent successfully")
+    console.log("Registration notification sent successfully");
   } catch (error) {
-    console.error("Error sending registration notification:", error)
+    console.error("Error sending registration notification:", error);
     // Don't throw the error - we don't want to fail the registration if notification fails
   }
 }

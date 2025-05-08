@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity"
+import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "partner",
@@ -37,4 +37,4 @@ export default defineType({
       media: "logo",
     },
   },
-})
+});

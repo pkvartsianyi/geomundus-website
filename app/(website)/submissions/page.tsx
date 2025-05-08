@@ -1,38 +1,49 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileTextIcon, ImageIcon, AwardIcon, ExternalLinkIcon, CalendarIcon } from "lucide-react"
-import { PortableText } from "@portabletext/react"
-import { cachedClient } from "@/lib/sanity.client"
-import { submissionInfoQuery } from "@/lib/sanity.queries"
-import { format } from "date-fns"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  FileTextIcon,
+  ImageIcon,
+  AwardIcon,
+  ExternalLinkIcon,
+  CalendarIcon,
+} from "lucide-react";
+import { PortableText } from "@portabletext/react";
+import { cachedClient } from "@/lib/sanity.client";
+import { submissionInfoQuery } from "@/lib/sanity.queries";
+import { format } from "date-fns";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const submissionInfo = await cachedClient(submissionInfoQuery)
+  const submissionInfo = await cachedClient(submissionInfoQuery);
 
   return {
     title: `GeoMundus - ${submissionInfo?.title || "Submissions"}`,
-    description: submissionInfo?.description || "Submit your papers and posters to the GeoMundus Conference",
-  }
+    description:
+      submissionInfo?.description ||
+      "Submit your papers and posters to the GeoMundus Conference",
+  };
 }
 
 export default async function SubmissionsPage() {
-  const submissionInfo = await cachedClient(submissionInfoQuery)
+  const submissionInfo = await cachedClient(submissionInfoQuery);
 
   // Format submission deadline if available
   const formattedDeadline = submissionInfo?.submissionDeadline
     ? format(new Date(submissionInfo.submissionDeadline), "MMMM do, yyyy")
-    : null
+    : null;
 
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">{submissionInfo?.title || "Submissions"}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            {submissionInfo?.title || "Submissions"}
+          </h1>
           <p className="text-lg md:text-xl mb-4">
-            {submissionInfo?.description || "Submit your papers and posters to the GeoMundus Conference"}
+            {submissionInfo?.description ||
+              "Submit your papers and posters to the GeoMundus Conference"}
           </p>
 
           {formattedDeadline && (
@@ -49,7 +60,8 @@ export default async function SubmissionsPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-8">
-              {submissionInfo?.callForPapersTitle || "Call for Short Paper and Poster"}
+              {submissionInfo?.callForPapersTitle ||
+                "Call for Short Paper and Poster"}
             </h2>
 
             {submissionInfo?.callForPapersContent ? (
@@ -59,18 +71,25 @@ export default async function SubmissionsPage() {
             ) : (
               <div className="prose max-w-none text-gray-700 space-y-4">
                 <p>
-                  The Geomundus Conference is opening its forum to young professionals looking to present their work in
-                  the field of Geospatial Technologies, Geoinformatics & GI Applications.
+                  The Geomundus Conference is opening its forum to young
+                  professionals looking to present their work in the field of
+                  Geospatial Technologies, Geoinformatics & GI Applications.
                 </p>
                 <p>
-                  Our unique approach as a student organized congress gives the opportunity to young academics to
-                  receive feedback to their work from experienced actors of the scientific community and interact with
-                  other likeminded professionals working with geographic applications.
+                  Our unique approach as a student organized congress gives the
+                  opportunity to young academics to receive feedback to their
+                  work from experienced actors of the scientific community and
+                  interact with other likeminded professionals working with
+                  geographic applications.
                 </p>
               </div>
             )}
 
-            {submissionInfo?.footnote && <p className="text-sm text-gray-500 italic mt-6">{submissionInfo.footnote}</p>}
+            {submissionInfo?.footnote && (
+              <p className="text-sm text-gray-500 italic mt-6">
+                {submissionInfo.footnote}
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -82,14 +101,17 @@ export default async function SubmissionsPage() {
             <h2 className="text-2xl font-bold text-center mb-8">Submission</h2>
 
             <p className="text-center mb-10">
-              You can find the guidelines for writing the short paper and poster, as well as the template for the short
-              paper in the links below:
+              You can find the guidelines for writing the short paper and
+              poster, as well as the template for the short paper in the links
+              below:
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="bg-emerald-50 flex flex-row items-center justify-between">
-                  <CardTitle className="text-lg">Short Paper Guidelines</CardTitle>
+                  <CardTitle className="text-lg">
+                    Short Paper Guidelines
+                  </CardTitle>
                   <FileTextIcon className="h-5 w-5 text-emerald-700" />
                 </CardHeader>
                 <CardContent className="pt-6">
@@ -108,7 +130,9 @@ export default async function SubmissionsPage() {
 
               <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="bg-emerald-50 flex flex-row items-center justify-between">
-                  <CardTitle className="text-lg">Short Paper Template</CardTitle>
+                  <CardTitle className="text-lg">
+                    Short Paper Template
+                  </CardTitle>
                   <FileTextIcon className="h-5 w-5 text-emerald-700" />
                 </CardHeader>
                 <CardContent className="pt-6">
@@ -146,7 +170,9 @@ export default async function SubmissionsPage() {
 
               <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="bg-amber-50 flex flex-row items-center justify-between">
-                  <CardTitle className="text-lg">Mobility Grant Guideline</CardTitle>
+                  <CardTitle className="text-lg">
+                    Mobility Grant Guideline
+                  </CardTitle>
                   <AwardIcon className="h-5 w-5 text-amber-700" />
                 </CardHeader>
                 <CardContent className="pt-6">
@@ -165,7 +191,9 @@ export default async function SubmissionsPage() {
             </div>
 
             {submissionInfo?.posterPrintingNote && (
-              <p className="text-center mb-6 text-sm text-gray-600">{submissionInfo.posterPrintingNote}</p>
+              <p className="text-center mb-6 text-sm text-gray-600">
+                {submissionInfo.posterPrintingNote}
+              </p>
             )}
 
             <div className="space-y-4">
@@ -175,7 +203,11 @@ export default async function SubmissionsPage() {
                 className="w-full bg-emerald-700 hover:bg-emerald-800"
                 disabled={!submissionInfo?.submissionFormUrl}
               >
-                <Link href={submissionInfo?.submissionFormUrl || "#"} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={submissionInfo?.submissionFormUrl || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   SUBMIT YOUR SHORT PAPER AND POSTER ABSTRACT
                 </Link>
               </Button>
@@ -187,7 +219,11 @@ export default async function SubmissionsPage() {
                 className="w-full"
                 disabled={!submissionInfo?.mobilityGrantFormUrl}
               >
-                <Link href={submissionInfo?.mobilityGrantFormUrl || "#"} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={submissionInfo?.mobilityGrantFormUrl || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   APPLY FOR MOBILITY GRANT
                 </Link>
               </Button>
@@ -211,5 +247,5 @@ export default async function SubmissionsPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }

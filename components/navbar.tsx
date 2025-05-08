@@ -1,48 +1,53 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { LuMenu, LuX } from "react-icons/lu"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown } from "lucide-react"
+import type React from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { LuMenu, LuX } from "react-icons/lu";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 interface SiteSettings {
-  logo: any
-  title: string
-  registrationOpen?: boolean
+  logo: any;
+  title: string;
+  registrationOpen?: boolean;
   banner?: {
-    enabled: boolean
-  }
+    enabled: boolean;
+  };
 }
 
 interface NavbarProps {
-  siteSettings: SiteSettings | null
+  siteSettings: SiteSettings | null;
 }
 
 export default function Navbar({ siteSettings }: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const hasBanner = siteSettings?.banner?.enabled || false
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const hasBanner = siteSettings?.banner?.enabled || false;
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
-        setIsScrolled(true)
+        setIsScrolled(true);
       } else {
-        setIsScrolled(false)
+        setIsScrolled(false);
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <header
@@ -119,7 +124,9 @@ export default function Navbar({ siteSettings }: NavbarProps) {
               <Button
                 asChild
                 className={
-                  isScrolled ? "bg-emerald-700 hover:bg-emerald-800" : "bg-white text-emerald-800 hover:bg-gray-100"
+                  isScrolled
+                    ? "bg-emerald-700 hover:bg-emerald-800"
+                    : "bg-white text-emerald-800 hover:bg-gray-100"
                 }
               >
                 <Link href="/registration">Register</Link>
@@ -140,11 +147,20 @@ export default function Navbar({ siteSettings }: NavbarProps) {
           </nav>
 
           {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={toggleMenu}
+          >
             {isOpen ? (
-              <LuX className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
+              <LuX
+                className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`}
+              />
             ) : (
-              <LuMenu className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
+              <LuMenu
+                className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`}
+              />
             )}
           </Button>
         </div>
@@ -174,13 +190,20 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             </MobileNavLink>
 
             {siteSettings?.registrationOpen ? (
-              <Button asChild className="w-full bg-emerald-700 hover:bg-emerald-800">
+              <Button
+                asChild
+                className="w-full bg-emerald-700 hover:bg-emerald-800"
+              >
                 <Link href="/registration" onClick={toggleMenu}>
                   Register
                 </Link>
               </Button>
             ) : (
-              <Button asChild variant="outline" className="w-full border-emerald-700 text-emerald-700">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full border-emerald-700 text-emerald-700"
+              >
                 <Link href="/registration" onClick={toggleMenu}>
                   Registration Coming Soon
                 </Link>
@@ -190,13 +213,13 @@ export default function Navbar({ siteSettings }: NavbarProps) {
         </div>
       )}
     </header>
-  )
+  );
 }
 
 interface NavLinkProps {
-  href: string
-  children: React.ReactNode
-  isScrolled: boolean
+  href: string;
+  children: React.ReactNode;
+  isScrolled: boolean;
 }
 
 function NavLink({ href, children, isScrolled }: NavLinkProps) {
@@ -209,13 +232,13 @@ function NavLink({ href, children, isScrolled }: NavLinkProps) {
     >
       {children}
     </Link>
-  )
+  );
 }
 
 interface MobileNavLinkProps {
-  href: string
-  children: React.ReactNode
-  onClick: () => void
+  href: string;
+  children: React.ReactNode;
+  onClick: () => void;
 }
 
 function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
@@ -227,5 +250,5 @@ function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
     >
       {children}
     </Link>
-  )
+  );
 }

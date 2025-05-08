@@ -1,51 +1,51 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Image from "next/image"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, X } from "lucide-react"
+import { useState } from "react";
+import Image from "next/image";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 interface ConferenceGalleryProps {
-  images: string[]
+  images: string[];
 }
 
 export default function ConferenceGallery({ images }: ConferenceGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const openLightbox = (image: string, index: number) => {
-    setSelectedImage(image)
-    setCurrentIndex(index)
-  }
+    setSelectedImage(image);
+    setCurrentIndex(index);
+  };
 
   const closeLightbox = () => {
-    setSelectedImage(null)
-  }
+    setSelectedImage(null);
+  };
 
   const goToPrevious = () => {
-    const newIndex = (currentIndex - 1 + images.length) % images.length
-    setSelectedImage(images[newIndex])
-    setCurrentIndex(newIndex)
-  }
+    const newIndex = (currentIndex - 1 + images.length) % images.length;
+    setSelectedImage(images[newIndex]);
+    setCurrentIndex(newIndex);
+  };
 
   const goToNext = () => {
-    const newIndex = (currentIndex + 1) % images.length
-    setSelectedImage(images[newIndex])
-    setCurrentIndex(newIndex)
-  }
+    const newIndex = (currentIndex + 1) % images.length;
+    setSelectedImage(images[newIndex]);
+    setCurrentIndex(newIndex);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") {
-      goToPrevious()
+      goToPrevious();
     } else if (e.key === "ArrowRight") {
-      goToNext()
+      goToNext();
     } else if (e.key === "Escape") {
-      closeLightbox()
+      closeLightbox();
     }
-  }
+  };
 
   return (
     <div>
@@ -66,7 +66,10 @@ export default function ConferenceGallery({ images }: ConferenceGalleryProps) {
         ))}
       </div>
 
-      <Dialog open={!!selectedImage} onOpenChange={(open) => !open && closeLightbox()}>
+      <Dialog
+        open={!!selectedImage}
+        onOpenChange={(open) => !open && closeLightbox()}
+      >
         <DialogContent
           className="max-w-screen-lg w-[90vw] h-[90vh] p-0 bg-black/90 border-none"
           onKeyDown={handleKeyDown}
@@ -117,5 +120,5 @@ export default function ConferenceGallery({ images }: ConferenceGalleryProps) {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

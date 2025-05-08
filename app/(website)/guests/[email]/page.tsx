@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { cachedClient } from "@/lib/sanity.client"
-import GuestDetails from "@/components/guest-details"
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { cachedClient } from "@/lib/sanity.client";
+import GuestDetails from "@/components/guest-details";
 
 type Props = {
-  params: { email: string }
-}
+  params: { email: string };
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const decodedEmail = decodeURIComponent(params.email)
+  const decodedEmail = decodeURIComponent(params.email);
 
   return {
     title: `Guest Information - GeoMundus`,
     description: `Registration details for ${decodedEmail}`,
-  }
+  };
 }
 
 // Query to get registration by email
@@ -29,14 +29,16 @@ const registrationByEmailQuery = `*[_type == "registration" && email == $email][
   abstract,
   status,
   qrCode
-}`
+}`;
 
 export default async function GuestPage({ params }: Props) {
-  const decodedEmail = decodeURIComponent(params.email)
-  const registration = await cachedClient(registrationByEmailQuery, { email: decodedEmail })
+  const decodedEmail = decodeURIComponent(params.email);
+  const registration = await cachedClient(registrationByEmailQuery, {
+    email: decodedEmail,
+  });
 
   if (!registration) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -44,8 +46,12 @@ export default async function GuestPage({ params }: Props) {
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Guest Information</h1>
-          <p className="text-lg md:text-xl mb-4">Registration details for GeoMundus Conference</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            Guest Information
+          </h1>
+          <p className="text-lg md:text-xl mb-4">
+            Registration details for GeoMundus Conference
+          </p>
         </div>
       </section>
 
@@ -58,5 +64,5 @@ export default async function GuestPage({ params }: Props) {
         </div>
       </section>
     </main>
-  )
+  );
 }

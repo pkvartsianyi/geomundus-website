@@ -1,61 +1,63 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { format } from "date-fns"
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 
 interface ScheduleEvent {
-  time: string
-  title: string
-  description?: string
-  speaker?: string
-  location?: string
-  type: string
+  time: string;
+  title: string;
+  description?: string;
+  speaker?: string;
+  location?: string;
+  type: string;
 }
 
 interface ScheduleDay {
-  date: string
-  events: ScheduleEvent[]
+  date: string;
+  events: ScheduleEvent[];
 }
 
 interface Schedule {
-  days: ScheduleDay[]
+  days: ScheduleDay[];
 }
 
 interface ScheduleSectionProps {
-  schedule: Schedule
+  schedule: Schedule;
 }
 
 export default function ScheduleSection({ schedule }: ScheduleSectionProps) {
-  const [activeTab, setActiveTab] = useState<string>(schedule.days[0]?.date || "")
+  const [activeTab, setActiveTab] = useState<string>(
+    schedule.days[0]?.date || "",
+  );
 
   const getEventTypeColor = (type: string) => {
     switch (type) {
       case "keynote":
-        return "bg-amber-100 text-amber-800 hover:bg-amber-200"
+        return "bg-amber-100 text-amber-800 hover:bg-amber-200";
       case "talk":
-        return "bg-blue-100 text-blue-800 hover:bg-blue-200"
+        return "bg-blue-100 text-blue-800 hover:bg-blue-200";
       case "workshop":
-        return "bg-purple-100 text-purple-800 hover:bg-purple-200"
+        return "bg-purple-100 text-purple-800 hover:bg-purple-200";
       case "break":
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200"
+        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
       case "social":
-        return "bg-pink-100 text-pink-800 hover:bg-pink-200"
+        return "bg-pink-100 text-pink-800 hover:bg-pink-200";
       default:
-        return "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+        return "bg-emerald-100 text-emerald-800 hover:bg-emerald-200";
     }
-  }
+  };
 
   const formatEventDate = (dateString: string) => {
     try {
-      const date = new Date(dateString)
-      return format(date, "EEEE, MMMM d, yyyy")
+      const date = new Date(dateString);
+      return format(date, "EEEE, MMMM d, yyyy");
     } catch (error) {
-      return dateString
+      return dateString;
     }
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -76,15 +78,30 @@ export default function ScheduleSection({ schedule }: ScheduleSectionProps) {
                   <div className="flex flex-col md:flex-row">
                     <div className="bg-gray-50 p-4 md:w-1/4 flex flex-col justify-center items-center md:items-start">
                       <div className="text-lg font-bold">{event.time}</div>
-                      {event.location && <div className="text-sm text-gray-500">{event.location}</div>}
-                      <Badge className={`mt-2 ${getEventTypeColor(event.type)}`}>
-                        {event.type.charAt(0).toUpperCase() + event.type.slice(1)}
+                      {event.location && (
+                        <div className="text-sm text-gray-500">
+                          {event.location}
+                        </div>
+                      )}
+                      <Badge
+                        className={`mt-2 ${getEventTypeColor(event.type)}`}
+                      >
+                        {event.type.charAt(0).toUpperCase() +
+                          event.type.slice(1)}
                       </Badge>
                     </div>
                     <div className="p-4 md:w-3/4">
                       <h3 className="text-lg font-bold">{event.title}</h3>
-                      {event.speaker && <p className="text-emerald-700 font-medium">{event.speaker}</p>}
-                      {event.description && <p className="mt-2 text-gray-600">{event.description}</p>}
+                      {event.speaker && (
+                        <p className="text-emerald-700 font-medium">
+                          {event.speaker}
+                        </p>
+                      )}
+                      {event.description && (
+                        <p className="mt-2 text-gray-600">
+                          {event.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -94,5 +111,5 @@ export default function ScheduleSection({ schedule }: ScheduleSectionProps) {
         ))}
       </Tabs>
     </div>
-  )
+  );
 }

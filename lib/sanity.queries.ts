@@ -1,6 +1,8 @@
-import { groq } from "next-sanity"
+import { groq } from "next-sanity";
+import { tagQuery } from "./sanity.client";
 
-export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
+export const siteSettingsQuery = tagQuery(
+  groq`*[_type == "siteSettings"][0]{
   title,
   description,
   "logo": logo.asset->url,
@@ -21,20 +23,29 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
   registrationOpen,
   registrationDeadline,
   banner
-}`
+}`,
+  "siteSettings",
+);
 
-export const aboutSectionQuery = groq`*[_type == "aboutSection"][0]{
+export const aboutSectionQuery = tagQuery(
+  groq`*[_type == "aboutSection"][0]{
   title,
   content
-}`
+}`,
+  "aboutSection",
+);
 
-export const focusTopicQuery = groq`*[_type == "focusTopic"][0]{
+export const focusTopicQuery = tagQuery(
+  groq`*[_type == "focusTopic"][0]{
   title,
   description,
   topics
-}`
+}`,
+  "focusTopic",
+);
 
-export const speakersQuery = groq`*[_type == "speaker"] | order(order asc) {
+export const speakersQuery = tagQuery(
+  groq`*[_type == "speaker"] | order(order asc) {
   _id,
   name,
   title,
@@ -43,25 +54,34 @@ export const speakersQuery = groq`*[_type == "speaker"] | order(order asc) {
   websiteUrl,
   keynoteTitle,
   keynoteDescription
-}`
+}`,
+  "speaker",
+);
 
-export const sponsorsQuery = groq`*[_type == "sponsor"] | order(tier asc, order asc) {
+export const sponsorsQuery = tagQuery(
+  groq`*[_type == "sponsor"] | order(tier asc, order asc) {
   _id,
   name,
   "logoUrl": logo.asset->url,
   websiteUrl,
   tier
-}`
+}`,
+  "sponsor",
+);
 
-export const partnersQuery = groq`*[_type == "partner"] | order(order asc) {
+export const partnersQuery = tagQuery(
+  groq`*[_type == "partner"] | order(order asc) {
   _id,
   name,
   "logoUrl": logo.asset->url,
   websiteUrl
-}`
+}`,
+  "partner",
+);
 
 // New queries for conference archives
-export const conferencesQuery = groq`*[_type == "conference"] | order(year desc) {
+export const conferencesQuery = tagQuery(
+  groq`*[_type == "conference"] | order(year desc) {
   _id,
   year,
   title,
@@ -69,9 +89,13 @@ export const conferencesQuery = groq`*[_type == "conference"] | order(year desc)
   "imageUrl": image.asset->url,
   websiteUrl,
   location
-}`
+}`,
+  "conference",
+);
 
-export const conferenceByYearQuery = groq`*[_type == "conference" && year == $year][0] {
+export const conferenceByYearQuery = (year: number) =>
+  tagQuery(
+    groq`*[_type == "conference" && year == $year][0] {
   _id,
   year,
   title,
@@ -81,12 +105,18 @@ export const conferenceByYearQuery = groq`*[_type == "conference" && year == $ye
   location,
   highlights,
   "galleryImages": gallery[].asset->url
-}`
+}`,
+    "conference",
+  );
 
-export const currentConferenceYearQuery = groq`*[_type == "conference"] | order(year desc)[0].year`
+export const currentConferenceYearQuery = tagQuery(
+  groq`*[_type == "conference"] | order(year desc)[0].year`,
+  "conference",
+);
 
 // Query for schedule
-export const scheduleQuery = groq`*[_type == "schedule"][0] {
+export const scheduleQuery = tagQuery(
+  groq`*[_type == "schedule"][0] {
   days[] {
     date,
     events[] {
@@ -98,17 +128,23 @@ export const scheduleQuery = groq`*[_type == "schedule"][0] {
       type
     }
   }
-}`
+}`,
+  "schedule",
+);
 
 // Query for FAQs
-export const faqsQuery = groq`*[_type == "faq"] | order(order asc) {
+export const faqsQuery = tagQuery(
+  groq`*[_type == "faq"] | order(order asc) {
   _id,
   question,
   answer
-}`
+}`,
+  "faq",
+);
 
 // Query for registrations
-export const registrationsQuery = groq`*[_type == "registration"] | order(_createdAt desc) {
+export const registrationsQuery = tagQuery(
+  groq`*[_type == "registration"] | order(_createdAt desc) {
   _id,
   firstName,
   lastName,
@@ -118,10 +154,13 @@ export const registrationsQuery = groq`*[_type == "registration"] | order(_creat
   dietaryRequirements,
   attendingDinner,
   _createdAt
-}`
+}`,
+  "registration",
+);
 
 // Query for submission information
-export const submissionInfoQuery = groq`*[_type == "submission"][0] {
+export const submissionInfoQuery = tagQuery(
+  groq`*[_type == "submission"][0] {
   title,
   description,
   callForPapersTitle,
@@ -137,4 +176,6 @@ export const submissionInfoQuery = groq`*[_type == "submission"][0] {
   contactEmail,
   contactNote,
   footnote
-}`
+}`,
+  "submission",
+);

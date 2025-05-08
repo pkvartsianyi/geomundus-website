@@ -1,19 +1,39 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/hooks/use-toast"
-import { submitRegistration } from "@/lib/actions"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
+import { submitRegistration } from "@/lib/actions";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -32,11 +52,11 @@ const formSchema = z.object({
   dietaryRequirements: z.string().optional(),
   attendingDinner: z.boolean(),
   abstract: z.string().optional(),
-})
+});
 
 export default function RegistrationForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,33 +69,34 @@ export default function RegistrationForm() {
       attendingDinner: false,
       abstract: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
-      await submitRegistration(values)
+      await submitRegistration(values);
 
       toast({
         title: "Registration successful",
         description: "Thank you for registering for GeoMundus!",
-      })
+      });
 
       // Reset form
-      form.reset()
+      form.reset();
 
       // Redirect to confirmation page
-      router.push("/registration/confirmation")
+      router.push("/registration/confirmation");
     } catch (error) {
-      console.error("Registration error:", error)
+      console.error("Registration error:", error);
       toast({
         title: "Registration failed",
-        description: "There was a problem with your registration. Please try again.",
+        description:
+          "There was a problem with your registration. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
@@ -83,7 +104,10 @@ export default function RegistrationForm() {
     <Card>
       <CardHeader>
         <CardTitle>Conference Registration</CardTitle>
-        <CardDescription>Please fill out the form below to register for the GeoMundus Conference.</CardDescription>
+        <CardDescription>
+          Please fill out the form below to register for the GeoMundus
+          Conference.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -125,7 +149,11 @@ export default function RegistrationForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="john.doe@example.com" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="john.doe@example.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -139,9 +167,14 @@ export default function RegistrationForm() {
                 <FormItem>
                   <FormLabel>Affiliation</FormLabel>
                   <FormControl>
-                    <Input placeholder="University or Organization" {...field} />
+                    <Input
+                      placeholder="University or Organization"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>Your university, company, or organization</FormDescription>
+                  <FormDescription>
+                    Your university, company, or organization
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -154,14 +187,19 @@ export default function RegistrationForm() {
                 <FormItem>
                   <FormLabel>Role</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select your role" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="student">Student</SelectItem>
                         <SelectItem value="academic">Academic</SelectItem>
-                        <SelectItem value="industry">Industry Professional</SelectItem>
+                        <SelectItem value="industry">
+                          Industry Professional
+                        </SelectItem>
                         <SelectItem value="government">Government</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
@@ -179,9 +217,14 @@ export default function RegistrationForm() {
                 <FormItem>
                   <FormLabel>Dietary Requirements</FormLabel>
                   <FormControl>
-                    <Input placeholder="Vegetarian, vegan, allergies, etc." {...field} />
+                    <Input
+                      placeholder="Vegetarian, vegan, allergies, etc."
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>Please let us know if you have any dietary restrictions</FormDescription>
+                  <FormDescription>
+                    Please let us know if you have any dietary restrictions
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -193,11 +236,18 @@ export default function RegistrationForm() {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>I would like to attend the conference dinner</FormLabel>
-                    <FormDescription>The conference dinner is included in your registration</FormDescription>
+                    <FormLabel>
+                      I would like to attend the conference dinner
+                    </FormLabel>
+                    <FormDescription>
+                      The conference dinner is included in your registration
+                    </FormDescription>
                   </div>
                 </FormItem>
               )}
@@ -229,5 +279,5 @@ export default function RegistrationForm() {
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }

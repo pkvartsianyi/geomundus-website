@@ -1,25 +1,32 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { PortableText } from "@portabletext/react"
-import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
+import { useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { PortableText } from "@portabletext/react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 interface FAQ {
-  _id: string
-  question: string
-  answer: any
+  _id: string;
+  question: string;
+  answer: any;
 }
 
 interface FAQSectionProps {
-  faqs: FAQ[]
+  faqs: FAQ[];
 }
 
 export default function FaqSection({ faqs }: FAQSectionProps) {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredFaqs = faqs.filter((faq) => faq.question.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredFaqs = faqs.filter((faq) =>
+    faq.question.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -35,13 +42,17 @@ export default function FaqSection({ faqs }: FAQSectionProps) {
 
       {filteredFaqs.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-gray-500">No questions found matching your search.</p>
+          <p className="text-gray-500">
+            No questions found matching your search.
+          </p>
         </div>
       ) : (
         <Accordion type="single" collapsible className="w-full">
           {filteredFaqs.map((faq) => (
             <AccordionItem key={faq._id} value={faq._id}>
-              <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+              <AccordionTrigger className="text-left">
+                {faq.question}
+              </AccordionTrigger>
               <AccordionContent>
                 <div className="prose max-w-none">
                   <PortableText value={faq.answer} />
@@ -52,5 +63,5 @@ export default function FaqSection({ faqs }: FAQSectionProps) {
         </Accordion>
       )}
     </div>
-  )
+  );
 }

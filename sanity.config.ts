@@ -1,28 +1,95 @@
-'use client'
-
-/**
- * This configuration is used to for the Sanity Studio that’s mounted on the `/app/studio/[[...tool]]/page.tsx` route
- */
-
-import {visionTool} from '@sanity/vision'
-import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
-
-// Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import {apiVersion, dataset, projectId} from './sanity/env'
-import {schema} from './sanity/schemaTypes'
-import {structure} from './sanity/structure'
+import { defineConfig } from "sanity";
+import { structureTool } from "sanity/structure";
+import { visionTool } from "@sanity/vision";
+import { schema } from "./sanity/schemaTypes";
+import { apiVersion, dataset, projectId } from "./sanity/env";
 
 export default defineConfig({
-  basePath: '/studio',
+  basePath: "/studio",
+  name: "default",
+  title: "GeoMundus",
+
   projectId,
   dataset,
-  // Add and edit the content schema in the './sanity/schemaTypes' folder
+
+  plugins: [structureTool(), visionTool({ defaultApiVersion: apiVersion })],
   schema,
-  plugins: [
-    structureTool({structure}),
-    // Vision is for querying with GROQ from inside the Studio
-    // https://www.sanity.io/docs/the-vision-plugin
-    visionTool({defaultApiVersion: apiVersion}),
-  ],
-})
+  document: {
+    // custom action to publish and deploy
+    actions: (prev, context) => {
+      // Only show the "Publish & Deploy" action for document types that affect the website
+      const relevantTypes = [
+        "siteSettings",
+        "aboutSection",
+        "focusTopic",
+        "speaker",
+        "sponsor",
+        "partner",
+        "conference",
+        "schedule",
+        "faq",
+        "submission",
+      ];
+
+      // If this is a relevant document type, add our custom publish action
+      if (relevantTypes.includes(context.schemaType)) {
+        return [
+          ...prev,
+          {
+            name: "publishAndDeploy",
+            label: "Publish & Deploy",
+            icon: () => "🚀",
+            onHandle: async (props) => {
+              // First publish the document
+              const publishResult = await props.publish();
+
+              // Then trigger a revalidation
+              if (publishResult && publishResult.document) {
+                try {
+                  const doc = publishResult.document;
+                  const revalidateUrl = `${process.env.SANITY_STUDIO_SITE_URL}/api/revalidate`;
+
+                  // Send the webhook to trigger revalidation
+                  const response = await fetch(revalidateUrl, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "x-webhook-secret":
+                        process.env.SANITY_STUDIO_REVALIDATE_SECRET || "",
+                    },
+                    body: JSON.stringify(doc),
+                  });
+
+                  const result = await response.json();
+
+                  if (response.ok) {
+                    props.onComplete({
+                      type: "success",
+                      message: `Published and deployed changes! ${result.message || ""}`,
+                    });
+                  } else {
+                    props.onComplete({
+                      type: "error",
+                      message: `Published, but failed to deploy: ${result.message || response.statusText}`,
+                    });
+                  }
+                } catch (error) {
+                  props.onComplete({
+                    type: "error",
+                    message: `Published, but failed to deploy: ${error instanceof Error ? error.message : String(error)}`,
+                  });
+                }
+              } else {
+                props.onComplete({
+                  type: "error",
+                  message: "Failed to publish document",
+                });
+              }
+            },
+          },
+        ];
+      }
+      return prev;
+    },
+  },
+});

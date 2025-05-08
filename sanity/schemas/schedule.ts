@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity"
+import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "schedule",
@@ -88,4 +88,4 @@ export default defineType({
       title: "title",
     },
   },
-})
+});

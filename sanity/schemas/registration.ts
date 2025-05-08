@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity"
+import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "registration",
@@ -84,11 +84,11 @@ export default defineType({
       subtitle: "lastName",
     },
     prepare(selection) {
-      const { title, subtitle } = selection
+      const { title, subtitle } = selection;
       return {
         title: title,
         subtitle: subtitle,
-      }
+      };
     },
   },
-})
+});

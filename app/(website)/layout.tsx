@@ -1,17 +1,15 @@
-import type React from "react"
-import Navbar from "@/components/navbar"
-import { cachedClient } from "@/lib/sanity.client"
-import { siteSettingsQuery } from "@/lib/sanity.queries"
-import SiteBanner from "@/components/site-banner"
-
+import type React from "react";
+import Navbar from "@/components/navbar";
+import { cachedClient } from "@/lib/sanity.client";
+import { siteSettingsQuery } from "@/lib/sanity.queries";
+import SiteBanner from "@/components/site-banner";
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-
-  const siteSettings = (await cachedClient(siteSettingsQuery))
+  const siteSettings = await cachedClient(siteSettingsQuery);
 
   return (
     <>
@@ -26,5 +24,5 @@ export default async function RootLayout({
       <Navbar siteSettings={siteSettings} />
       {children}
     </>
-  )
+  );
 }
