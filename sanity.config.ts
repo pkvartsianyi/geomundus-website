@@ -4,6 +4,7 @@ import { visionTool } from "@sanity/vision";
 import { schema } from "./sanity/schemaTypes";
 import { apiVersion, dataset, projectId } from "./sanity/env";
 
+
 export default defineConfig({
   basePath: "/studio",
   name: "default",
@@ -12,7 +13,7 @@ export default defineConfig({
   projectId,
   dataset,
 
-  plugins: [structureTool(), visionTool({ defaultApiVersion: apiVersion })],
+  plugins: [structureTool(), visionTool()],
   schema,
   document: {
     // custom action to publish and deploy
@@ -47,7 +48,7 @@ export default defineConfig({
               if (publishResult && publishResult.document) {
                 try {
                   const doc = publishResult.document;
-                  const revalidateUrl = `${process.env.SANITY_STUDIO_SITE_URL}/api/revalidate`;
+                  const revalidateUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/revalidate`;
 
                   // Send the webhook to trigger revalidation
                   const response = await fetch(revalidateUrl, {
