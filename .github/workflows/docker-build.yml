@@ -31,11 +31,6 @@ jobs:
             --build-arg SANITY_PROJECT_ID=${{ secrets.SANITY_PROJECT_ID }} \
             --build-arg SANITY_DATASET=${{ secrets.SANITY_DATASET }} \
             --build-arg SANITY_AUTH_TOKEN=${{ secrets.SANITY_AUTH_TOKEN }} \
-            --build-arg NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }} \
-            --build-arg ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }} \
-            --build-arg NEXT_PUBLIC_POSTHOG_KEY=${{ vars.NEXT_PUBLIC_POSTHOG_KEY }} \
-            --build-arg NEXT_PUBLIC_POSTHOG_HOST=${{ vars.NEXT_PUBLIC_POSTHOG_HOST }} \
-            --build-arg NOTIFICATION_WEBHOOK_URL=${{ secrets.NOTIFICATION_WEBHOOK_URL }} \
             -t $IMAGE_NAME:latest .
 
       - name: Push Docker image
