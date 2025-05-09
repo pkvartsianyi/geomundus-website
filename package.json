@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "gen": "pnpx sanity schema extract && pnpx sanity schema extract",
     "start": "next start",
     "sanity": "cd studio && sanity start",
     "lint": "next lint",

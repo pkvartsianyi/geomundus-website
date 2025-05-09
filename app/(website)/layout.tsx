@@ -4,7 +4,7 @@ import { cachedClient } from "@/lib/sanity.client";
 import { siteSettingsQuery } from "@/lib/sanity.queries";
 import SiteBanner from "@/components/site-banner";
 import { PostHogProvider } from "@/components/PostHogProvider";
-import { SiteSettings } from "@/types/sanity.types";
+import { SiteSettings } from "@/sanity.types";
 
 export default async function RootLayout({
   children,

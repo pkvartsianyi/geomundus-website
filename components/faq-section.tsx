@@ -10,22 +10,17 @@ import {
 import { PortableText } from "@portabletext/react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-
-interface FAQ {
-  _id: string;
-  question: string;
-  answer: any;
-}
+import { Faq } from "@/sanity.types";
 
 interface FAQSectionProps {
-  faqs: FAQ[];
+  faqs: Faq[];
 }
 
 export default function FaqSection({ faqs }: FAQSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredFaqs = faqs.filter((faq) =>
-    faq.question.toLowerCase().includes(searchQuery.toLowerCase()),
+    faq.question?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -55,7 +50,7 @@ export default function FaqSection({ faqs }: FAQSectionProps) {
               </AccordionTrigger>
               <AccordionContent>
                 <div className="prose max-w-none">
-                  <PortableText value={faq.answer} />
+                  <PortableText value={faq.answer || []} />
                 </div>
               </AccordionContent>
             </AccordionItem>

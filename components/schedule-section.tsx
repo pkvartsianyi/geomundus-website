@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { Schedule } from "@/types/sanity.types";
+import { Schedule } from "@/sanity.types";
 
 
 interface ScheduleSectionProps {
