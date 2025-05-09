@@ -1,68 +1,76 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { LuMenu, LuX } from "react-icons/lu"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown } from "lucide-react"
-import { RegisterButton } from "./register-button"
-import { SiteSettings } from "@/types/sanity.types"
-
+import type React from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { LuMenu, LuX } from "react-icons/lu";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
+import { RegisterButton } from "./register-button";
+import { SiteSettings } from "@/types/sanity.types";
 
 interface NavbarProps {
-  siteSettings: SiteSettings | null
+  siteSettings: SiteSettings | null;
 }
 
 export default function Navbar({ siteSettings }: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [bannerVisible, setBannerVisible] = useState(true)
-  const hasBanner = siteSettings?.banner?.enabled || false
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(true);
+  const hasBanner = siteSettings?.banner?.enabled || false;
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
-        setIsScrolled(true)
+        setIsScrolled(true);
       } else {
-        setIsScrolled(false)
+        setIsScrolled(false);
       }
-    }
+    };
 
     // Check if banner has been dismissed
     const checkBannerStatus = () => {
       // Check localStorage first
-      const bannerDismissed = localStorage.getItem("bannerDismissed") === "true"
+      const bannerDismissed =
+        localStorage.getItem("bannerDismissed") === "true";
       if (bannerDismissed) {
-        setBannerVisible(false)
-        return
+        setBannerVisible(false);
+        return;
       }
 
       // Then check DOM state as fallback
-      const hasBannerClass = document.body.classList.contains("has-banner")
-      setBannerVisible(hasBannerClass && hasBanner)
-    }
+      const hasBannerClass = document.body.classList.contains("has-banner");
+      setBannerVisible(hasBannerClass && hasBanner);
+    };
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll);
 
     // Set up a mutation observer to watch for changes to the body class
-    const observer = new MutationObserver(checkBannerStatus)
-    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] })
+    const observer = new MutationObserver(checkBannerStatus);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     // Initial check
-    checkBannerStatus()
+    checkBannerStatus();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-      observer.disconnect()
-    }
-  }, [hasBanner])
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
+  }, [hasBanner]);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <header
@@ -139,11 +147,20 @@ export default function Navbar({ siteSettings }: NavbarProps) {
           </nav>
 
           {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={toggleMenu}
+          >
             {isOpen ? (
-              <LuX className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
+              <LuX
+                className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`}
+              />
             ) : (
-              <LuMenu className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
+              <LuMenu
+                className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`}
+              />
             )}
           </Button>
         </div>
@@ -177,13 +194,13 @@ export default function Navbar({ siteSettings }: NavbarProps) {
         </div>
       )}
     </header>
-  )
+  );
 }
 
 interface NavLinkProps {
-  href: string
-  children: React.ReactNode
-  isScrolled: boolean
+  href: string;
+  children: React.ReactNode;
+  isScrolled: boolean;
 }
 
 function NavLink({ href, children, isScrolled }: NavLinkProps) {
@@ -196,13 +213,13 @@ function NavLink({ href, children, isScrolled }: NavLinkProps) {
     >
       {children}
     </Link>
-  )
+  );
 }
 
 interface MobileNavLinkProps {
-  href: string
-  children: React.ReactNode
-  onClick: () => void
+  href: string;
+  children: React.ReactNode;
+  onClick: () => void;
 }
 
 function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
@@ -214,5 +231,5 @@ function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
     >
       {children}
     </Link>
-  )
+  );
 }

@@ -11,7 +11,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteSettings = await cachedClient<SiteSettings>(siteSettingsQuery.query);
+  const siteSettings = await cachedClient<SiteSettings>(
+    siteSettingsQuery.query,
+  );
 
   return (
     <PostHogProvider>

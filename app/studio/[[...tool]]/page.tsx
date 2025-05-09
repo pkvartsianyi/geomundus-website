@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { NextStudio } from "next-sanity/studio"
-import { config } from "../../../sanity/desk"
+import { NextStudio } from "next-sanity/studio";
+import { config } from "../../../sanity/desk";
 
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return <NextStudio config={config} />;
 }

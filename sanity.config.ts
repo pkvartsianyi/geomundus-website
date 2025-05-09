@@ -3,14 +3,14 @@ import { structureTool } from "sanity/structure";
 import { schema } from "./sanity/schemaTypes";
 import { dataset, projectId } from "./sanity/env";
 
+console.log("Sanity Studio Config, projectId:", projectId, "dataset:", dataset);
+
 export default defineConfig({
   basePath: "/studio",
   name: "default",
   title: "GeoMundus",
-
   projectId,
   dataset,
-
   plugins: [structureTool()],
   schema,
   document: {

@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { LuExternalLink, LuPlus, LuMinus } from "react-icons/lu"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import Link from "next/link"
+import { useState } from "react";
+import Image from "next/image";
+import { LuExternalLink, LuPlus, LuMinus } from "react-icons/lu";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import Link from "next/link";
 
 interface SpeakerCardProps {
-  name: string
-  title: string
-  organization: string
-  imageUrl?: string
-  websiteUrl?: string
-  keynoteTitle?: string
-  keynoteDescription?: string
+  name: string;
+  title: string;
+  organization: string;
+  imageUrl?: string;
+  websiteUrl?: string;
+  keynoteTitle?: string;
+  keynoteDescription?: string;
 }
 
 export default function SpeakerCard({
@@ -26,13 +26,13 @@ export default function SpeakerCard({
   keynoteTitle,
   keynoteDescription,
 }: SpeakerCardProps) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(false);
 
   // Use a placeholder or handle missing imageUrl more gracefully
-  const resolvedImageUrl = imageUrl || "/placeholder.svg?height=128&width=128" // You should have a placeholder image
+  const resolvedImageUrl = imageUrl || "/placeholder.svg?height=128&width=128"; // You should have a placeholder image
 
   // Check if keynote information is available
-  const hasKeynoteInfo = keynoteTitle || keynoteDescription
+  const hasKeynoteInfo = keynoteTitle || keynoteDescription;
 
   return (
     <Card className="overflow-hidden">
@@ -58,7 +58,12 @@ export default function SpeakerCard({
 
           <div className="p-6 text-center">
             <div className="relative w-32 h-32 mx-auto mb-4 overflow-hidden rounded-full">
-              <Image src={resolvedImageUrl || "/placeholder.svg"} alt={name} fill className="object-cover" />
+              <Image
+                src={resolvedImageUrl || "/placeholder.svg"}
+                alt={name}
+                fill
+                className="object-cover"
+              />
             </div>
 
             <div className="space-y-1">
@@ -84,8 +89,14 @@ export default function SpeakerCard({
           {expanded && hasKeynoteInfo && (
             <div className="p-6 bg-gray-50 border-t">
               <h4 className="font-semibold mb-2">KEYNOTE:</h4>
-              {keynoteTitle && <p className="text-sm text-gray-700">{keynoteTitle}</p>}
-              {keynoteDescription && <p className="text-sm text-gray-600 mt-2">{keynoteDescription}</p>}
+              {keynoteTitle && (
+                <p className="text-sm text-gray-700">{keynoteTitle}</p>
+              )}
+              {keynoteDescription && (
+                <p className="text-sm text-gray-600 mt-2">
+                  {keynoteDescription}
+                </p>
+              )}
               <div className="mt-4 text-center">
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/speakers" className="text-emerald-700">
@@ -98,5 +109,5 @@ export default function SpeakerCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { Schedule } from "@/sanity.types";
 
-
 interface ScheduleSectionProps {
   schedule: Schedule;
 }

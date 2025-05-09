@@ -31,18 +31,34 @@ import {
 import ScheduleSection from "@/components/schedule-section";
 import FaqSection from "@/components/faq-section";
 import { RegisterButton } from "@/components/register-button";
-import { AboutSection, Conference, Faq, FocusTopic, Partner, Schedule, SiteSettings, Speaker, Sponsor } from "@/sanity.types";
+import {
+  AboutSection,
+  Conference,
+  Faq,
+  FocusTopic,
+  Partner,
+  Schedule,
+  SiteSettings,
+  Speaker,
+  Sponsor,
+} from "@/sanity.types";
 
 export default async function Home() {
-  const siteSettings = await cachedClient<SiteSettings>(siteSettingsQuery.query);
-  const aboutSection = await cachedClient<AboutSection>(aboutSectionQuery.query);
+  const siteSettings = await cachedClient<SiteSettings>(
+    siteSettingsQuery.query,
+  );
+  const aboutSection = await cachedClient<AboutSection>(
+    aboutSectionQuery.query,
+  );
   const focusTopic = await cachedClient<FocusTopic>(focusTopicQuery.query);
   const speakers = await cachedClient<Speaker[]>(speakersQuery.query);
   const sponsors = await cachedClient<Sponsor[]>(sponsorsQuery.query);
   const partners = await cachedClient<Partner[]>(partnersQuery.query);
   const schedule = await cachedClient<Schedule>(scheduleQuery.query);
   const faqs = await cachedClient<Faq[]>(faqsQuery.query);
-  const currentYear = await cachedClient<Conference>(currentConferenceYearQuery.query);
+  const currentYear = await cachedClient<Conference>(
+    currentConferenceYearQuery.query,
+  );
   const startDate = siteSettings?.conferenceDate
     ? new Date(siteSettings.conferenceDate)
     : null;
@@ -193,26 +209,26 @@ export default async function Home() {
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {speakers.length > 0 ? (
+              {speakers.length > 0 ? (
                 speakers.map((speaker) => (
                   <SpeakerCard
-                  key={speaker._id}
-                  name={speaker.name || ""}
-                  title={speaker.title || ""}
-                  organization={speaker.organization || ""}
-                  imageUrl={(speaker as any).imageUrl} // Suppressed type error
-                  websiteUrl={speaker.websiteUrl}
-                  keynoteTitle={speaker.keynoteTitle}
-                  keynoteDescription={speaker.keynoteDescription}
+                    key={speaker._id}
+                    name={speaker.name || ""}
+                    title={speaker.title || ""}
+                    organization={speaker.organization || ""}
+                    imageUrl={(speaker as any).imageUrl} // Suppressed type error
+                    websiteUrl={speaker.websiteUrl}
+                    keynoteTitle={speaker.keynoteTitle}
+                    keynoteDescription={speaker.keynoteDescription}
                   />
                 ))
-                ) : (
+              ) : (
                 <div className="col-span-1 md:col-span-2 lg:col-span-4 text-center">
                   <p className="text-gray-700">
-                  No speakers available at the moment.
+                    No speakers available at the moment.
                   </p>
                 </div>
-                )}
+              )}
             </div>
           </div>
         </section>

@@ -99,7 +99,8 @@ export default async function SubmissionsPage() {
             <h2 className="text-2xl font-bold text-center mb-8">Submission</h2>
 
             <p className="text-center mb-10">
-              You can download the templates for the short paper and poster below. Each template also includes the submission guidelines.
+              You can download the templates for the short paper and poster
+              below. Each template also includes the submission guidelines.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">

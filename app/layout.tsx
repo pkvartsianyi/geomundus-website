@@ -7,8 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GeoMundus Conference",
-  description:
-    "International Conference on Geoinformation Sciences",
+  description: "International Conference on Geoinformation Sciences",
 };
 
 export default async function RootLayout({
@@ -18,9 +17,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {children}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
