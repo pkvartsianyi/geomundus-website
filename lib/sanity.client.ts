@@ -16,5 +16,10 @@ export const cachedClient = cache(client.fetch.bind(client));
 // Helper function to add tags to queries for revalidation
 export function tagQuery(query: string, tag: string, id?: string) {
   const fullTag = id ? [`${tag}`, `${tag}:${id}`] : [tag];
-  return { query, token: fullTag };
+
+  return {
+    query,
+    tag: fullTag,
+    token: fullTag,
+  };
 }
