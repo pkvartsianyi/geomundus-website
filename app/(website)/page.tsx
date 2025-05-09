@@ -31,17 +31,18 @@ import {
 import ScheduleSection from "@/components/schedule-section";
 import FaqSection from "@/components/faq-section";
 import { RegisterButton } from "@/components/register-button";
+import { AboutSection, Conference, FAQ, FocusTopic, Partner, Schedule, SiteSettings, Speaker, Sponsor } from "@/types/sanity.types";
 
 export default async function Home() {
-  const siteSettings = await cachedClient(siteSettingsQuery.query);
-  const aboutSection = await cachedClient(aboutSectionQuery.query);
-  const focusTopic = await cachedClient(focusTopicQuery.query);
-  const speakers = await cachedClient(speakersQuery.query);
-  const sponsors = await cachedClient(sponsorsQuery.query);
-  const partners = await cachedClient(partnersQuery.query);
-  const schedule = await cachedClient(scheduleQuery.query);
-  const faqs = await cachedClient(faqsQuery.query);
-  const currentYear = await cachedClient(currentConferenceYearQuery.query);
+  const siteSettings = await cachedClient<SiteSettings>(siteSettingsQuery.query);
+  const aboutSection = await cachedClient<AboutSection>(aboutSectionQuery.query);
+  const focusTopic = await cachedClient<FocusTopic>(focusTopicQuery.query);
+  const speakers = await cachedClient<Speaker[]>(speakersQuery.query);
+  const sponsors = await cachedClient<Sponsor[]>(sponsorsQuery.query);
+  const partners = await cachedClient<Partner[]>(partnersQuery.query);
+  const schedule = await cachedClient<Schedule>(scheduleQuery.query);
+  const faqs = await cachedClient<FAQ[]>(faqsQuery.query);
+  const currentYear = await cachedClient<Conference>(currentConferenceYearQuery.query);
   const startDate = siteSettings?.conferenceDate
     ? new Date(siteSettings.conferenceDate)
     : null;
@@ -197,9 +198,9 @@ export default async function Home() {
                   <SpeakerCard
                     key={speaker._id}
                     name={speaker.name}
-                    title={speaker.title}
-                    organization={speaker.organization}
-                    imageUrl={speaker.imageUrl}
+                    title={speaker.title || ""}
+                    organization={speaker.organization || ""}
+                    imageUrl={speaker.image?.asset?.url || ""}
                     websiteUrl={speaker.websiteUrl}
                     keynoteTitle={speaker.keynoteTitle}
                     keynoteDescription={speaker.keynoteDescription}
@@ -244,7 +245,7 @@ export default async function Home() {
                 </Link>
                 for more information on how to be a part of this unique
                 conference! We will be glad to discuss your ideas to sponsor the
-                GeoMundus Conference {currentYear}.
+                GeoMundus Conference {currentYear?.year}.
               </p>
             </div>
 

@@ -1,20 +1,6 @@
+import { Partner, Sponsor } from "@/types/sanity.types";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Sponsor {
-  _id: string;
-  name: string;
-  logoUrl: string;
-  websiteUrl?: string;
-  tier: string;
-}
-
-interface Partner {
-  _id: string;
-  name: string;
-  logoUrl: string;
-  websiteUrl?: string;
-}
 
 interface SponsorSectionProps {
   sponsors?: Sponsor[];
@@ -74,7 +60,7 @@ export default function SponsorSection({
                   <SponsorLogo
                     key={sponsor._id}
                     name={sponsor.name}
-                    logoUrl={sponsor.logoUrl}
+                    logoUrl={sponsor.logo}
                     websiteUrl={sponsor.websiteUrl}
                     size="large"
                   />
@@ -92,7 +78,7 @@ export default function SponsorSection({
                   <SponsorLogo
                     key={sponsor._id}
                     name={sponsor.name}
-                    logoUrl={sponsor.logoUrl}
+                    logoUrl={sponsor.logo}
                     websiteUrl={sponsor.websiteUrl}
                   />
                 ))}
@@ -109,7 +95,7 @@ export default function SponsorSection({
                   <SponsorLogo
                     key={sponsor._id}
                     name={sponsor.name}
-                    logoUrl={sponsor.logoUrl}
+                    logoUrl={sponsor.logo}
                     websiteUrl={sponsor.websiteUrl}
                     size="small"
                   />
@@ -129,7 +115,7 @@ export default function SponsorSection({
                   <SponsorLogo
                     key={sponsor._id}
                     name={sponsor.name}
-                    logoUrl={sponsor.logoUrl}
+                    logoUrl={sponsor.logo}
                     websiteUrl={sponsor.websiteUrl}
                     size="small"
                   />
@@ -155,7 +141,7 @@ export default function SponsorSection({
             <SponsorLogo
               key={partner._id}
               name={partner.name}
-              logoUrl={partner.logoUrl}
+              logoUrl={partner.logo}
               websiteUrl={partner.websiteUrl}
               size="small"
             />

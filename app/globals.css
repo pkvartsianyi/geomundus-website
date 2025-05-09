@@ -47,6 +47,8 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --banner-height: 0px;
+    --banner-height-sm: 0px;
   }
 }
 
@@ -59,14 +61,23 @@ body {
   }
 }
 
-:root {
-  --banner-height: ${siteSettings?.banner?.enabled ? "46px": "0px"};
-}
-@media (min-width: 640px) {
-  :root {
-    --banner-height: ${siteSettings?.banner?.enabled ? "42px": "0px"};
-  }
-}
 body {
   padding-top: var(--banner-height);
+}
+
+@media (min-width: 640px) {
+  body {
+    padding-top: var(--banner-height-sm);
+  }
+}
+
+/* Ensure content starts below the banner */
+.has-banner {
+  padding-top: var(--banner-height);
+}
+
+@media (min-width: 640px) {
+  .has-banner {
+    padding-top: var(--banner-height-sm);
+  }
 }

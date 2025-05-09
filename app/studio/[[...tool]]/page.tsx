@@ -1,7 +1,8 @@
-// app/studio/[[...index]]/page.tsx
-import { NextStudio } from 'next-sanity/studio';
-import config from '../../../sanity.config';
+"use client"
+
+import { NextStudio } from "next-sanity/studio"
+import { config } from "../../../sanity/desk"
 
 export default function StudioPage() {
-  return <NextStudio config={config} />;
+  return <NextStudio config={config} />
 }

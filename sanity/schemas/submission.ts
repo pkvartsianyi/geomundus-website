@@ -39,18 +39,8 @@ export default defineType({
       type: "url",
     }),
     defineField({
-      name: "shortPaperTemplateUrl",
-      title: "Short Paper Template URL",
-      type: "url",
-    }),
-    defineField({
       name: "posterGuidelineUrl",
       title: "Poster Guideline URL",
-      type: "url",
-    }),
-    defineField({
-      name: "mobilityGrantGuidelineUrl",
-      title: "Mobility Grant Guideline URL",
       type: "url",
     }),
     defineField({

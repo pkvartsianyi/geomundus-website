@@ -1,59 +1,74 @@
-"use client";
+"use client"
 
-import type React from "react";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { LuMenu, LuX } from "react-icons/lu";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import type React from "react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { LuMenu, LuX } from "react-icons/lu"
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ChevronDown } from "lucide-react"
+import { RegisterButton } from "./register-button"
+import { SiteSettings } from "@/types/sanity.types"
 
-interface SiteSettings {
-  logo: any;
-  title: string;
-  registrationOpen?: boolean;
-  banner?: {
-    enabled: boolean;
-  };
-}
 
 interface NavbarProps {
-  siteSettings: SiteSettings | null;
+  siteSettings: SiteSettings | null
 }
 
 export default function Navbar({ siteSettings }: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const hasBanner = siteSettings?.banner?.enabled || false;
+  const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [bannerVisible, setBannerVisible] = useState(true)
+  const hasBanner = siteSettings?.banner?.enabled || false
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
-        setIsScrolled(true);
+        setIsScrolled(true)
       } else {
-        setIsScrolled(false);
+        setIsScrolled(false)
       }
-    };
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    // Check if banner has been dismissed
+    const checkBannerStatus = () => {
+      // Check localStorage first
+      const bannerDismissed = localStorage.getItem("bannerDismissed") === "true"
+      if (bannerDismissed) {
+        setBannerVisible(false)
+        return
+      }
+
+      // Then check DOM state as fallback
+      const hasBannerClass = document.body.classList.contains("has-banner")
+      setBannerVisible(hasBannerClass && hasBanner)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+
+    // Set up a mutation observer to watch for changes to the body class
+    const observer = new MutationObserver(checkBannerStatus)
+    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] })
+
+    // Initial check
+    checkBannerStatus()
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      observer.disconnect()
+    }
+  }, [hasBanner])
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
-      } ${hasBanner ? "top-[46px] sm:top-[42px]" : "top-0"}`}
+      } ${bannerVisible ? "top-[46px] sm:top-[42px]" : "top-0"}`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
@@ -93,7 +108,7 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             </NavLink>
 
             {/* Archive Dropdown */}
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   className={`font-medium hover:text-emerald-700 transition-colors flex items-center gap-1 ${
@@ -114,53 +129,21 @@ export default function Navbar({ siteSettings }: NavbarProps) {
                   <Link href="/2022">2022 Conference</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
 
             <NavLink href="/#contact" isScrolled={isScrolled}>
               Contact
             </NavLink>
 
-            {siteSettings?.registrationOpen ? (
-              <Button
-                asChild
-                className={
-                  isScrolled
-                    ? "bg-emerald-700 hover:bg-emerald-800"
-                    : "bg-white text-emerald-800 hover:bg-gray-100"
-                }
-              >
-                <Link href="/registration">Register</Link>
-              </Button>
-            ) : (
-              <Button
-                asChild
-                variant="outline"
-                className={
-                  isScrolled
-                    ? "border-emerald-700 text-emerald-700 hover:bg-emerald-50"
-                    : "border-white text-white hover:bg-white/10"
-                }
-              >
-                <Link href="/registration">Registration Coming Soon</Link>
-              </Button>
-            )}
+            <RegisterButton registrationOpen={siteSettings?.registrationOpen} />
           </nav>
 
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={toggleMenu}
-          >
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
             {isOpen ? (
-              <LuX
-                className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`}
-              />
+              <LuX className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
             ) : (
-              <LuMenu
-                className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`}
-              />
+              <LuMenu className={`h-6 w-6 ${isScrolled ? "text-gray-800" : "text-white"}`} />
             )}
           </Button>
         </div>
@@ -189,37 +172,18 @@ export default function Navbar({ siteSettings }: NavbarProps) {
               Contact
             </MobileNavLink>
 
-            {siteSettings?.registrationOpen ? (
-              <Button
-                asChild
-                className="w-full bg-emerald-700 hover:bg-emerald-800"
-              >
-                <Link href="/registration" onClick={toggleMenu}>
-                  Register
-                </Link>
-              </Button>
-            ) : (
-              <Button
-                asChild
-                variant="outline"
-                className="w-full border-emerald-700 text-emerald-700"
-              >
-                <Link href="/registration" onClick={toggleMenu}>
-                  Registration Coming Soon
-                </Link>
-              </Button>
-            )}
+            <RegisterButton registrationOpen={siteSettings?.registrationOpen} />
           </div>
         </div>
       )}
     </header>
-  );
+  )
 }
 
 interface NavLinkProps {
-  href: string;
-  children: React.ReactNode;
-  isScrolled: boolean;
+  href: string
+  children: React.ReactNode
+  isScrolled: boolean
 }
 
 function NavLink({ href, children, isScrolled }: NavLinkProps) {
@@ -232,13 +196,13 @@ function NavLink({ href, children, isScrolled }: NavLinkProps) {
     >
       {children}
     </Link>
-  );
+  )
 }
 
 interface MobileNavLinkProps {
-  href: string;
-  children: React.ReactNode;
-  onClick: () => void;
+  href: string
+  children: React.ReactNode
+  onClick: () => void
 }
 
 function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
@@ -250,5 +214,5 @@ function MobileNavLink({ href, children, onClick }: MobileNavLinkProps) {
     >
       {children}
     </Link>
-  );
+  )
 }

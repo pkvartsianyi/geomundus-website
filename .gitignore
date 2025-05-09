@@ -10,3 +10,5 @@ npm-debug.log*
 .env.local
 .env
 sanity.cli.ts
+.DS_Store*
+schema.json

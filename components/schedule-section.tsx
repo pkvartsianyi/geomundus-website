@@ -5,24 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { Schedule } from "@/types/sanity.types";
 
-interface ScheduleEvent {
-  time: string;
-  title: string;
-  description?: string;
-  speaker?: string;
-  location?: string;
-  type: string;
-}
-
-interface ScheduleDay {
-  date: string;
-  events: ScheduleEvent[];
-}
-
-interface Schedule {
-  days: ScheduleDay[];
-}
 
 interface ScheduleSectionProps {
   schedule: Schedule;
