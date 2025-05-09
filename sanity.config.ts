@@ -1,9 +1,7 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-import { visionTool } from "@sanity/vision";
 import { schema } from "./sanity/schemaTypes";
-import { apiVersion, dataset, projectId } from "./sanity/env";
-
+import { dataset, projectId } from "./sanity/env";
 
 export default defineConfig({
   basePath: "/studio",
@@ -13,7 +11,7 @@ export default defineConfig({
   projectId,
   dataset,
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [structureTool()],
   schema,
   document: {
     // custom action to publish and deploy
@@ -29,7 +27,7 @@ export default defineConfig({
         "conference",
         "schedule",
         "faq",
-        "submission",
+        // "submission",
       ];
 
       // If this is a relevant document type, add our custom publish action

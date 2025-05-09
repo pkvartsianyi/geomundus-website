@@ -7,6 +7,7 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn,
+  stega: { studioUrl: process.env.NEXT_PUBLIC_SITE_URL + "/studio" },
 });
 
 // Create a cached version of the Sanity client for use with React Server Components

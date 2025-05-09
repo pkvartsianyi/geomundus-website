@@ -10,6 +10,7 @@ import conference from "../schemas/conference";
 import schedule from "../schemas/schedule";
 import faq from "../schemas/faq";
 import registration from "../schemas/registration";
+import submission from "../schemas/submission";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -23,5 +24,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     schedule,
     faq,
     registration,
+    submission,
   ],
 };

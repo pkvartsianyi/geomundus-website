@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar";
 import { cachedClient } from "@/lib/sanity.client";
 import { siteSettingsQuery } from "@/lib/sanity.queries";
 import SiteBanner from "@/components/site-banner";
+import { PostHogProvider } from "@/components/PostHogProvider";
 
 export default async function RootLayout({
   children,
@@ -12,7 +13,7 @@ export default async function RootLayout({
   const siteSettings = await cachedClient(siteSettingsQuery.query);
 
   return (
-    <>
+    <PostHogProvider>
       {siteSettings?.banner?.enabled && siteSettings.banner.text && (
         <SiteBanner
           text={siteSettings.banner.text}
@@ -23,6 +24,6 @@ export default async function RootLayout({
       )}
       <Navbar siteSettings={siteSettings} />
       {children}
-    </>
+    </PostHogProvider>
   );
 }
