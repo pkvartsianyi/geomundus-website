@@ -4,11 +4,17 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { path?: string[] } },
 ) {
+  // Allow CORS
+  const headers = new Headers();
+  headers.set("Access-Control-Allow-Origin", "*");
+  headers.set("Access-Control-Allow-Methods", "GET");
+  headers.set("Access-Control-Allow-Headers", "Content-Type");
+
   // Get the requested path
   const { path } = (await params) || {};
 
   if (!path || path.length === 0) {
-    return new NextResponse(null, { status: 404 });
+    return new NextResponse(null, { status: 404, headers });
   }
 
   const assetPath = path.join("/");
@@ -34,7 +40,7 @@ export async function GET(
   // If no year found, return 404
   if (!year) {
     console.log(`No year found for asset: ${assetPath}`);
-    return new NextResponse(null, { status: 404 });
+    return new NextResponse(null, { status: 404, headers });
   }
 
   // Construct and check the legacy URL
@@ -48,12 +54,14 @@ export async function GET(
 
     if (response.ok) {
       // If the asset exists, redirect to it
-      return NextResponse.redirect(legacyUrl);
+      const redirectResponse = NextResponse.redirect(legacyUrl);
+      redirectResponse.headers.set("Access-Control-Allow-Origin", "*"); // Ensure CORS on redirect
+      return redirectResponse;
     }
   } catch (error) {
     console.error(`Failed to check ${legacyUrl}:`, error);
   }
 
   // If asset wasn't found, return 404
-  return new NextResponse(null, { status: 404 });
+  return new NextResponse(null, { status: 404, headers });
 }

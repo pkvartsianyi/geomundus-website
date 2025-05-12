@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { RegisterButton } from "./register-button";
-import { SiteSettings } from "@/types/sanity.types";
+import { SiteSettings } from "@/sanity.types";
 
 interface NavbarProps {
   siteSettings: SiteSettings | null;
@@ -207,7 +207,7 @@ function NavLink({ href, children, isScrolled }: NavLinkProps) {
   return (
     <Link
       href={href}
-      className={`font-medium hover:text-emerald-700 transition-colors ${
+      className={`font-medium hover:text-emerald-100 transition-colors ${
         isScrolled ? "text-gray-800" : "text-white"
       } px-3 py-2 rounded-md hover:bg-white/10`}
     >
