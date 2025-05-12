@@ -14,3 +14,4 @@ sanity.cli.ts
 .DS_Store
 schema.json
 website.zip
+public_html_legacy

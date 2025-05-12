@@ -43,3 +43,6 @@ Dockerfile
 out/
 dist/
 coverage/
+public_html_legacy
+docker-compose.yml
+Caddyfile
