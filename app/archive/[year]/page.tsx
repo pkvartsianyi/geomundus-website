@@ -10,16 +10,16 @@ interface Props {
 }
 
 // Remove static generation
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getConferenceData(year: string) {
   try {
     const response = await fetch(`${process.env.LEGACY_WEBSITE_URL}/${year}`, {
-      cache: 'no-store',
+      cache: "no-store",
       headers: {
-        'Accept': 'text/html',
-      }
+        Accept: "text/html",
+      },
     });
 
     if (!response.ok) {
@@ -28,7 +28,7 @@ async function getConferenceData(year: string) {
 
     return await response.text();
   } catch (error) {
-    console.error('Error fetching conference data:', error);
+    console.error("Error fetching conference data:", error);
     return null;
   }
 }
@@ -39,7 +39,7 @@ const ConferenceContent = async ({ year }: { year: string }) => {
 
   // If current year, redirect to main page
   if (parsedYear === currentYear) {
-    return redirect("/")
+    return redirect("/");
   }
 
   // Fetch conference data
@@ -55,32 +55,32 @@ const ConferenceContent = async ({ year }: { year: string }) => {
           className="w-full h-full border-0"
         />
       </div>
-    )
+    );
   }
 
   // If HTML is available, render it directly
   return (
     <div className="relative">
-      <div 
-        className="w-full min-h-[90vh]" 
+      <div
+        className="w-full min-h-[90vh]"
         dangerouslySetInnerHTML={{ __html: conferenceHtml }}
       />
-      <Link 
-        href="/" 
-        className="fixed bottom-4 right-4 bg-emerald-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition-colors"
+      <Link
+        href="/"
+        className="fixed bottom-4 right-4 bg-emerald-700 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition-colors"
       >
         Come back to the main page
       </Link>
     </div>
-  )
-}
+  );
+};
 
 const ConferenceYearPage: NextPage<Props> = ({ params }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ConferenceContent year={params.year} />
     </Suspense>
-  )
-}
+  );
+};
 
 export default ConferenceYearPage;

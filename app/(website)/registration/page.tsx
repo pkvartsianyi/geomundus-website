@@ -30,7 +30,7 @@ export default async function RegistrationPage() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
+      <section className="relative flex flex-col items-center justify-center pt-32 px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Registration</h1>
           <p className="text-lg md:text-xl mb-4">
