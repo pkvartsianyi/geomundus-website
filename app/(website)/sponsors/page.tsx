@@ -33,7 +33,7 @@ export default async function SponsorsPage() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
+      <section className="relative flex flex-col items-center justify-center pt-32 px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             Become a Sponsor
@@ -361,7 +361,7 @@ export default async function SponsorsPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-center mb-12">
-                Our Current Sponsors & Partners
+                Sponsors and Partners: Current & Previous
               </h2>
 
               {sponsors?.length > 0 && (
@@ -467,10 +467,10 @@ export default async function SponsorsPage() {
                   <p className="text-gray-700">
                     Email us at{" "}
                     <Link
-                      href={`mailto:${siteSettings?.contactEmail || "budget@geomundus.org"}`}
+                      href={`mailto:${"budget@geomundus.org"}`}
                       className="text-emerald-700 font-medium hover:underline"
                     >
-                      {siteSettings?.contactEmail || "budget@geomundus.org"}
+                      {"budget@geomundus.org"}
                     </Link>{" "}
                     to discuss sponsorship opportunities.
                   </p>
@@ -479,9 +479,7 @@ export default async function SponsorsPage() {
                     size="lg"
                     className="mt-4 bg-emerald-700 hover:bg-emerald-800"
                   >
-                    <Link
-                      href={`mailto:${siteSettings?.contactEmail || "budget@geomundus.org"}`}
-                    >
+                    <Link href={`mailto:${"budget@geomundus.org"}`}>
                       Contact Us About Sponsorship
                     </Link>
                   </Button>

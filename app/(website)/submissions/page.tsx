@@ -8,7 +8,6 @@ import {
   ExternalLinkIcon,
   CalendarIcon,
 } from "lucide-react";
-import { PortableText } from "@portabletext/react";
 import { cachedClient } from "@/lib/sanity.client";
 import { siteSettingsQuery, submissionInfoQuery } from "@/lib/sanity.queries";
 import { format } from "date-fns";
@@ -39,7 +38,7 @@ export default async function SubmissionsPage() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
+      <section className="relative flex flex-col items-center justify-center pt-32 px-4 py-16 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             {submissionInfo?.title || "Submissions"}
@@ -49,10 +48,17 @@ export default async function SubmissionsPage() {
               "Submit your papers and posters to the GeoMundus Conference"}
           </p>
 
-          <p className="flex items-center justify-center gap-2 text-lg mt-4">
-            <CalendarIcon className="h-5 w-5" />
-            Submissions will be opened soon!
-          </p>
+          {formattedDeadline && isSubmissionOpen ? (
+            <p className="flex items-center justify-center gap-2 text-lg mt-4">
+              <CalendarIcon className="h-5 w-5" />
+              Submission deadline: {formattedDeadline}
+            </p>
+          ) : (
+            <p className="flex items-center justify-center gap-2 text-lg mt-4">
+              <CalendarIcon className="h-5 w-5" />
+              Submissions will be opened soon!
+            </p>
+          )}
         </div>
       </section>
 

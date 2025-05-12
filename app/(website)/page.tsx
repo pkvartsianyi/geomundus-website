@@ -41,6 +41,7 @@ import type {
   Speaker,
   Sponsor,
 } from "@/sanity.types";
+import PortableTextRenderer from "@/components/portable-text-renderer";
 
 export default async function Home() {
   const siteSettings = await cachedClient<SiteSettings>(
@@ -125,61 +126,77 @@ export default async function Home() {
       )}
 
       {/* About Section */}
-      {aboutSection && (
-        <section id="info" className="py-16 md:py-24 bg-white">
-          <div className="container mx-auto px-4">
-            {siteSettings?.conferenceDate && (
-              <CountdownTimer targetDate={siteSettings.conferenceDate} />
-            )}
+      <section className="py-16 md:py-24 bg-gray-50">
+        <div className="container mx-auto px-4">
+          {siteSettings?.conferenceDate && (
+            <CountdownTimer targetDate={siteSettings.conferenceDate} />
+          )}
 
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-              {aboutSection?.title}
-            </h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
+            {aboutSection?.title}
+          </h2>
 
-            <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
-              {aboutSection?.content && (
-                <div className="prose max-w-none">
-                  <PortableText value={aboutSection.content} />
-                </div>
-              )}
-            </div>
-
-            {siteSettings?.youtubeVideoId && (
-              <div className="mt-12 max-w-4xl mx-auto aspect-video">
-                <iframe
-                  className="w-full h-full"
-                  src={`https://www.youtube-nocookie.com/embed/${siteSettings.youtubeVideoId}`}
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            )}
-
-            {focusTopic && (
-              <div className="mt-16 max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-                  {focusTopic?.title}
-                </h2>
-
-                {focusTopic?.description && (
-                  <div className="prose max-w-none">
-                    <PortableText value={focusTopic.description} />
-                  </div>
-                )}
-
-                {focusTopic?.topics && focusTopic.topics.length > 0 && (
-                  <ul className="list-disc pl-6 mt-6 space-y-2 text-gray-700">
-                    {focusTopic.topics.map((topic, index) => (
-                      <li key={index}>{topic}</li>
-                    ))}
-                  </ul>
-                )}
+          <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
+            {aboutSection?.content && (
+              <div className="prose max-w-none">
+                <PortableTextRenderer content={aboutSection.content} />
               </div>
             )}
           </div>
-        </section>
-      )}
+
+          {siteSettings?.youtubeVideoId && (
+            <div className="mt-12 max-w-4xl mx-auto aspect-video">
+              <iframe
+                className="w-full h-full"
+                src={`https://www.youtube-nocookie.com/embed/${siteSettings.youtubeVideoId}`}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Focus Topics Section */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="container mx-auto px-4">
+          {focusTopic && (
+            <div className="mt-16 max-w-5xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 inline-block relative">
+                  {focusTopic?.title}
+                  <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-emerald-600 rounded-full"></span>
+                </h2>
+
+                {focusTopic?.description && (
+                  <div className="prose prose-lg max-w-3xl mx-auto mt-8 text-gray-700 portable-text">
+                    <PortableTextRenderer content={focusTopic.description} />
+                  </div>
+                )}
+              </div>
+
+              {focusTopic?.topics && focusTopic.topics.length > 0 && (
+                <div className="mt-12">
+                  <h3 className="text-xl md:text-2xl font-semibold text-center mb-10 text-emerald-800">
+                    Conference Topics
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {focusTopic.topics.slice(0, 9).map((topic, index) => (
+                      <div
+                        key={index}
+                        className="bg-white p-5 rounded-lg shadow-md border-l-4 border-emerald-600 hover:shadow-lg transition-shadow duration-300"
+                      >
+                        <p className="text-gray-800 font-medium">{topic}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Schedule Section */}
       {schedule && schedule.days && schedule.days.length > 0 && (
