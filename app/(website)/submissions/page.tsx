@@ -10,8 +10,10 @@ import {
 } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { cachedClient } from "@/lib/sanity.client";
-import { submissionInfoQuery } from "@/lib/sanity.queries";
+import { siteSettingsQuery, submissionInfoQuery } from "@/lib/sanity.queries";
 import { format } from "date-fns";
+import PortableTextRenderer from "@/components/portable-text-renderer";
+import { SubmissionButton } from "@/components/submission-button";
 
 export async function generateMetadata(): Promise<Metadata> {
   const submissionInfo = await cachedClient(submissionInfoQuery.query);
@@ -25,7 +27,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SubmissionsPage() {
+  const siteSettings = await cachedClient(siteSettingsQuery.query);
   const submissionInfo = await cachedClient(submissionInfoQuery.query);
+
+  const isSubmissionOpen = siteSettings?.submissionOpen || false;
 
   const formattedDeadline = submissionInfo?.submissionDeadline
     ? format(new Date(submissionInfo.submissionDeadline), "MMMM do, yyyy")
@@ -44,12 +49,10 @@ export default async function SubmissionsPage() {
               "Submit your papers and posters to the GeoMundus Conference"}
           </p>
 
-          {formattedDeadline && (
-            <p className="flex items-center justify-center gap-2 text-lg mt-4">
-              <CalendarIcon className="h-5 w-5" />
-              Submission deadline: {formattedDeadline}
-            </p>
-          )}
+          <p className="flex items-center justify-center gap-2 text-lg mt-4">
+            <CalendarIcon className="h-5 w-5" />
+            Submissions will be opened soon!
+          </p>
         </div>
       </section>
 
@@ -64,7 +67,9 @@ export default async function SubmissionsPage() {
 
             {submissionInfo?.callForPapersContent ? (
               <div className="prose max-w-none text-gray-700">
-                <PortableText value={submissionInfo.callForPapersContent} />
+                <PortableTextRenderer
+                  content={submissionInfo.callForPapersContent}
+                />
               </div>
             ) : (
               <div className="prose max-w-none text-gray-700 space-y-4">
@@ -154,22 +159,11 @@ export default async function SubmissionsPage() {
             )}
 
             <div className="space-y-4">
-              <Button
-                asChild
-                size="lg"
-                className="w-full bg-emerald-700 hover:bg-emerald-800"
-                disabled={!submissionInfo?.submissionFormUrl}
-              >
-                <Link
-                  href={submissionInfo?.submissionFormUrl || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  SUBMIT YOUR SHORT PAPER AND POSTER ABSTRACT
-                </Link>
-              </Button>
+              <SubmissionButton
+                submissionOpen={isSubmissionOpen}
+                link={submissionInfo.submissionFormUrl}
+              />
             </div>
-
             <div className="mt-10 text-center p-6 bg-gray-100 rounded-lg">
               <p>
                 {submissionInfo?.contactNote ||

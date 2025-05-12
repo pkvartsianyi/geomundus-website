@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   AiOutlineCalendar,
   AiOutlineEnvironment,
-  AiOutlineCaretDown,
   AiOutlineTwitter,
   AiOutlineFacebook,
   AiOutlineInstagram,
@@ -31,7 +30,7 @@ import {
 import ScheduleSection from "@/components/schedule-section";
 import FaqSection from "@/components/faq-section";
 import { RegisterButton } from "@/components/register-button";
-import {
+import type {
   AboutSection,
   Conference,
   Faq,
@@ -75,7 +74,7 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
       {siteSettings && (
-        <section className="relative flex flex-col items-center justify-center px-4 py-24 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600 min-h-[90vh]">
+        <section className="relative flex flex-col items-center justify-center px-4 py-24 pt-32 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600 min-h-[90vh]">
           <div className="max-w-5xl mx-auto">
             <div className="mb-8">
               {siteSettings?.logo && (
@@ -254,14 +253,14 @@ export default async function Home() {
               <p className="text-justify">
                 Start the conversation by contacting us at{" "}
                 <Link
-                  href={`mailto:${siteSettings?.contactEmail || "budget@geomundus.org"}`}
+                  href="mailto:geomunduswebteam@gmail.com"
                   className="text-emerald-700 hover:underline"
                 >
-                  {siteSettings?.contactEmail}
-                </Link>
+                  geomunduswebteam@gmail.com
+                </Link>{" "}
                 for more information on how to be a part of this unique
-                conference! We will be glad to discuss your ideas to sponsor the
-                GeoMundus Conference {currentYear?.year}.
+                conference! We will be glad to discuss your ideas for sponsoring
+                the GeoMundus Conference.
               </p>
             </div>
 

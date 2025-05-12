@@ -27,16 +27,16 @@ export default function SponsorSection({
 
   return (
     <div className="mt-12">
-      <h3 className="text-2xl font-bold text-center mb-8">Sponsors</h3>
+      <h3 className="text-2xl font-bold text-center mb-8">Past Sponsors</h3>
 
       {sponsors && sponsors.length > 0 ? (
         <div className="space-y-8">
           {/* Platinum Sponsors */}
           {sponsorsByTier.platinum && sponsorsByTier.platinum.length > 0 && (
             <div>
-              <h4 className="text-xl font-semibold text-center mb-4">
+              {/* <h4 className="text-xl font-semibold text-center mb-4">
                 Platinum
-              </h4>
+              </h4> */}
               <div className="flex flex-wrap justify-center gap-8">
                 {sponsorsByTier.platinum.map((sponsor) => (
                   <SponsorLogo
@@ -54,7 +54,7 @@ export default function SponsorSection({
           {/* Gold Sponsors */}
           {sponsorsByTier.gold && sponsorsByTier.gold.length > 0 && (
             <div>
-              <h4 className="text-xl font-semibold text-center mb-4">Gold</h4>
+              {/* <h4 className="text-xl font-semibold text-center mb-4">Gold</h4> */}
               <div className="flex flex-wrap justify-center gap-8">
                 {sponsorsByTier.gold.map((sponsor) => (
                   <SponsorLogo
@@ -72,7 +72,7 @@ export default function SponsorSection({
           {/* Silver Sponsors */}
           {sponsorsByTier.silver && sponsorsByTier.silver.length > 0 && (
             <div>
-              <h4 className="text-xl font-semibold text-center mb-4">Silver</h4>
+              {/* <h4 className="text-xl font-semibold text-center mb-4">Silver</h4> */}
               <div className="flex flex-wrap justify-center gap-8">
                 {sponsorsByTier.silver.map((sponsor) => (
                   <SponsorLogo
@@ -89,7 +89,7 @@ export default function SponsorSection({
           {/* Bronze Sponsors */}
           {sponsorsByTier.bronze && sponsorsByTier.bronze.length > 0 && (
             <div>
-              <h4 className="text-xl font-semibold text-center mb-4">Bronze</h4>
+              {/* <h4 className="text-xl font-semibold text-center mb-4">Bronze</h4> */}
               <div className="flex flex-wrap justify-center gap-8">
                 {sponsorsByTier.bronze.map((sponsor) => (
                   <SponsorLogo
@@ -107,9 +107,9 @@ export default function SponsorSection({
           {/* Other Sponsors */}
           {sponsorsByTier.other && sponsorsByTier.other.length > 0 && (
             <div>
-              <h4 className="text-xl font-semibold text-center mb-4">
+              {/* <h4 className="text-xl font-semibold text-center mb-4">
                 Sponsors
-              </h4>
+              </h4> */}
               <div className="flex flex-wrap justify-center gap-8">
                 {sponsorsByTier.other.map((sponsor) => (
                   <SponsorLogo

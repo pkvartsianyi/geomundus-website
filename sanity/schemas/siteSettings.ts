@@ -135,6 +135,13 @@ export default defineType({
       title: "Registration Deadline",
       type: "date",
     }),
+    defineField({
+      name: "submissionOpen",
+      title: "Submission Open",
+      type: "boolean",
+      initialValue: false,
+      description: "Toggle to control if submissions are open or closed",
+    }),
     // Banner Configuration
     defineField({
       name: "banner",

@@ -23,6 +23,7 @@ export const siteSettingsQuery = tagQuery(
     arrivalInfoPdfUrl,
     registrationOpen,
     registrationDeadline,
+    submissionOpen,
     banner
   }`,
   "siteSettings",
