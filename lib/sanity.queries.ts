@@ -24,9 +24,30 @@ export const siteSettingsQuery = tagQuery(
     registrationOpen,
     registrationDeadline,
     submissionOpen,
-    banner
+    banner,
+    "currentConferenceYear": *[_type == "conference" && current == true][0].year
   }`,
   "siteSettings",
+);
+
+// Current conference with speakers
+export const currentConferenceQuery = tagQuery(
+  groq`*[_type == "conference" && current == true][0]{
+    _id,
+    year,
+    title,
+    description,
+    "imageUrl": image.asset->url,
+    location,
+    themes,
+    keynoteSpeakers[] {
+      name,
+      organization,
+      topic,
+      "imageUrl": image.asset->url,
+    }
+  }`,
+  "currentConference",
 );
 
 // About section
@@ -46,21 +67,6 @@ export const focusTopicQuery = tagQuery(
     topics
   }`,
   "focusTopic",
-);
-
-// Speakers
-export const speakersQuery = tagQuery(
-  groq`*[_type == "speaker"] | order(order asc) {
-    _id,
-    name,
-    title,
-    organization,
-    "imageUrl": image.asset->url,
-    websiteUrl,
-    keynoteTitle,
-    keynoteDescription
-  }`,
-  "speaker",
 );
 
 // Sponsors
@@ -94,8 +100,8 @@ export const conferencesQuery = tagQuery(
     title,
     description,
     "imageUrl": image.asset->url,
-    websiteUrl,
-    location
+    location,
+    current
   }`,
   "conference",
 );
@@ -108,16 +114,27 @@ export const conferenceByYearQuery = (year: number) =>
       title,
       description,
       "imageUrl": image.asset->url,
-      websiteUrl,
       location,
       highlights,
-      "galleryImages": gallery[].asset->url
+      "galleryImages": gallery[].asset->url,
+      hostInstitution {
+        name,
+        description,
+        "imageUrl": image.asset->url
+      },
+      themes,
+      keynoteSpeakers[] {
+        name,
+        organization,
+        topic,
+        "imageUrl": image.asset->url,
+      }
     }`,
     "conference",
   );
 
 export const currentConferenceYearQuery = tagQuery(
-  groq`*[_type == "conference"] | order(year desc)[0].year`,
+  groq`*[_type == "conference" && current == true][0].year`,
   "conference",
 );
 

@@ -1,3 +1,4 @@
+import type React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ import {
   siteSettingsQuery,
   aboutSectionQuery,
   focusTopicQuery,
-  speakersQuery,
+  currentConferenceQuery,
   sponsorsQuery,
   partnersQuery,
   scheduleQuery,
@@ -30,6 +31,7 @@ import {
 import ScheduleSection from "@/components/schedule-section";
 import FaqSection from "@/components/faq-section";
 import { RegisterButton } from "@/components/register-button";
+import PortableTextRenderer from "@/components/portable-text-renderer";
 import type {
   AboutSection,
   Conference,
@@ -38,10 +40,10 @@ import type {
   Partner,
   Schedule,
   SiteSettings,
-  Speaker,
   Sponsor,
 } from "@/sanity.types";
-import PortableTextRenderer from "@/components/portable-text-renderer";
+
+import { Lightbulb } from "lucide-react";
 
 export default async function Home() {
   const siteSettings = await cachedClient<SiteSettings>(
@@ -51,7 +53,9 @@ export default async function Home() {
     aboutSectionQuery.query,
   );
   const focusTopic = await cachedClient<FocusTopic>(focusTopicQuery.query);
-  const speakers = await cachedClient<Speaker[]>(speakersQuery.query);
+  const currentConference = await cachedClient<Conference>(
+    currentConferenceQuery.query,
+  );
   const sponsors = await cachedClient<Sponsor[]>(sponsorsQuery.query);
   const partners = await cachedClient<Partner[]>(partnersQuery.query);
   const schedule = await cachedClient<Schedule>(scheduleQuery.query);
@@ -59,6 +63,7 @@ export default async function Home() {
   const currentYear = await cachedClient<Conference>(
     currentConferenceYearQuery.query,
   );
+
   const startDate = siteSettings?.conferenceDate
     ? new Date(siteSettings.conferenceDate)
     : null;
@@ -126,77 +131,97 @@ export default async function Home() {
       )}
 
       {/* About Section */}
-      <section className="py-16 md:py-24 bg-gray-50">
-        <div className="container mx-auto px-4">
-          {siteSettings?.conferenceDate && (
-            <CountdownTimer targetDate={siteSettings.conferenceDate} />
-          )}
-
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-            {aboutSection?.title}
-          </h2>
-
-          <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
-            {aboutSection?.content && (
-              <div className="prose max-w-none">
-                <PortableTextRenderer content={aboutSection.content} />
-              </div>
+      {aboutSection && (
+        <section id="info" className="py-16 md:py-24 bg-white">
+          <div className="container mx-auto px-4">
+            {siteSettings?.conferenceDate && (
+              <CountdownTimer targetDate={siteSettings.conferenceDate} />
             )}
-          </div>
 
-          {siteSettings?.youtubeVideoId && (
-            <div className="mt-12 max-w-4xl mx-auto aspect-video">
-              <iframe
-                className="w-full h-full"
-                src={`https://www.youtube-nocookie.com/embed/${siteSettings.youtubeVideoId}`}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
-            </div>
-          )}
-        </div>
-      </section>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
+              {aboutSection?.title}
+            </h2>
 
-      {/* Focus Topics Section */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="container mx-auto px-4">
-          {focusTopic && (
-            <div className="mt-16 max-w-5xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 inline-block relative">
-                  {focusTopic?.title}
-                  <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-emerald-600 rounded-full"></span>
-                </h2>
-
-                {focusTopic?.description && (
-                  <div className="prose prose-lg max-w-3xl mx-auto mt-8 text-gray-700 portable-text">
-                    <PortableTextRenderer content={focusTopic.description} />
-                  </div>
-                )}
-              </div>
-
-              {focusTopic?.topics && focusTopic.topics.length > 0 && (
-                <div className="mt-12">
-                  <h3 className="text-xl md:text-2xl font-semibold text-center mb-10 text-emerald-800">
-                    Conference Topics
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {focusTopic.topics.slice(0, 9).map((topic, index) => (
-                      <div
-                        key={index}
-                        className="bg-white p-5 rounded-lg shadow-md border-l-4 border-emerald-600 hover:shadow-lg transition-shadow duration-300"
-                      >
-                        <p className="text-gray-800 font-medium">{topic}</p>
-                      </div>
-                    ))}
-                  </div>
+            <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
+              {aboutSection?.content && (
+                <div className="prose max-w-none">
+                  <PortableText value={aboutSection.content} />
                 </div>
               )}
             </div>
-          )}
-        </div>
-      </section>
+
+            {siteSettings?.youtubeVideoId && (
+              <div className="mt-12 max-w-4xl mx-auto aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src={`https://www.youtube-nocookie.com/embed/${siteSettings.youtubeVideoId}`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
+
+            {/* Updated Focus Topic Section with Modern Design */}
+            {focusTopic && (
+              <div className="mt-24 max-w-6xl mx-auto">
+                <div className="text-center mb-16">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 inline-block relative">
+                    {focusTopic?.title || "This Year's Focus"}
+                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-emerald-600 rounded-full"></span>
+                  </h2>
+
+                  {focusTopic?.description && (
+                    <div className="prose prose-lg max-w-3xl mx-auto mt-8 text-gray-700">
+                      <div className="portable-text">
+                        <PortableTextRenderer
+                          content={focusTopic.description}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {focusTopic?.topics && focusTopic.topics.length > 0 && (
+                  <div className="mt-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {focusTopic.topics.map((topic, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="bg-white p-6 rounded-lg shadow-md border-l-4 border-emerald-600 hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px] group"
+                          >
+                            <div className="flex items-start">
+                              <div>
+                                <h3 className="font-semibold text-lg text-gray-800 mb-2">
+                                  {topic}
+                                </h3>
+                                <p className="text-gray-600 text-sm">
+                                  Explore innovative approaches and research in
+                                  this critical area of geospatial science.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                      <Button
+                        asChild
+                        className="bg-emerald-700 hover:bg-emerald-800 text-white"
+                      >
+                        <Link href="/submissions">Submit Your Research</Link>
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Schedule Section */}
       {schedule && schedule.days && schedule.days.length > 0 && (
@@ -211,44 +236,40 @@ export default async function Home() {
       )}
 
       {/* Speakers Section */}
-      {speakers && (
-        <section id="speakers" className="py-16 md:py-24 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-              Keynote Speakers
-            </h2>
+      {currentConference?.keynoteSpeakers &&
+        currentConference.keynoteSpeakers.length > 0 && (
+          <section id="speakers" className="py-16 md:py-24 bg-white">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
+                Keynote Speakers
+              </h2>
 
-            <p className="text-justify text-gray-700 max-w-4xl mx-auto mb-12">
-              Geomundus will feature a broad landscape of expertise and areas of
-              action within the GIS field, such as academic figures, NGO
-              advisors, government officials, and private sector actors.
-            </p>
+              <p className="text-justify text-gray-700 max-w-4xl mx-auto mb-12">
+                Geomundus will feature a broad landscape of expertise and areas
+                of action within the GIS field, such as academic figures, NGO
+                advisors, government officials, and private sector actors.
+              </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {speakers.length > 0 ? (
-                speakers.map((speaker) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {currentConference.keynoteSpeakers.map((speaker, index) => (
                   <SpeakerCard
-                    key={speaker._id}
+                    key={index}
                     name={speaker.name || ""}
-                    title={speaker.title || ""}
+                    title={speaker.topic || ""}
                     organization={speaker.organization || ""}
-                    imageUrl={(speaker as any).imageUrl} // Suppressed type error
+                    imageUrl={
+                      speaker.imageUrl ||
+                      "/placeholder.svg?height=300&width=300"
+                    }
                     websiteUrl={speaker.websiteUrl}
-                    keynoteTitle={speaker.keynoteTitle}
-                    keynoteDescription={speaker.keynoteDescription}
+                    keynoteTitle={speaker.topic}
+                    keynoteDescription=""
                   />
-                ))
-              ) : (
-                <div className="col-span-1 md:col-span-2 lg:col-span-4 text-center">
-                  <p className="text-gray-700">
-                    No speakers available at the moment.
-                  </p>
-                </div>
-              )}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
 
       {/* Sponsors Section */}
       {sponsors && partners && (

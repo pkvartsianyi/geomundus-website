@@ -100,7 +100,9 @@ export default async function ArchivePage() {
                     </Button>
                   ) : (
                     <Button asChild className="w-full">
-                      <Link href={`/archive/${conference.year}`}>View Details</Link>
+                      <Link href={`/archive/${conference.year}`}>
+                        View Details
+                      </Link>
                     </Button>
                   )}
                 </CardFooter>

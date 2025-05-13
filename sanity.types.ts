@@ -202,19 +202,7 @@ export type Conference = {
   year?: number;
   title?: string;
   description?: string;
-  image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  websiteUrl?: string;
+  imageUrl?: string;
   location?: string;
   highlights?: Array<{
     children?: Array<{
@@ -234,21 +222,20 @@ export type Conference = {
     _type: "block";
     _key: string;
   }>;
-  gallery?: Array<{
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    caption?: string;
-    alt?: string;
-    _type: "image";
-    _key: string;
+  galleryImages?: string[];
+  hostInstitution?: {
+    name: string;
+    description: string;
+    imageUrl?: string;
+  };
+  themes?: string[];
+  keynoteSpeakers?: Array<{
+    name: string;
+    organization: string;
+    topic: string;
+    imageUrl?: string;
   }>;
+  current?: boolean;
 };
 
 export type Partner = {
@@ -516,5 +503,27 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Slug | Submission | Registration | Faq | Schedule | Conference | Partner | Sponsor | Speaker | FocusTopic | AboutSection | SiteSettings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes =
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityFileAsset
+  | Geopoint
+  | Slug
+  | Submission
+  | Registration
+  | Faq
+  | Schedule
+  | Conference
+  | Partner
+  | Sponsor
+  | Speaker
+  | FocusTopic
+  | AboutSection
+  | SiteSettings
+  | SanityImageCrop
+  | SanityImageHotspot
+  | SanityImageAsset
+  | SanityAssetSourceData
+  | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;

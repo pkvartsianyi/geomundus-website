@@ -1,16 +1,11 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
-import { LuExternalLink, LuPlus, LuMinus } from "react-icons/lu";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface SpeakerCardProps {
   name: string;
-  title: string;
-  organization: string;
+  title?: string;
+  organization?: string;
   imageUrl?: string;
   websiteUrl?: string;
   keynoteTitle?: string;
@@ -26,84 +21,47 @@ export default function SpeakerCard({
   keynoteTitle,
   keynoteDescription,
 }: SpeakerCardProps) {
-  const [expanded, setExpanded] = useState(false);
-
-  // Use a placeholder or handle missing imageUrl more gracefully
-  const resolvedImageUrl = imageUrl || "/placeholder.svg?height=128&width=128"; // You should have a placeholder image
-
-  // Check if keynote information is available
-  const hasKeynoteInfo = keynoteTitle || keynoteDescription;
-
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <CardContent className="p-0">
-        <div className="relative">
-          {/* Only show the expand button if keynote information is available */}
-          {hasKeynoteInfo && (
-            <div className="absolute top-2 right-2 z-10">
-              <Button
-                variant="secondary"
-                size="icon"
-                className="h-8 w-8 rounded-full bg-white/80 hover:bg-white"
-                onClick={() => setExpanded(!expanded)}
-              >
-                {expanded ? (
-                  <LuMinus className="h-4 w-4 text-emerald-700" />
-                ) : (
-                  <LuPlus className="h-4 w-4 text-emerald-700" />
-                )}
-              </Button>
-            </div>
+        <div className="relative aspect-square">
+          <Image
+            src={imageUrl || "/placeholder.svg?height=300&width=300"}
+            alt={`Photo of ${name}`}
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="p-4">
+          <h3 className="text-lg font-bold">{name}</h3>
+          {title && <p className="text-sm text-gray-600">{title}</p>}
+          {organization && (
+            <p className="text-sm text-gray-600">{organization}</p>
           )}
 
-          <div className="p-6 text-center">
-            <div className="relative w-32 h-32 mx-auto mb-4 overflow-hidden rounded-full">
-              <Image
-                src={resolvedImageUrl || "/placeholder.svg"}
-                alt={name}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <h3 className="font-semibold text-lg flex items-center justify-center gap-1">
-                {name}
-                {websiteUrl && (
-                  <Link
-                    href={websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-emerald-700 hover:text-emerald-800"
-                  >
-                    <LuExternalLink className="h-4 w-4" />
-                    <span className="sr-only">Website</span>
-                  </Link>
-                )}
-              </h3>
-              <p className="text-sm text-gray-600">{title}</p>
-              <p className="text-sm text-gray-500">{organization}</p>
-            </div>
-          </div>
-
-          {expanded && hasKeynoteInfo && (
-            <div className="p-6 bg-gray-50 border-t">
-              <h4 className="font-semibold mb-2">KEYNOTE:</h4>
-              {keynoteTitle && (
-                <p className="text-sm text-gray-700">{keynoteTitle}</p>
-              )}
+          {keynoteTitle && (
+            <div className="mt-3 pt-3 border-t border-gray-200">
+              <p className="text-sm font-semibold text-emerald-700">
+                {keynoteTitle}
+              </p>
               {keynoteDescription && (
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-xs mt-1 text-gray-600">
                   {keynoteDescription}
                 </p>
               )}
-              <div className="mt-4 text-center">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/speakers" className="text-emerald-700">
-                    Read details
-                  </Link>
-                </Button>
-              </div>
+            </div>
+          )}
+
+          {websiteUrl && (
+            <div className="mt-3">
+              <Link
+                href={websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-emerald-700 hover:underline"
+              >
+                Visit Website
+              </Link>
             </div>
           )}
         </div>
