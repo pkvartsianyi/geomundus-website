@@ -19,8 +19,6 @@ import { PortableText } from "@portabletext/react";
 import { cachedClient } from "@/lib/sanity.client";
 import {
   siteSettingsQuery,
-  aboutSectionQuery,
-  focusTopicQuery,
   currentConferenceQuery,
   sponsorsQuery,
   partnersQuery,
@@ -33,31 +31,23 @@ import FaqSection from "@/components/faq-section";
 import { RegisterButton } from "@/components/register-button";
 import PortableTextRenderer from "@/components/portable-text-renderer";
 import type {
-  AboutSection,
   Conference,
   Faq,
-  FocusTopic,
   Partner,
   Schedule,
   SiteSettings,
   Sponsor,
 } from "@/sanity.types";
 
-import { Lightbulb } from "lucide-react";
 
 export default async function Home() {
   const siteSettings = await cachedClient<SiteSettings>(
     siteSettingsQuery.query,
   );
-  const aboutSection = await cachedClient<AboutSection>(
-    aboutSectionQuery.query,
-  );
-  const focusTopic = await cachedClient<FocusTopic>(focusTopicQuery.query);
   const currentConference = await cachedClient<Conference>(
     currentConferenceQuery.query,
   );
-  const sponsors = await cachedClient<Sponsor[]>(sponsorsQuery.query);
-  const partners = await cachedClient<Partner[]>(partnersQuery.query);
+  console.log(currentConference);
   const schedule = await cachedClient<Schedule>(scheduleQuery.query);
   const faqs = await cachedClient<Faq[]>(faqsQuery.query);
   const currentYear = await cachedClient<Conference>(
@@ -131,7 +121,7 @@ export default async function Home() {
       )}
 
       {/* About Section */}
-      {aboutSection && (
+      {currentConference.about && (
         <section id="info" className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-4">
             {siteSettings?.conferenceDate && (
@@ -139,13 +129,13 @@ export default async function Home() {
             )}
 
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-              {aboutSection?.title}
+              {currentConference.about?.title}
             </h2>
 
             <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
-              {aboutSection?.content && (
+              {currentConference.about?.content && (
                 <div className="prose max-w-none">
-                  <PortableText value={aboutSection.content} />
+                  <PortableText value={currentConference.about.content} />
                 </div>
               )}
             </div>
@@ -163,60 +153,64 @@ export default async function Home() {
             )}
 
             {/* Updated Focus Topic Section with Modern Design */}
-            {focusTopic && (
+            {currentConference.focusTopic && (
               <div className="mt-24 max-w-6xl mx-auto">
                 <div className="text-center mb-16">
                   <h2 className="text-3xl md:text-4xl font-bold mb-6 inline-block relative">
-                    {focusTopic?.title || "This Year's Focus"}
+                    {currentConference.focusTopic?.title || "This Year's Focus"}
                     <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-emerald-600 rounded-full"></span>
                   </h2>
 
-                  {focusTopic?.description && (
+                  {currentConference.focusTopic?.description && (
                     <div className="prose prose-lg max-w-3xl mx-auto mt-8 text-gray-700">
                       <div className="portable-text">
                         <PortableTextRenderer
-                          content={focusTopic.description}
+                          content={currentConference.focusTopic.description}
                         />
                       </div>
                     </div>
                   )}
                 </div>
 
-                {focusTopic?.topics && focusTopic.topics.length > 0 && (
-                  <div className="mt-12">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {focusTopic.topics.map((topic, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className="bg-white p-6 rounded-lg shadow-md border-l-4 border-emerald-600 hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px] group"
-                          >
-                            <div className="flex items-start">
-                              <div>
-                                <h3 className="font-semibold text-lg text-gray-800 mb-2">
-                                  {topic}
-                                </h3>
-                                <p className="text-gray-600 text-sm">
-                                  Explore innovative approaches and research in
-                                  this critical area of geospatial science.
-                                </p>
+                {currentConference.focusTopic?.topics &&
+                  currentConference.focusTopic.topics.length > 0 && (
+                    <div className="mt-12">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {currentConference.focusTopic.topics.map(
+                          (topic, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="bg-white p-6 rounded-lg shadow-md border-l-4 border-emerald-600 hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px] group"
+                              >
+                                <div className="flex items-start">
+                                  <div>
+                                    <h3 className="font-semibold text-lg text-gray-800 mb-2">
+                                      {topic}
+                                    </h3>
+                                    <p className="text-gray-600 text-sm">
+                                      Explore innovative approaches and research
+                                      in this critical area of geospatial
+                                      science.
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                            );
+                          },
+                        )}
+                      </div>
 
-                    <div className="mt-12 text-center">
-                      <Button
-                        asChild
-                        className="bg-emerald-700 hover:bg-emerald-800 text-white"
-                      >
-                        <Link href="/submissions">Submit Your Research</Link>
-                      </Button>
+                      <div className="mt-12 text-center">
+                        <Button
+                          asChild
+                          className="bg-emerald-700 hover:bg-emerald-800 text-white"
+                        >
+                          <Link href="/submissions">Submit Your Research</Link>
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             )}
           </div>
@@ -272,7 +266,7 @@ export default async function Home() {
         )}
 
       {/* Sponsors Section */}
-      {sponsors && partners && (
+      {currentConference.sponsors && currentConference.partners && (
         <section id="sponsors" className="py-16 md:py-24 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
@@ -291,10 +285,10 @@ export default async function Home() {
               <p className="text-justify">
                 Start the conversation by contacting us at{" "}
                 <Link
-                  href="mailto:geomunduswebteam@gmail.com"
+                  href="mailto:budget@geomundus.org"
                   className="text-emerald-700 hover:underline"
                 >
-                  geomunduswebteam@gmail.com
+                  budget@geomundus.org
                 </Link>{" "}
                 for more information on how to be a part of this unique
                 conference! We will be glad to discuss your ideas for sponsoring
@@ -302,7 +296,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <SponsorSection sponsors={sponsors} partners={partners} />
+            <SponsorSection sponsors={currentConference.sponsors} partners={currentConference.partners} />
           </div>
         </section>
       )}

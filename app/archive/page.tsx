@@ -34,7 +34,9 @@ export default async function ArchivePage() {
     <main className="flex min-h-screen flex-col">
       <div className="bg-amber-100 text-amber-800 p-4 text-center">
         <p className="font-medium">
-          {"We are working on the archive. Please, be aware that some information might be missing."}
+          {
+            "We are working on the archive. Please, be aware that some information might be missing."
+          }
         </p>
       </div>
       {/* Hero Section */}

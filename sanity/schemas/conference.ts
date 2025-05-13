@@ -145,6 +145,123 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: "about",
+      title: "About Section",
+      type: "object",
+      fields: [
+        {
+          name: "title",
+          title: "Title",
+          type: "string",
+        },
+        {
+          name: "content",
+          title: "Content",
+          type: "array",
+          of: [{ type: "block" }],
+        },
+      ],
+    }),
+    defineField({
+      name: "focusTopic",
+      title: "Focus Topic",
+      type: "object",
+      fields: [
+        {
+          name: "title",
+          title: "Title",
+          type: "string",
+        },
+        {
+          name: "description",
+          title: "Description",
+          type: "array",
+          of: [{ type: "block" }],
+        },
+        {
+          name: "topics",
+          title: "Topics",
+          type: "array",
+          of: [{ type: "string" }],
+        },
+      ],
+    }),
+    defineField({
+      name: "sponsors",
+      title: "Sponsors",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "name",
+              title: "Name",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "logo",
+              title: "Logo",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+            {
+              name: "websiteUrl",
+              title: "Website URL",
+              type: "url",
+            },
+            {
+              name: "tier",
+              title: "Sponsorship Tier",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Platinum", value: "platinum" },
+                  { title: "Gold", value: "gold" },
+                  { title: "Silver", value: "silver" },
+                  { title: "Bronze", value: "bronze" },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "partners",
+      title: "Partners",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "name",
+              title: "Name",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "logo",
+              title: "Logo",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+            {
+              name: "websiteUrl",
+              title: "Website URL",
+              type: "url",
+            },
+          ],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {

@@ -23,13 +23,6 @@ export const structure = (S: StructureBuilder) =>
         ),
 
       S.listItem()
-        .title("About Section")
-        .icon(FiFileText)
-        .child(
-          S.document().schemaType("aboutSection").documentId("aboutSection"),
-        ),
-
-      S.listItem()
         .title("Focus Topic")
         .icon(FiStar)
         .child(S.document().schemaType("focusTopic").documentId("focusTopic")),

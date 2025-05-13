@@ -82,11 +82,6 @@ export async function POST(request: NextRequest) {
         // Schedule appears on the home page
         revalidatePath("/");
         break;
-      case "aboutSection":
-      case "focusTopic":
-        // These appear on the home page
-        revalidatePath("/");
-        break;
       case "registration":
         // Registration data might appear in various places
         revalidatePath("/");

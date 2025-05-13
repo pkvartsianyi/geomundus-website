@@ -45,28 +45,29 @@ export const currentConferenceQuery = tagQuery(
       organization,
       topic,
       "imageUrl": image.asset->url,
+    },
+    about {
+      title,
+      content
+    },
+    focusTopic {
+      title,
+      description,
+      topics
+    },
+    partners[] {
+      name,
+      "logoUrl": logo.asset->url,
+      websiteUrl
+    },
+    sponsors[] {
+      name,
+      "logoUrl": logo.asset->url,
+      websiteUrl,
+      tier
     }
   }`,
   "currentConference",
-);
-
-// About section
-export const aboutSectionQuery = tagQuery(
-  groq`*[_type == "aboutSection"][0]{
-    title,
-    content
-  }`,
-  "aboutSection",
-);
-
-// Focus topic
-export const focusTopicQuery = tagQuery(
-  groq`*[_type == "focusTopic"][0]{
-    title,
-    description,
-    topics
-  }`,
-  "focusTopic",
 );
 
 // Sponsors
@@ -128,6 +129,26 @@ export const conferenceByYearQuery = (year: number) =>
         organization,
         topic,
         "imageUrl": image.asset->url,
+      },
+      about {
+        title,
+        content
+      },
+      focusTopic {
+        title,
+        description,
+        topics
+      },
+      sponsors[] {
+        name,
+        "logoUrl": logo.asset->url,
+        websiteUrl,
+        tier
+      },
+      partners[] {
+        name,
+        "logoUrl": logo.asset->url,
+        websiteUrl
       }
     }`,
     "conference",
