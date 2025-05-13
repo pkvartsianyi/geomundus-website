@@ -516,27 +516,5 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes =
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityFileAsset
-  | Geopoint
-  | Slug
-  | Submission
-  | Registration
-  | Faq
-  | Schedule
-  | Conference
-  | Partner
-  | Sponsor
-  | Speaker
-  | FocusTopic
-  | AboutSection
-  | SiteSettings
-  | SanityImageCrop
-  | SanityImageHotspot
-  | SanityImageAsset
-  | SanityAssetSourceData
-  | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Slug | Submission | Registration | Faq | Schedule | Conference | Partner | Sponsor | Speaker | FocusTopic | AboutSection | SiteSettings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;

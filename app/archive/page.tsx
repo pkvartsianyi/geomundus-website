@@ -15,6 +15,7 @@ import {
   conferencesQuery,
   currentConferenceYearQuery,
 } from "@/lib/sanity.queries";
+import { Conference } from "@/sanity.types";
 
 export const metadata: Metadata = {
   title: "GeoMundus - Conference Archive",
@@ -27,9 +28,8 @@ export default async function ArchivePage() {
 
   // Filter out the current year from the archive
   const pastConferences = conferences.filter(
-    (conf) => conf.year !== currentYear,
+    (conf: Conference) => conf.year !== currentYear,
   );
-
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
@@ -59,7 +59,7 @@ export default async function ArchivePage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {pastConferences.map((conference) => (
+            {pastConferences.map((conference: Conference) => (
               <Card
                 key={conference._id}
                 className="overflow-hidden hover:shadow-lg transition-shadow"
@@ -100,7 +100,7 @@ export default async function ArchivePage() {
                     </Button>
                   ) : (
                     <Button asChild className="w-full">
-                      <Link href={`/${conference.year}`}>View Details</Link>
+                      <Link href={`/archive/${conference.year}`}>View Details</Link>
                     </Button>
                   )}
                 </CardFooter>

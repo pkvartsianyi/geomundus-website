@@ -1,48 +1,44 @@
-# this is required server config to host past conferences archive
+localhost:8443 {
+    tls internal
 
-:80 {
     root * /srv
 
-    # Handle specific year assets, images, and js
+    # Static versioned routes
     handle_path /[0-9]{4}/assets/* {
-        root /srv
         file_server
     }
 
     handle_path /[0-9]{4}/images/* {
-        root /srv
         file_server
     }
 
     handle_path /[0-9]{4}/js/* {
-        root /srv
         file_server
     }
 
-    # Handle static files with fallback across years
+    # Fallback routes
     handle_path /assets/* {
         uri strip_prefix /assets
-        try_files {path} /2010/assets/{path} /2011/assets/{path} /2012/assets/{path} /2013/assets/{path} /2014/assets/{path} /2015/assets/{path} /2016/assets/{path} /2017/assets/{path} /2018/assets/{path} /2019/assets/{path} /2020/assets/{path} /2021/assets/{path} /2022/assets/{path} /2023/assets/{path} /2024/assets/{path}
+        try_files /2025/assets/{path} /2024/assets/{path} /2023/assets/{path} /2022/assets/{path}
         file_server
     }
 
-    # Handle static images with fallback across years
     handle_path /images/* {
         uri strip_prefix /images
-        try_files {path} /2010/images/{path} /2011/images/{path} /2012/images/{path} /2013/images/{path} /2014/images/{path} /2015/images/{path} /2016/images/{path} /2017/images/{path} /2018/images/{path} /2019/images/{path} /2020/images/{path} /2021/images/{path} /2022/images/{path} /2023/images/{path} /2024/images/{path}
+        try_files /2025/images/{path} /2024/images/{path} /2023/images/{path} /2022/images/{path}
         file_server
     }
 
-    # Handle static js with fallback across years
     handle_path /js/* {
         uri strip_prefix /js
-        try_files {path} /2010/js/{path} /2011/js/{path} /2012/js/{path} /2013/js/{path} /2014/js/{path} /2015/js/{path} /2016/js/{path} /2017/js/{path} /2018/js/{path} /2019/js/{path} /2020/js/{path} /2021/js/{path} /2022/js/{path} /2023/js/{path} /2024/js/{path}
+        try_files /2025/js/{path} /2024/js/{path} /2023/js/{path} /2022/js/{path}
         file_server
     }
 
-    # Default file serving (e.g. /index.html)
+    # Catch-all
     handle {
         try_files {path} {path}/index.html
         file_server
     }
 }
+

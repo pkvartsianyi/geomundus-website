@@ -16,9 +16,9 @@ services:
 
   legacy-website:
     image: caddy:alpine
-    container_name: legacy-caddy
+    container_name: legacy-website
     ports:
-      - "8081:80"
+      - "8443:8443"
     volumes:
       - ./public_html_legacy:/srv
       - ./Caddyfile:/etc/caddy/Caddyfile
