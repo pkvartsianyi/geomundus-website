@@ -32,6 +32,11 @@ export default async function ArchivePage() {
   );
   return (
     <main className="flex min-h-screen flex-col">
+      <div className="bg-amber-100 text-amber-800 p-4 text-center">
+        <p className="font-medium">
+          {"We are working on the archive. Please, be aware that some information might be missing."}
+        </p>
+      </div>
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 py-24 text-center text-white bg-gradient-to-br from-emerald-800 to-teal-600">
         <div className="max-w-5xl mx-auto">

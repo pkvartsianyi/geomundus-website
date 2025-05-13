@@ -173,15 +173,18 @@ export default async function SubmissionsPage() {
             <div className="mt-10 text-center p-6 bg-gray-100 rounded-lg">
               <p>
                 {submissionInfo?.contactNote ||
-                  "If you have further queries about the short paper and poster submission, please contact the conference organizing committee."}{" "}
+                  "If you have further queries about the short paper and poster submission, please contact the conference organizing committee."}{" "}{"At "}
                 {submissionInfo?.contactEmail && (
                   <Link
                     href={`mailto:${submissionInfo.contactEmail}`}
                     className="text-emerald-700 font-medium hover:underline"
                   >
-                    {submissionInfo.contactEmail}
+                    {submissionInfo.contactEmail}.
                   </Link>
                 )}
+              </p>
+              <p>
+                {"Follow us on social networks to get the latest updates."}
               </p>
             </div>
           </div>

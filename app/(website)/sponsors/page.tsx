@@ -124,7 +124,7 @@ export default async function SponsorsPage() {
       </section>
 
       {/* Sponsorship Tiers Section */}
-      <section className="py-16 md:py-20 bg-gray-50">
+      {/* <section className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-8">
@@ -270,7 +270,7 @@ export default async function SponsorsPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Special Sponsorship Opportunities */}
       <section className="py-16 md:py-20 bg-white">

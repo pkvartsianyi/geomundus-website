@@ -1,6 +1,5 @@
 import type { SchemaTypeDefinition } from "sanity";
 
-import speaker from "../schemas/speaker";
 import sponsor from "../schemas/sponsor";
 import partner from "../schemas/partner";
 import siteSettings from "../schemas/siteSettings";
@@ -17,7 +16,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     siteSettings,
     aboutSection,
     focusTopic,
-    speaker,
     sponsor,
     partner,
     conference,
