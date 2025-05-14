@@ -373,7 +373,7 @@ export default async function ConferenceArchivePage({ params }: Props) {
               )}
             </div>
 
-            <Button asChild>
+            <Button asChild className="bg-emerald-700 text-white">
               <Link href="/">Return to Current Conference</Link>
             </Button>
           </div>

@@ -38,6 +38,7 @@ import type {
   SiteSettings,
   Sponsor,
 } from "@/sanity.types";
+import YouTubeSection from "@/components/video-section";
 
 
 export default async function Home() {
@@ -141,14 +142,12 @@ export default async function Home() {
             </div>
 
             {siteSettings?.youtubeVideoId && (
-              <div className="mt-12 max-w-4xl mx-auto aspect-video">
-                <iframe
-                  className="w-full h-full"
-                  src={`https://www.youtube-nocookie.com/embed/${siteSettings.youtubeVideoId}`}
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
+              <div className="mt-12">
+                <YouTubeSection
+                  videoId={siteSettings.youtubeVideoId}
+                  title="GeoMundus Conference"
+                  description="Watch our latest conference video to learn more about GeoMundus and the exciting topics we cover in geospatial technologies."
+                />
               </div>
             )}
 

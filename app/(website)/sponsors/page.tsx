@@ -14,9 +14,7 @@ import {
 import { Check, Mail, Users, Globe, Award, Zap, BarChart } from "lucide-react";
 import { cachedClient } from "@/lib/sanity.client";
 import {
-  siteSettingsQuery,
-  sponsorsQuery,
-  partnersQuery,
+  currentConferenceQuery,
 } from "@/lib/sanity.queries";
 
 export const metadata: Metadata = {
@@ -26,9 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SponsorsPage() {
-  const siteSettings = await cachedClient(siteSettingsQuery.query);
-  const sponsors = await cachedClient(sponsorsQuery.query);
-  const partners = await cachedClient(partnersQuery.query);
+  const currentConference = await cachedClient(currentConferenceQuery.query);
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -124,7 +120,7 @@ export default async function SponsorsPage() {
       </section>
 
       {/* Sponsorship Tiers Section */}
-      {/* <section className="py-16 md:py-20 bg-gray-50">
+      <section className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-8">
@@ -249,7 +245,7 @@ export default async function SponsorsPage() {
                       <Check className="h-5 w-5 text-emerald-600 mx-auto" />
                     </TableCell>
                   </TableRow>
-                  <TableRow>
+                  {/* <TableRow>
                     <TableCell className="font-medium">
                       Complimentary Registrations
                     </TableCell>
@@ -257,7 +253,7 @@ export default async function SponsorsPage() {
                     <TableCell className="text-center">2</TableCell>
                     <TableCell className="text-center">3</TableCell>
                     <TableCell className="text-center">5</TableCell>
-                  </TableRow>
+                  </TableRow> */}
                 </TableBody>
               </Table>
             </div>
@@ -270,7 +266,7 @@ export default async function SponsorsPage() {
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
 
       {/* Special Sponsorship Opportunities */}
       <section className="py-16 md:py-20 bg-white">
@@ -356,21 +352,21 @@ export default async function SponsorsPage() {
       </section>
 
       {/* Current Sponsors Section */}
-      {(sponsors?.length > 0 || partners?.length > 0) && (
+      {currentConference.sponsors?.length > 0 || currentConference.partners?.length > 0 && (
         <section className="py-16 md:py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-center mb-12">
-                Sponsors and Partners: Current & Previous
+                Sponsors and Partners
               </h2>
 
-              {sponsors?.length > 0 && (
+              {currentConference.sponsors?.length > 0 && (
                 <div className="mb-12">
                   <h3 className="text-xl font-bold text-center mb-8">
-                    Sponsors
+                    Past Sponsors
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
-                    {sponsors.map((sponsor) => (
+                    {currentConference.sponsors.map((sponsor) => (
                       <div
                         key={sponsor._id}
                         className="flex items-center justify-center"
@@ -403,13 +399,13 @@ export default async function SponsorsPage() {
                 </div>
               )}
 
-              {partners?.length > 0 && (
+              {currentConference.partners?.length > 0 && (
                 <div>
                   <h3 className="text-xl font-bold text-center mb-8">
                     Partners
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
-                    {partners.map((partner) => (
+                    {currentConference.partners.map((partner) => (
                       <div
                         key={partner._id}
                         className="flex items-center justify-center"
