@@ -15,13 +15,10 @@ import CountdownTimer from "@/components/countdown-timer";
 import SpeakerCard from "@/components/speaker-card";
 import SponsorSection from "@/components/sponsor-section";
 import CookieConsent from "@/components/cookie-consent";
-import { PortableText } from "@portabletext/react";
 import { cachedClient } from "@/lib/sanity.client";
 import {
   siteSettingsQuery,
   currentConferenceQuery,
-  sponsorsQuery,
-  partnersQuery,
   scheduleQuery,
   faqsQuery,
   currentConferenceYearQuery,
@@ -30,16 +27,9 @@ import ScheduleSection from "@/components/schedule-section";
 import FaqSection from "@/components/faq-section";
 import { RegisterButton } from "@/components/register-button";
 import PortableTextRenderer from "@/components/portable-text-renderer";
-import type {
-  Conference,
-  Faq,
-  Partner,
-  Schedule,
-  SiteSettings,
-  Sponsor,
-} from "@/sanity.types";
+import type { Conference, Faq, Schedule, SiteSettings } from "@/sanity.types";
 import YouTubeSection from "@/components/video-section";
-
+import { SocialLinks } from "@/components/socialLinks";
 
 export default async function Home() {
   const siteSettings = await cachedClient<SiteSettings>(
@@ -48,7 +38,6 @@ export default async function Home() {
   const currentConference = await cachedClient<Conference>(
     currentConferenceQuery.query,
   );
-  console.log(currentConference);
   const schedule = await cachedClient<Schedule>(scheduleQuery.query);
   const faqs = await cachedClient<Faq[]>(faqsQuery.query);
   const currentYear = await cachedClient<Conference>(
@@ -136,7 +125,9 @@ export default async function Home() {
             <div className="max-w-4xl mx-auto space-y-6 text-gray-700">
               {currentConference.about?.content && (
                 <div className="prose max-w-none">
-                  <PortableText value={currentConference.about.content} />
+                  <PortableTextRenderer
+                    content={currentConference.about.content}
+                  />
                 </div>
               )}
             </div>
@@ -238,7 +229,7 @@ export default async function Home() {
               </h2>
 
               <p className="text-justify text-gray-700 max-w-4xl mx-auto mb-12">
-                Geomundus will feature a broad landscape of expertise and areas
+                GeoMundus will feature a broad landscape of expertise and areas
                 of action within the GIS field, such as academic figures, NGO
                 advisors, government officials, and private sector actors.
               </p>
@@ -295,7 +286,10 @@ export default async function Home() {
               </p>
             </div>
 
-            <SponsorSection sponsors={currentConference.sponsors} partners={currentConference.partners} />
+            <SponsorSection
+              sponsors={currentConference.sponsors}
+              partners={currentConference.partners}
+            />
           </div>
         </section>
       )}
@@ -381,69 +375,19 @@ export default async function Home() {
               <div className="text-center">
                 <h4 className="text-xl font-bold mb-4">Mailing address</h4>
                 {siteSettings?.mailingAddress && (
-                  <PortableText value={siteSettings.mailingAddress} />
+                  <PortableTextRenderer content={siteSettings.mailingAddress} />
                 )}
               </div>
 
               <div className="text-center">
                 <h4 className="text-xl font-bold mb-4">Social Media</h4>
-                <div className="flex justify-center space-x-4">
-                  {siteSettings?.socialLinks?.twitter && (
-                    <Link
-                      href={siteSettings.socialLinks.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-emerald-700"
-                    >
-                      <AiOutlineTwitter className="h-6 w-6" />
-                      <span className="sr-only">Twitter</span>
-                    </Link>
-                  )}
-                  {siteSettings?.socialLinks?.facebook && (
-                    <Link
-                      href={siteSettings.socialLinks.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-emerald-700"
-                    >
-                      <AiOutlineFacebook className="h-6 w-6" />
-                      <span className="sr-only">Facebook</span>
-                    </Link>
-                  )}
-                  {siteSettings?.socialLinks?.instagram && (
-                    <Link
-                      href={siteSettings.socialLinks.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-emerald-700"
-                    >
-                      <AiOutlineInstagram className="h-6 w-6" />
-                      <span className="sr-only">Instagram</span>
-                    </Link>
-                  )}
-                  {siteSettings?.socialLinks?.linkedin && (
-                    <Link
-                      href={siteSettings.socialLinks.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-emerald-700"
-                    >
-                      <AiOutlineLinkedin className="h-6 w-6" />
-                      <span className="sr-only">LinkedIn</span>
-                    </Link>
-                  )}
-                  {siteSettings?.socialLinks?.github && (
-                    <Link
-                      href={siteSettings.socialLinks.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-emerald-700"
-                    >
-                      <AiOutlineGithub className="h-6 w-6" />
-                      <span className="sr-only">GitHub</span>
-                    </Link>
-                  )}
-                </div>
+                <SocialLinks
+                  twitter={siteSettings?.socialLinks?.twitter}
+                  facebook={siteSettings?.socialLinks?.facebook}
+                  instagram={siteSettings?.socialLinks?.instagram}
+                  linkedin={siteSettings?.socialLinks?.linkedin}
+                  github={siteSettings?.socialLinks?.github}
+                />
               </div>
             </div>
           </div>

@@ -8,12 +8,5 @@ import registration from "../schemas/registration";
 import submission from "../schemas/submission";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [
-    siteSettings,
-    conference,
-    schedule,
-    faq,
-    registration,
-    submission,
-  ],
+  types: [siteSettings, conference, schedule, faq, registration, submission],
 };

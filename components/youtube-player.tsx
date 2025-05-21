@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import ReactPlayer from "react-player/lazy"
-import { cn } from "@/lib/utils"
-import { Play } from "lucide-react"
+import { useState, useEffect, useRef } from "react";
+import ReactPlayer from "react-player/lazy";
+import { cn } from "@/lib/utils";
+import { Play } from "lucide-react";
 
 interface ReactPlayerWrapperProps {
-  url: string
-  title?: string
-  description?: string
-  className?: string
-  light?: boolean | string
-  controls?: boolean
-  playing?: boolean
-  loop?: boolean
-  volume?: number
-  muted?: boolean
-  playbackRate?: number
-  width?: string | number
-  height?: string | number
-  fallbackImage?: string
-  onEnded?: () => void
+  url: string;
+  title?: string;
+  description?: string;
+  className?: string;
+  light?: boolean | string;
+  controls?: boolean;
+  playing?: boolean;
+  loop?: boolean;
+  volume?: number;
+  muted?: boolean;
+  playbackRate?: number;
+  width?: string | number;
+  height?: string | number;
+  fallbackImage?: string;
+  onEnded?: () => void;
 }
 
 export default function ReactPlayerWrapper({
@@ -40,56 +40,62 @@ export default function ReactPlayerWrapper({
   fallbackImage,
   onEnded,
 }: ReactPlayerWrapperProps) {
-  const [isClient, setIsClient] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(playing)
-  const [hasStarted, setHasStarted] = useState(false)
-  const [isReady, setIsReady] = useState(false)
-  const [thumbnailUrl, setThumbnailUrl] = useState<string | boolean>(light)
-  const playerRef = useRef<ReactPlayer>(null)
+  const [isClient, setIsClient] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(playing);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | boolean>(light);
+  const playerRef = useRef<ReactPlayer>(null);
 
   // Handle YouTube thumbnail loading if light=true and no custom thumbnail is provided
   useEffect(() => {
-    setIsClient(true)
+    setIsClient(true);
 
     if (light === true && url.includes("youtube.com") && !fallbackImage) {
       // Extract video ID from YouTube URL
-      const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^#&?]*)/)
+      const videoIdMatch = url.match(
+        /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^#&?]*)/,
+      );
       if (videoIdMatch && videoIdMatch[1]) {
-        const videoId = videoIdMatch[1]
+        const videoId = videoIdMatch[1];
 
         // Try to load the highest quality thumbnail first
-        const img = new Image()
+        const img = new Image();
         img.onload = () => {
-          setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`)
-        }
+          setThumbnailUrl(
+            `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+          );
+        };
         img.onerror = () => {
           // If maxres is not available, use high quality
-          setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`)
-        }
-        img.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+          setThumbnailUrl(
+            `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+          );
+        };
+        img.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
       }
     } else if (typeof fallbackImage === "string") {
-      setThumbnailUrl(fallbackImage)
+      setThumbnailUrl(fallbackImage);
     }
-  }, [light, url, fallbackImage])
+  }, [light, url, fallbackImage]);
 
   const handlePlay = () => {
-    setIsPlaying(true)
-    setHasStarted(true)
-  }
+    setIsPlaying(true);
+    setHasStarted(true);
+  };
 
   const handlePause = () => {
-    setIsPlaying(false)
-  }
+    setIsPlaying(false);
+  };
 
   const handleEnded = () => {
-    setIsPlaying(false)
-    if (onEnded) onEnded()
-  }
+    setIsPlaying(false);
+    if (onEnded) onEnded();
+  };
 
   const handleReady = () => {
-    setIsReady(true)
-  }
+    setIsReady(true);
+  };
 
   // Custom play button for the light mode
   const renderPlayIcon = () => (
@@ -102,21 +108,29 @@ export default function ReactPlayerWrapper({
         <Play className="w-8 h-8 text-white fill-white" />
       </div>
     </button>
-  )
+  );
 
   const handleThumbnailClick = () => {
     if (!hasStarted) {
-      setIsPlaying(true)
-      setHasStarted(true)
+      setIsPlaying(true);
+      setHasStarted(true);
     }
-  }
+  };
 
   return (
     <div className={cn("video-player-wrapper", className)}>
       {(title || description) && (
         <div className="p-4 bg-white dark:bg-gray-800 rounded-t-lg">
-          {title && <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{title}</h3>}
-          {description && <p className="text-gray-600 dark:text-gray-300 text-sm">{description}</p>}
+          {title && (
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              {title}
+            </h3>
+          )}
+          {description && (
+            <p className="text-gray-600 dark:text-gray-300 text-sm">
+              {description}
+            </p>
+          )}
         </div>
       )}
 
@@ -144,17 +158,17 @@ export default function ReactPlayerWrapper({
             onReady={handleReady}
             playIcon={renderPlayIcon()}
             config={{
-                youtube: {
-                  playerVars: {
-                    modestbranding: 1, // Removes YouTube logo in the control bar
-                    rel: 0,            // Prevents related videos from other channels
-                    showinfo: 0,       // Deprecated, but doesn't hurt
-                    iv_load_policy: 3, // Hides video annotations
-                    fs: 0,             // Hides fullscreen button (optional)
-                    disablekb: 1,      // Disables keyboard controls (optional)
-                  },
+              youtube: {
+                playerVars: {
+                  modestbranding: 1, // Removes YouTube logo in the control bar
+                  rel: 0, // Prevents related videos from other channels
+                  showinfo: 0, // Deprecated, but doesn't hurt
+                  iv_load_policy: 3, // Hides video annotations
+                  fs: 0, // Hides fullscreen button (optional)
+                  disablekb: 1, // Disables keyboard controls (optional)
                 },
-              }}
+              },
+            }}
           />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
@@ -173,5 +187,5 @@ export default function ReactPlayerWrapper({
         )}
       </div>
     </div>
-  )
+  );
 }

@@ -106,7 +106,10 @@ export default async function ArchivePage() {
                       </a>
                     </Button>
                   ) : (
-                    <Button asChild className="w-full bg-emerald-700 text-white">
+                    <Button
+                      asChild
+                      className="w-full bg-emerald-700 text-white"
+                    >
                       <Link href={`/archive/${conference.year}`}>
                         View Details
                       </Link>

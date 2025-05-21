@@ -13,9 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Check, Mail, Users, Globe, Award, Zap, BarChart } from "lucide-react";
 import { cachedClient } from "@/lib/sanity.client";
-import {
-  currentConferenceQuery,
-} from "@/lib/sanity.queries";
+import { currentConferenceQuery } from "@/lib/sanity.queries";
 
 export const metadata: Metadata = {
   title: "GeoMundus - Become a Sponsor",
@@ -352,95 +350,96 @@ export default async function SponsorsPage() {
       </section>
 
       {/* Current Sponsors Section */}
-      {currentConference.sponsors?.length > 0 || currentConference.partners?.length > 0 && (
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-12">
-                Sponsors and Partners
-              </h2>
+      {currentConference.sponsors?.length > 0 ||
+        (currentConference.partners?.length > 0 && (
+          <section className="py-16 md:py-20 bg-gray-50">
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-3xl font-bold text-center mb-12">
+                  Sponsors and Partners
+                </h2>
 
-              {currentConference.sponsors?.length > 0 && (
-                <div className="mb-12">
-                  <h3 className="text-xl font-bold text-center mb-8">
-                    Past Sponsors
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
-                    {currentConference.sponsors.map((sponsor) => (
-                      <div
-                        key={sponsor._id}
-                        className="flex items-center justify-center"
-                      >
-                        {sponsor.logoUrl ? (
-                          <Link
-                            href={sponsor.websiteUrl || "#"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:opacity-80 transition-opacity"
-                          >
-                            <Image
-                              src={sponsor.logoUrl || "/placeholder.svg"}
-                              alt={sponsor.name}
-                              width={150}
-                              height={80}
-                              className="max-h-20 w-auto object-contain"
-                            />
-                          </Link>
-                        ) : (
-                          <div className="bg-gray-200 p-4 rounded-md">
-                            <p className="text-gray-700 font-medium">
-                              {sponsor.name}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                {currentConference.sponsors?.length > 0 && (
+                  <div className="mb-12">
+                    <h3 className="text-xl font-bold text-center mb-8">
+                      Past Sponsors
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
+                      {currentConference.sponsors.map((sponsor) => (
+                        <div
+                          key={sponsor._id}
+                          className="flex items-center justify-center"
+                        >
+                          {sponsor.logoUrl ? (
+                            <Link
+                              href={sponsor.websiteUrl || "#"}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:opacity-80 transition-opacity"
+                            >
+                              <Image
+                                src={sponsor.logoUrl || "/placeholder.svg"}
+                                alt={sponsor.name}
+                                width={150}
+                                height={80}
+                                className="max-h-20 w-auto object-contain"
+                              />
+                            </Link>
+                          ) : (
+                            <div className="bg-gray-200 p-4 rounded-md">
+                              <p className="text-gray-700 font-medium">
+                                {sponsor.name}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {currentConference.partners?.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-bold text-center mb-8">
-                    Partners
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
-                    {currentConference.partners.map((partner) => (
-                      <div
-                        key={partner._id}
-                        className="flex items-center justify-center"
-                      >
-                        {partner.logoUrl ? (
-                          <Link
-                            href={partner.websiteUrl || "#"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:opacity-80 transition-opacity"
-                          >
-                            <Image
-                              src={partner.logoUrl || "/placeholder.svg"}
-                              alt={partner.name}
-                              width={150}
-                              height={80}
-                              className="max-h-20 w-auto object-contain"
-                            />
-                          </Link>
-                        ) : (
-                          <div className="bg-gray-200 p-4 rounded-md">
-                            <p className="text-gray-700 font-medium">
-                              {partner.name}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                {currentConference.partners?.length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-bold text-center mb-8">
+                      Partners
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
+                      {currentConference.partners.map((partner) => (
+                        <div
+                          key={partner._id}
+                          className="flex items-center justify-center"
+                        >
+                          {partner.logoUrl ? (
+                            <Link
+                              href={partner.websiteUrl || "#"}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:opacity-80 transition-opacity"
+                            >
+                              <Image
+                                src={partner.logoUrl || "/placeholder.svg"}
+                                alt={partner.name}
+                                width={150}
+                                height={80}
+                                className="max-h-20 w-auto object-contain"
+                              />
+                            </Link>
+                          ) : (
+                            <div className="bg-gray-200 p-4 rounded-md">
+                              <p className="text-gray-700 font-medium">
+                                {partner.name}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        ))}
 
       {/* Contact Section */}
       <section className="py-16 md:py-20 bg-white">

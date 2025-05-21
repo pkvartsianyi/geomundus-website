@@ -13,6 +13,7 @@ import { siteSettingsQuery, submissionInfoQuery } from "@/lib/sanity.queries";
 import { format } from "date-fns";
 import PortableTextRenderer from "@/components/portable-text-renderer";
 import { SubmissionButton } from "@/components/submission-button";
+import { SocialLinks } from "@/components/socialLinks";
 
 export async function generateMetadata(): Promise<Metadata> {
   const submissionInfo = await cachedClient(submissionInfoQuery.query);
@@ -172,9 +173,9 @@ export default async function SubmissionsPage() {
             </div>
             <div className="mt-10 text-center p-6 bg-gray-100 rounded-lg">
               <p>
-                {submissionInfo?.contactNote ||
-                  "If you have further queries about the short paper and poster submission, please contact the conference organizing committee."}{" "}
-                {"At "}
+                {
+                  "If you have further queries about the short paper and poster submission, please contact the conference organizing committee at"
+                }{" "}
                 {submissionInfo?.contactEmail && (
                   <Link
                     href={`mailto:${submissionInfo.contactEmail}`}
@@ -184,7 +185,15 @@ export default async function SubmissionsPage() {
                   </Link>
                 )}
               </p>
+              <br />
               <p>{"Follow us on social networks to get the latest updates."}</p>
+              <SocialLinks
+                twitter={siteSettings?.socialLinks?.twitter}
+                facebook={siteSettings?.socialLinks?.facebook}
+                instagram={siteSettings?.socialLinks?.instagram}
+                linkedin={siteSettings?.socialLinks?.linkedin}
+                github={siteSettings?.socialLinks?.github}
+              />
             </div>
           </div>
         </div>

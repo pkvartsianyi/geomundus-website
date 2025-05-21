@@ -7,10 +7,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { PortableText } from "@portabletext/react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { Faq } from "@/sanity.types";
+import PortableTextRenderer from "./portable-text-renderer";
 
 interface FAQSectionProps {
   faqs: Faq[];
@@ -50,7 +50,7 @@ export default function FaqSection({ faqs }: FAQSectionProps) {
               </AccordionTrigger>
               <AccordionContent>
                 <div className="prose max-w-none">
-                  <PortableText value={faq.answer || []} />
+                  <PortableTextRenderer value={faq.answer || []} />
                 </div>
               </AccordionContent>
             </AccordionItem>
