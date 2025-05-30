@@ -5,11 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   AiOutlineCalendar,
   AiOutlineEnvironment,
-  AiOutlineTwitter,
-  AiOutlineFacebook,
-  AiOutlineInstagram,
-  AiOutlineLinkedin,
-  AiOutlineGithub,
 } from "react-icons/ai";
 import CountdownTimer from "@/components/countdown-timer";
 import SpeakerCard from "@/components/speaker-card";
@@ -30,6 +25,7 @@ import PortableTextRenderer from "@/components/portable-text-renderer";
 import type { Conference, Faq, Schedule, SiteSettings } from "@/sanity.types";
 import YouTubeSection from "@/components/video-section";
 import { SocialLinks } from "@/components/socialLinks";
+import { FeaturedResource } from "@/components/featured-resources";
 
 export default async function Home() {
   const siteSettings = await cachedClient<SiteSettings>(
@@ -328,6 +324,10 @@ export default async function Home() {
         </section>
       )}
 
+      <section className="py-16 md:py-24 bg-white">
+        <FeaturedResource link={siteSettings?.arrivalInfoPdfUrl} />
+      </section>
+
       {/* Location & Contact */}
       {siteSettings && (
         <section id="contact" className="py-16 md:py-24 bg-white">
@@ -347,17 +347,6 @@ export default async function Home() {
                   referrerPolicy="no-referrer-when-downgrade"
                   className="border-0 mx-auto"
                 ></iframe>
-              </div>
-            )}
-
-            {siteSettings?.arrivalInfoPdfUrl && (
-              <div className="text-center mb-12">
-                <Link
-                  href={siteSettings.arrivalInfoPdfUrl}
-                  className="font-bold text-emerald-700 hover:underline"
-                >
-                  Arrival Information to University of Münster [PDF]
-                </Link>
               </div>
             )}
 
