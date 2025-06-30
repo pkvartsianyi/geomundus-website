@@ -516,6 +516,36 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
+// Team Member
+export interface TeamMember {
+  _type: "teamMember"
+  name: string
+  photo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  teamName: "program" | "budget" | "web" | "marketing" | "logistics" | "sponsorship" | "registration" | "other"
+  conferenceYear: number
+  socialLinks?: {
+    twitter?: string
+    linkedin?: string
+    github?: string
+    website?: string
+  }
+  role?: string
+  bio?: string
+  order?: number
+  isActive: boolean
+}
+
 export type AllSanitySchemaTypes =
   | SanityImagePaletteSwatch
   | SanityImagePalette

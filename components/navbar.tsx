@@ -6,13 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { LuMenu, LuX } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
 import { RegisterButton } from "./register-button";
 import { SiteSettings } from "@/sanity.types";
 
@@ -113,6 +106,9 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             </NavLink>
             <NavLink href="/submissions" isScrolled={isScrolled}>
               Submissions
+            </NavLink>
+            <NavLink href="/about" isScrolled={isScrolled}>
+              About Us
             </NavLink>
 
             {/* Archive Dropdown */}

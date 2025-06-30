@@ -222,3 +222,35 @@ export const submissionInfoQuery = tagQuery(
   }`,
   "submission",
 );
+
+// Team members
+export const teamMembersQuery = tagQuery(
+  groq`*[_type == "teamMember" && isActive == true] | order(teamName asc, order asc) {
+    _id,
+    name,
+    "photoUrl": photo.asset->url,
+    teamName,
+    conferenceYear,
+    socialLinks,
+    role,
+    bio,
+    order
+  }`,
+  "teamMember",
+)
+
+// Current team members (for current conference year)
+export const currentTeamMembersQuery = tagQuery(
+  groq`*[_type == "teamMember" && isActive == true && conferenceYear == $year] | order(teamName asc, order asc) {
+    _id,
+    name,
+    "photoUrl": photo.asset->url,
+    teamName,
+    conferenceYear,
+    socialLinks,
+    role,
+    bio,
+    order
+  }`,
+  "teamMember",
+)
