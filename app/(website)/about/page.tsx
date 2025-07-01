@@ -1,0 +1,165 @@
+import type { Metadata } from "next"
+import { currentConferenceYearQuery, currentTeamMembersQuery, currentConferenceQuery } from "@/lib/sanity.queries"
+import { PortableText } from "@portabletext/react"
+import { cachedClient } from "@/lib/sanity.client"
+import { TeamMemberCard } from "@/components/team-member-card"
+import { mockAboutSection, mockTeamMembers, mockCurrentYear } from "@/lib/mock-data"
+import { TeamMember } from "@/sanity.types"
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn more about our conference and the team behind it.",
+}
+
+// Group team members by team
+function groupMembersByTeam(members: (TeamMember & { photoUrl?: string })[]) {
+  if (!members || members.length === 0) {
+    return {}
+  }
+
+  const grouped = members.reduce(
+    (acc, member) => {
+      const teamName = member.teamName
+      if (!acc[teamName]) {
+        acc[teamName] = []
+      }
+      acc[teamName].push(member)
+      return acc
+    },
+    {} as Record<string, (TeamMember & { photoUrl?: string })[]>,
+  )
+
+  return grouped
+}
+
+const teamNameLabels: Record<string, string> = {
+  program: "Program Team",
+  budget: "Budget Team",
+  web: "Web Team",
+  marketing: "Marketing Team",
+  logistics: "Logistics Team",
+  sponsorship: "Sponsorship Team",
+  registration: "Registration Team",
+  other: "Other Team",
+}
+
+export default async function AboutPage() {
+  let currentYear = mockCurrentYear
+  let teamMembers = mockTeamMembers
+  let aboutSection = mockAboutSection
+
+  try {
+    // Try to get data from Sanity, fall back to mock data if it fails
+    const sanityCurrentYear = await cachedClient(currentConferenceYearQuery.query)
+    if (sanityCurrentYear) {
+      currentYear = sanityCurrentYear
+    }
+
+    const sanityTeamMembers = await cachedClient(currentTeamMembersQuery.query, { year: currentYear })
+    if (sanityTeamMembers && sanityTeamMembers.length > 0) {
+      teamMembers = sanityTeamMembers
+    }
+
+    const currentConference = await cachedClient(currentConferenceQuery.query)
+    if (currentConference?.aboutSection) {
+      aboutSection = currentConference.aboutSection
+    }
+  } catch (error) {
+    console.log("Using mock data for About page:", error)
+    // Continue with mock data
+  }
+
+  const groupedMembers = groupMembersByTeam(teamMembers)
+  const teamNames = Object.keys(groupedMembers).sort()
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">About Us</h1>
+            <p className="text-xl text-gray-600 leading-relaxed">
+              Learn more about our conference and the dedicated team that makes it all possible.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      {aboutSection && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{aboutSection.title}</h2>
+              <div className="prose prose-lg max-w-none text-gray-600">
+                <PortableText value={aboutSection.content} />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Team Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Team</h2>
+              <p className="text-lg text-gray-600">
+                Meet the dedicated individuals who work tirelessly to bring you an exceptional conference experience.
+              </p>
+            </div>
+
+            {teamNames.length > 0 ? (
+              <div className="space-y-12">
+                {teamNames.map((teamName) => (
+                  <div key={teamName}>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
+                      {teamNameLabels[teamName] || teamName}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {groupedMembers[teamName].map((member) => (
+                        <TeamMemberCard key={member._id} member={member} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">Team information will be available soon.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Get In Touch</h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Have questions about the conference or want to get involved? We'd love to hear from you.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="mailto:contact@conference.com"
+                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                Contact Us
+              </a>
+              <a
+                href="/registration"
+                className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              >
+                Register Now
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

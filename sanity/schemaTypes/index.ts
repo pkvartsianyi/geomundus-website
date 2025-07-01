@@ -6,7 +6,8 @@ import schedule from "../schemas/schedule";
 import faq from "../schemas/faq";
 import registration from "../schemas/registration";
 import submission from "../schemas/submission";
+import teamMember from "../schemas/teamMember";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [siteSettings, conference, schedule, faq, registration, submission],
+  types: [siteSettings, conference, schedule, faq, registration, submission, teamMember],
 };
