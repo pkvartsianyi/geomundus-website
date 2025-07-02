@@ -36,10 +36,9 @@ const teamNameLabels: Record<string, string> = {
   program: "Program Team",
   budget: "Budget Team",
   web: "Web Team",
-  marketing: "Marketing Team",
-  logistics: "Logistics Team",
-  sponsorship: "Sponsorship Team",
-  registration: "Registration Team",
+  local: "Local Team",
+  steering: "Steering Team",
+  pr: "Public Relations Team",
   other: "Other Team",
 }
 
