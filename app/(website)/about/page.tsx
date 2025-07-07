@@ -7,7 +7,7 @@ import { mockAboutSection, mockTeamMembers, mockCurrentYear } from "@/lib/mock-d
 import { TeamMember } from "@/sanity.types"
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "Team",
   description: "Learn more about our conference and the team behind it.",
 }
 
@@ -72,32 +72,18 @@ export default async function AboutPage() {
   const teamNames = Object.keys(groupedMembers).sort()
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen text-white bg-gradient-to-br from-emerald-800 to-teal-600">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16">
+        <section className="pt-32 px-4 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">About Us</h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">About Us</h1>
+            <p className="text-xl text-white leading-relaxed">
               Learn more about our conference and the dedicated team that makes it all possible.
             </p>
           </div>
         </div>
       </section>
-
-      {/* About Section */}
-      {aboutSection && (
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{aboutSection.title}</h2>
-              <div className="prose prose-lg max-w-none text-gray-600">
-                <PortableText value={aboutSection.content} />
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Team Section */}
       <section className="py-16 bg-gray-50">
@@ -138,8 +124,8 @@ export default async function AboutPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Get In Touch</h2>
-            <p className="text-lg text-gray-600 mb-8">
+            <h2 className="text-3xl font-bold text-white mb-6">Get In Touch</h2>
+            <p className="text-lg text-white mb-8">
               Have questions about the conference or want to get involved? We'd love to hear from you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -148,12 +134,6 @@ export default async function AboutPage() {
                 className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 Contact Us
-              </a>
-              <a
-                href="/registration"
-                className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-              >
-                Register Now
               </a>
             </div>
           </div>
