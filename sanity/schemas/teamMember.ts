@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity"
+import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "teamMember",
@@ -74,7 +74,8 @@ export default defineType({
       name: "role",
       title: "Role",
       type: "string",
-      description: "Specific role within the team (e.g., Team Lead, Coordinator)",
+      description:
+        "Specific role within the team (e.g., Team Lead, Coordinator)",
     }),
     defineField({
       name: "bio",
@@ -104,12 +105,12 @@ export default defineType({
       year: "conferenceYear",
     },
     prepare(selection) {
-      const { title, subtitle, media, year } = selection
+      const { title, subtitle, media, year } = selection;
       return {
         title,
         subtitle: `${subtitle} - ${year}`,
         media,
-      }
+      };
     },
   },
-})
+});

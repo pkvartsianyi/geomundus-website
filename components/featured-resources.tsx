@@ -1,10 +1,10 @@
-import Link from "next/link"
+import Link from "next/link";
 
 interface FeaturedResourceProps {
-  link: string
-  title?: string
-  description?: string
-  buttonText?: string
+  link: string;
+  title?: string;
+  description?: string;
+  buttonText?: string;
 }
 
 export function FeaturedResource({
@@ -16,8 +16,12 @@ export function FeaturedResource({
   return (
     <div className="container p-8 mx-auto xl:px-0 py-12 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-2xl mx-auto text-center">
-        <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">{title}</h2>
-        <p className="mb-6 text-lg text-gray-600 dark:text-gray-400">{description}</p>
+        <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">
+          {title}
+        </h2>
+        <p className="mb-6 text-lg text-gray-600 dark:text-gray-400">
+          {description}
+        </p>
         <Link
           href={link}
           className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-emerald-700 rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 transition-colors"
@@ -42,5 +46,5 @@ export function FeaturedResource({
         </Link>
       </div>
     </div>
-  )
+  );
 }

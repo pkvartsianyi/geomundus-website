@@ -1,4 +1,4 @@
-import { AboutSection, TeamMember } from "@/sanity.types"
+import { AboutSection, TeamMember } from "@/sanity.types";
 
 // Mock about section data
 export const mockAboutSection: AboutSection = {
@@ -38,7 +38,7 @@ export const mockAboutSection: AboutSection = {
       markDefs: [],
     },
   ],
-}
+};
 
 // Mock team members data
 export const mockTeamMembers: (TeamMember & { photoUrl?: string })[] = [
@@ -211,10 +211,10 @@ export const mockTeamMembers: (TeamMember & { photoUrl?: string })[] = [
     order: 1,
     isActive: true,
   },
-]
+];
 
 // Mock current year
-export const mockCurrentYear = 2024
+export const mockCurrentYear = 2024;
 
 // Mock current conference data
 export const mockCurrentConference = {
@@ -227,4 +227,4 @@ export const mockCurrentConference = {
   title: "Innovation Conference 2024",
   description: "The premier conference for innovation and technology",
   aboutSection: mockAboutSection,
-}
+};

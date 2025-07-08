@@ -518,8 +518,8 @@ export type SanityImageMetadata = {
 
 // Team Member
 export interface TeamMember {
-  _type: "teamMember"
-  name: string
+  _type: "teamMember";
+  name: string;
   photo?: {
     asset?: {
       _ref: string;
@@ -532,18 +532,26 @@ export interface TeamMember {
     crop?: SanityImageCrop;
     _type: "image";
   };
-  teamName: "program" | "budget" | "web" | "marketing" | "logistics" | "sponsorship" | "registration" | "other"
-  conferenceYear: number
+  teamName:
+    | "program"
+    | "budget"
+    | "web"
+    | "marketing"
+    | "logistics"
+    | "sponsorship"
+    | "registration"
+    | "other";
+  conferenceYear: number;
   socialLinks?: {
-    twitter?: string
-    linkedin?: string
-    github?: string
-    website?: string
-  }
-  role?: string
-  bio?: string
-  order?: number
-  isActive: boolean
+    twitter?: string;
+    linkedin?: string;
+    github?: string;
+    website?: string;
+  };
+  role?: string;
+  bio?: string;
+  order?: number;
+  isActive: boolean;
 }
 
 export type AllSanitySchemaTypes =

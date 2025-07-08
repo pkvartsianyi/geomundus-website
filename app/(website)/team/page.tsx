@@ -1,35 +1,37 @@
-import type { Metadata } from "next"
-import { currentConferenceYearQuery, currentTeamMembersQuery, currentConferenceQuery } from "@/lib/sanity.queries"
-import { PortableText } from "@portabletext/react"
-import { cachedClient } from "@/lib/sanity.client"
-import { TeamMemberCard } from "@/components/team-member-card"
-import { mockAboutSection, mockTeamMembers, mockCurrentYear } from "@/lib/mock-data"
-import { TeamMember } from "@/sanity.types"
+import type { Metadata } from "next";
+import {
+  currentConferenceYearQuery,
+  currentTeamMembersQuery,
+  currentConferenceQuery,
+} from "@/lib/sanity.queries";
+import { cachedClient } from "@/lib/sanity.client";
+import { TeamMemberCard } from "@/components/team-member-card";
+import { TeamMember } from "@/sanity.types";
 
 export const metadata: Metadata = {
   title: "Team",
   description: "Learn more about our conference and the team behind it.",
-}
+};
 
 // Group team members by team
 function groupMembersByTeam(members: (TeamMember & { photoUrl?: string })[]) {
   if (!members || members.length === 0) {
-    return {}
+    return {};
   }
 
   const grouped = members.reduce(
     (acc, member) => {
-      const teamName = member.teamName
+      const teamName = member.teamName;
       if (!acc[teamName]) {
-        acc[teamName] = []
+        acc[teamName] = [];
       }
-      acc[teamName].push(member)
-      return acc
+      acc[teamName].push(member);
+      return acc;
     },
     {} as Record<string, (TeamMember & { photoUrl?: string })[]>,
-  )
+  );
 
-  return grouped
+  return grouped;
 }
 
 const teamNameLabels: Record<string, string> = {
@@ -40,46 +42,28 @@ const teamNameLabels: Record<string, string> = {
   steering: "Steering Team",
   pr: "Public Relations Team",
   other: "Other Team",
-}
+};
 
 export default async function AboutPage() {
-  let currentYear = mockCurrentYear
-  let teamMembers = mockTeamMembers
-  let aboutSection = mockAboutSection
-
-  try {
-    // Try to get data from Sanity, fall back to mock data if it fails
-    const sanityCurrentYear = await cachedClient(currentConferenceYearQuery.query)
-    if (sanityCurrentYear) {
-      currentYear = sanityCurrentYear
-    }
-
-    const sanityTeamMembers = await cachedClient(currentTeamMembersQuery.query, { year: currentYear })
-    if (sanityTeamMembers && sanityTeamMembers.length > 0) {
-      teamMembers = sanityTeamMembers
-    }
-
-    const currentConference = await cachedClient(currentConferenceQuery.query)
-    if (currentConference?.aboutSection) {
-      aboutSection = currentConference.aboutSection
-    }
-  } catch (error) {
-    console.log("Using mock data for About page:", error)
-    // Continue with mock data
-  }
-
-  const groupedMembers = groupMembersByTeam(teamMembers)
-  const teamNames = Object.keys(groupedMembers).sort()
-
+  const currentYear = await cachedClient(currentConferenceYearQuery.query);
+  const teamMembers = await cachedClient(currentTeamMembersQuery.query, {
+    year: currentYear,
+  });
+  const groupedMembers = groupMembersByTeam(teamMembers);
+  const teamNames = Object.keys(groupedMembers).sort();
+  console.log("Grouped Team Members:", groupedMembers);
   return (
     <div className="min-h-screen text-white bg-gradient-to-br from-emerald-800 to-teal-600">
       {/* Hero Section */}
-        <section className="pt-32 px-4 py-16">
+      <section className="pt-32 px-4 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">About Us</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              About Us
+            </h1>
             <p className="text-xl text-white leading-relaxed">
-              Learn more about our conference and the dedicated team that makes it all possible.
+              Learn more about our conference and the dedicated team that makes
+              it all possible.
             </p>
           </div>
         </div>
@@ -90,9 +74,12 @@ export default async function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Team</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Our Team
+              </h2>
               <p className="text-lg text-gray-600">
-                Meet the dedicated individuals who work tirelessly to bring you an exceptional conference experience.
+                Meet the dedicated individuals who work tirelessly to bring you
+                an exceptional conference experience.
               </p>
             </div>
 
@@ -113,7 +100,9 @@ export default async function AboutPage() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">Team information will be available soon.</p>
+                <p className="text-gray-500 text-lg">
+                  Team information will be available soon.
+                </p>
               </div>
             )}
           </div>
@@ -126,7 +115,8 @@ export default async function AboutPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Get In Touch</h2>
             <p className="text-lg text-white mb-8">
-              Have questions about the conference or want to get involved? We'd love to hear from you.
+              Have questions about the conference or want to get involved? We'd
+              love to hear from you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -140,5 +130,5 @@ export default async function AboutPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

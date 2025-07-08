@@ -107,7 +107,7 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             <NavLink href="/submissions" isScrolled={isScrolled}>
               Submissions
             </NavLink>
-            <NavLink href="/about" isScrolled={isScrolled}>
+            <NavLink href="/team" isScrolled={isScrolled}>
               Team
             </NavLink>
 

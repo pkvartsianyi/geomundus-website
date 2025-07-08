@@ -1,13 +1,13 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Twitter, Globe } from "lucide-react"
-import { TeamMember } from "@/sanity.types"
+import Image from "next/image";
+import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Github, Linkedin, Twitter, Globe } from "lucide-react";
+import { TeamMember } from "@/sanity.types";
 
 interface TeamMemberCardProps {
-  member: TeamMember & { photoUrl?: string }
+  member: TeamMember & { photoUrl?: string };
 }
 
 const teamNameLabels: Record<string, string> = {
@@ -19,7 +19,7 @@ const teamNameLabels: Record<string, string> = {
   sponsorship: "Sponsorship",
   registration: "Registration",
   other: "Other",
-}
+};
 
 const teamColors: Record<string, string> = {
   program: "bg-blue-100 text-blue-800",
@@ -30,7 +30,7 @@ const teamColors: Record<string, string> = {
   sponsorship: "bg-yellow-100 text-yellow-800",
   registration: "bg-indigo-100 text-indigo-800",
   other: "bg-gray-100 text-gray-800",
-}
+};
 
 export function TeamMemberCard({ member }: TeamMemberCardProps) {
   const socialLinks = [
@@ -54,7 +54,7 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
       url: member.socialLinks?.website,
       label: "Website",
     },
-  ].filter((link) => link.url)
+  ].filter((link) => link.url);
 
   return (
     <Card className="group hover:shadow-lg transition-shadow duration-300">
@@ -79,23 +79,39 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
 
           {/* Name and Role */}
           <div className="space-y-1">
-            <h3 className="font-semibold text-lg text-gray-900">{member.name}</h3>
-            {member.role && <p className="text-sm text-gray-600">{member.role}</p>}
+            <h3 className="font-semibold text-lg text-gray-900">
+              {member.name}
+            </h3>
+            {member.role && (
+              <p className="text-sm text-gray-600">{member.role}</p>
+            )}
           </div>
 
           {/* Team Badge */}
-          <Badge className={`${teamColors[member.teamName] || teamColors.other} border-0`}>
+          <Badge
+            className={`${teamColors[member.teamName] || teamColors.other} border-0`}
+          >
             {teamNameLabels[member.teamName] || member.teamName}
           </Badge>
 
           {/* Bio */}
-          {member.bio && <p className="text-sm text-gray-600 leading-relaxed">{member.bio}</p>}
+          {member.bio && (
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {member.bio}
+            </p>
+          )}
 
           {/* Social Links */}
           {socialLinks.length > 0 && (
             <div className="flex space-x-2 pt-2">
               {socialLinks.map((link, index) => (
-                <Button key={index} variant="ghost" size="sm" asChild className="h-8 w-8 p-0 hover:bg-gray-100">
+                <Button
+                  key={index}
+                  variant="ghost"
+                  size="sm"
+                  asChild
+                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                >
                   <Link
                     href={link.url!}
                     target="_blank"
@@ -111,5 +127,5 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

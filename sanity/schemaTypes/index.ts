@@ -9,5 +9,13 @@ import submission from "../schemas/submission";
 import teamMember from "../schemas/teamMember";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [siteSettings, conference, schedule, faq, registration, submission, teamMember],
+  types: [
+    siteSettings,
+    conference,
+    schedule,
+    faq,
+    registration,
+    submission,
+    teamMember,
+  ],
 };

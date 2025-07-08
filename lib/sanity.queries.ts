@@ -237,7 +237,7 @@ export const teamMembersQuery = tagQuery(
     order
   }`,
   "teamMember",
-)
+);
 
 // Current team members (for current conference year)
 export const currentTeamMembersQuery = tagQuery(
@@ -253,4 +253,4 @@ export const currentTeamMembersQuery = tagQuery(
     order
   }`,
   "teamMember",
-)
+);

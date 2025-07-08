@@ -2,10 +2,7 @@ import type React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  AiOutlineCalendar,
-  AiOutlineEnvironment,
-} from "react-icons/ai";
+import { AiOutlineCalendar, AiOutlineEnvironment } from "react-icons/ai";
 import CountdownTimer from "@/components/countdown-timer";
 import SpeakerCard from "@/components/speaker-card";
 import SponsorSection from "@/components/sponsor-section";
