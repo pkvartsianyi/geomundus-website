@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Twitter, Globe } from "lucide-react";
 import { TeamMember } from "@/sanity.types";
@@ -86,13 +85,6 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
               <p className="text-sm text-gray-600">{member.role}</p>
             )}
           </div>
-
-          {/* Team Badge */}
-          {/* <Badge
-            className={`${teamColors[member.teamName] || teamColors.other} border-0`}
-          >
-            {teamNameLabels[member.teamName] || member.teamName}
-          </Badge> */}
 
           {/* Bio */}
           {member.bio && (

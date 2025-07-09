@@ -51,7 +51,6 @@ export default async function AboutPage() {
   });
   const groupedMembers = groupMembersByTeam(teamMembers);
   const teamNames = Object.keys(groupedMembers).sort();
-  console.log("Grouped Team Members:", groupedMembers);
   return (
     <div className="min-h-screen text-white bg-gradient-to-br from-emerald-800 to-teal-600">
       {/* Hero Section */}
