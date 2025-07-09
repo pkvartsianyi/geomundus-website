@@ -88,11 +88,11 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
           </div>
 
           {/* Team Badge */}
-          <Badge
+          {/* <Badge
             className={`${teamColors[member.teamName] || teamColors.other} border-0`}
           >
             {teamNameLabels[member.teamName] || member.teamName}
-          </Badge>
+          </Badge> */}
 
           {/* Bio */}
           {member.bio && (

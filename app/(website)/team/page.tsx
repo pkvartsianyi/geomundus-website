@@ -90,7 +90,7 @@ export default async function AboutPage() {
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
                       {teamNameLabels[teamName] || teamName}
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                       {groupedMembers[teamName].map((member) => (
                         <TeamMemberCard key={member._id} member={member} />
                       ))}
