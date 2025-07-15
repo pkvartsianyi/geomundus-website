@@ -60,17 +60,17 @@ export function TeamMemberCard({ member }: TeamMemberCardProps) {
       <CardContent className="p-6">
         <div className="flex flex-col items-center text-center space-y-4">
           {/* Photo */}
-          <div className="relative w-24 h-24 rounded-full overflow-hidden bg-gray-100">
+          <div className="relative w-36 h-36 rounded-full overflow-hidden bg-gray-100">
             {member.photoUrl ? (
               <Image
                 src={member.photoUrl || "/placeholder.svg"}
                 alt={member.name}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 96px, 96px"
+                sizes="(max-width: 768px) 144px, 144px"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 text-2xl font-semibold">
+              <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 text-3xl font-semibold">
                 {member.name.charAt(0)}
               </div>
             )}

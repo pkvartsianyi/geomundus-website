@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import {
   currentConferenceYearQuery,
   currentTeamMembersQuery,
-  currentConferenceQuery,
 } from "@/lib/sanity.queries";
 import { cachedClient } from "@/lib/sanity.client";
 import { TeamMemberCard } from "@/components/team-member-card";
@@ -89,7 +88,7 @@ export default async function AboutPage() {
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
                       {teamNameLabels[teamName] || teamName}
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8">
                       {groupedMembers[teamName].map((member) => (
                         <TeamMemberCard key={member._id} member={member} />
                       ))}
@@ -109,25 +108,7 @@ export default async function AboutPage() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">Get In Touch</h2>
-            <p className="text-lg text-white mb-8">
-              Have questions about the conference or want to get involved? We'd
-              love to hear from you.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="mailto:contact@conference.com"
-                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-              >
-                Contact Us
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="py-16"></section>
     </div>
   );
 }

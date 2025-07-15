@@ -184,6 +184,9 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             <MobileNavLink href="/#contact" onClick={toggleMenu}>
               Contact
             </MobileNavLink>
+            <MobileNavLink href="/team" onClick={toggleMenu}>
+              Team
+            </MobileNavLink>
 
             <RegisterButton registrationOpen={siteSettings?.registrationOpen} />
           </div>
