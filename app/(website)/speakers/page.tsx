@@ -34,7 +34,7 @@ export default async function SpeakersPage() {
                 <SpeakerCard
                   key={index}
                   name={speaker.name || ""}
-                  title={speaker.topic || ""}
+                  title={""}
                   organization={speaker.organization || ""}
                   imageUrl={
                     speaker.imageUrl || "/placeholder.svg?height=300&width=300"

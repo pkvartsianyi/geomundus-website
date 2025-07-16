@@ -26,7 +26,7 @@ export default function SpeakerCard({
       <CardContent className="p-0">
         <div className="relative aspect-square">
           <Image
-            src={imageUrl || "/placeholder.svg?height=300&width=300"}
+            src={imageUrl}
             alt={`Photo of ${name}`}
             fill
             className="object-cover"
@@ -34,7 +34,6 @@ export default function SpeakerCard({
         </div>
         <div className="p-4">
           <h3 className="text-lg font-bold">{name}</h3>
-          {title && <p className="text-sm text-gray-600">{title}</p>}
           {organization && (
             <p className="text-sm text-gray-600">{organization}</p>
           )}
