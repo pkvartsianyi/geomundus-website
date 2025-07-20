@@ -98,7 +98,7 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             <NavLink href="/#info" isScrolled={isScrolled}>
               About
             </NavLink>
-            <NavLink href="/#speakers" isScrolled={isScrolled}>
+            <NavLink href="/speakers" isScrolled={isScrolled}>
               Speakers
             </NavLink>
             <NavLink href="/sponsors" isScrolled={isScrolled}>
@@ -169,7 +169,7 @@ export default function Navbar({ siteSettings }: NavbarProps) {
             <MobileNavLink href="/#info" onClick={toggleMenu}>
               About
             </MobileNavLink>
-            <MobileNavLink href="/#speakers" onClick={toggleMenu}>
+            <MobileNavLink href="/speakers" onClick={toggleMenu}>
               Speakers
             </MobileNavLink>
             <MobileNavLink href="/sponsors" onClick={toggleMenu}>

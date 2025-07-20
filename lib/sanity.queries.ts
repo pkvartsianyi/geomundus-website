@@ -41,6 +41,14 @@ export const currentConferenceQuery = tagQuery(
     location,
     themes,
     keynoteSpeakers[] {
+      _id,
+      name,
+      organization,
+      topic,
+      "imageUrl": image.asset->url,
+    },
+    workshopLeaders[] {
+      _id,
       name,
       organization,
       topic,

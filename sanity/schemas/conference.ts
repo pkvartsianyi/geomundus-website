@@ -110,6 +110,56 @@ export default defineType({
                 hotspot: true,
               },
             },
+            {
+              name: "description",
+              title: "Description",
+              type: "text",
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "workshopLeaders",
+      title: "Workshop Leaders",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "name",
+              title: "Name",
+              type: "string",
+            },
+            {
+              name: "organization",
+              title: "Organization",
+              type: "string",
+            },
+            {
+              name: "topic",
+              title: "Topic",
+              type: "string",
+            },
+            {
+              name: "websiteUrl",
+              title: "Website URL",
+              type: "url",
+            },
+            {
+              name: "image",
+              title: "Speaker Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "text",
+            },
           ],
         },
       ],

@@ -1,4 +1,3 @@
-import type React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -143,7 +142,6 @@ export default async function Home() {
                     {currentConference.focusTopic?.title || "This Year's Focus"}
                     <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-emerald-600 rounded-full"></span>
                   </h2>
-
                   {currentConference.focusTopic?.description && (
                     <div className="prose prose-lg max-w-3xl mx-auto mt-8 text-gray-700">
                       <div className="portable-text">
@@ -183,7 +181,6 @@ export default async function Home() {
                           },
                         )}
                       </div>
-
                       <div className="mt-12 text-center">
                         <Button
                           asChild
@@ -241,8 +238,63 @@ export default async function Home() {
                     websiteUrl={speaker.websiteUrl}
                     keynoteTitle={speaker.topic}
                     keynoteDescription=""
+                    _id={""}
                   />
                 ))}
+              </div>
+
+              {/* See All Speakers Button - Outside the grid */}
+              <div className="mt-12 text-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  asChild
+                  className="bg-emerald-700 hover:bg-emerald-800 text-white border-emerald-700"
+                >
+                  <Link href="/speakers">See All Speakers</Link>
+                </Button>
+              </div>
+            </div>
+          </section>
+        )}
+
+      {/* Workshop Leaders Section */}
+      {currentConference?.workshopLeaders &&
+        currentConference.workshopLeaders.length > 0 && (
+          <section id="workshops" className="py-16 md:py-24 bg-gray-50">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
+                Workshop Leaders
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {currentConference.workshopLeaders.map((leader, index) => (
+                  <SpeakerCard
+                    key={index}
+                    name={leader.name || ""}
+                    title={leader.topic || ""}
+                    organization={leader.organization || ""}
+                    imageUrl={
+                      leader.imageUrl || "/placeholder.svg?height=300&width=300"
+                    }
+                    websiteUrl={leader.websiteUrl}
+                    keynoteTitle={leader.topic}
+                    keynoteDescription=""
+                    _id={""}
+                  />
+                ))}
+              </div>
+
+              {/* See All Speakers Button - Outside the grid */}
+              <div className="mt-12 text-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  asChild
+                  className="bg-emerald-700 hover:bg-emerald-800 text-white border-emerald-700"
+                >
+                  <Link href="/speakers">See All Speakers</Link>
+                </Button>
               </div>
             </div>
           </section>
