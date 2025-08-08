@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { cachedClient } from "@/lib/sanity.client";
 import { siteSettingsQuery, submissionInfoQuery } from "@/lib/sanity.queries";
-import { format } from "date-fns";
+import { format, isPast } from "date-fns";
 import PortableTextRenderer from "@/components/portable-text-renderer";
 import { SubmissionButton } from "@/components/submission-button";
 import { SocialLinks } from "@/components/socialLinks";
@@ -36,6 +36,10 @@ export default async function SubmissionsPage() {
     ? format(new Date(submissionInfo.submissionDeadline), "MMMM do, yyyy")
     : null;
 
+  const isDeadlinePast = submissionInfo?.submissionDeadline
+  ? isPast(new Date(submissionInfo.submissionDeadline))
+  : false;
+
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
@@ -49,10 +53,15 @@ export default async function SubmissionsPage() {
               "Submit your papers and posters to the GeoMundus Conference"}
           </p>
 
-          {formattedDeadline && isSubmissionOpen ? (
+          {isSubmissionOpen && formattedDeadline ? (
             <p className="flex items-center justify-center gap-2 text-lg mt-4">
               <CalendarIcon className="h-5 w-5" />
               Submission deadline: {formattedDeadline}
+            </p>
+          ) : isDeadlinePast ? (
+            <p className="flex items-center justify-center gap-2 text-lg mt-4">
+              <CalendarIcon className="h-5 w-5" />
+              Submissions are now closed.
             </p>
           ) : (
             <p className="flex items-center justify-center gap-2 text-lg mt-4">
