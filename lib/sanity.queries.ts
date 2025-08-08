@@ -45,6 +45,7 @@ export const currentConferenceQuery = tagQuery(
       name,
       organization,
       topic,
+      description,
       "imageUrl": image.asset->url,
     },
     workshopLeaders[] {
@@ -52,6 +53,7 @@ export const currentConferenceQuery = tagQuery(
       name,
       organization,
       topic,
+      description,
       "imageUrl": image.asset->url,
     },
     about {
