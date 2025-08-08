@@ -217,7 +217,7 @@ export default async function SpeakersPage() {
                     {(speaker.keynoteTitle || speaker.description) && (
                       <div className="bg-emerald-50 p-6 rounded-lg">
                         <h3 className="font-bold text-xl text-emerald-800 mb-3">
-                          KEYNOTE PRESENTATION
+                          Workshop
                         </h3>
                         {speaker.keynoteTitle && (
                           <h4 className="font-semibold text-lg text-gray-900 mb-3">
