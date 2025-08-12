@@ -197,21 +197,75 @@ export const faqsQuery = tagQuery(
   "faq",
 );
 
-// Registrations
 export const registrationsQuery = tagQuery(
   groq`*[_type == "registration"] | order(_createdAt desc) {
     _id,
-    firstName,
-    lastName,
+    fullName,
     email,
     affiliation,
-    role,
-    dietaryRequirements,
+    country,
+    position,
+    positionOther,
+    website,
+    attendanceReason,
+    attendanceReasonOther,
+    presenting,
+    mapChallenge,
     attendingDinner,
+    dietaryRestrictions,
+    dietaryRestrictionsOther,
+    alcoholConsumption,
+    drinkPreferences,
+    drinkRestrictions,
+    workshopPreferences,
+    needsAccommodationHelp,
+    joinWhatsApp,
+    consentPublicList,
+    consentPhotography,
+    howDidYouHear,
+    howDidYouHearOther,
+    additionalComments,
+    status,
     _createdAt
   }`,
   "registration",
 );
+
+export const registrationByEmailQuery = (email: string) =>
+  tagQuery(
+    groq`*[_type == "registration" && email == $email][0] {
+      _id,
+      fullName,
+      email,
+      affiliation,
+      country,
+      position,
+      positionOther,
+      website,
+      attendanceReason,
+      attendanceReasonOther,
+      presenting,
+      mapChallenge,
+      attendingDinner,
+      dietaryRestrictions,
+      dietaryRestrictionsOther,
+      alcoholConsumption,
+      drinkPreferences,
+      drinkRestrictions,
+      workshopPreferences,
+      needsAccommodationHelp,
+      joinWhatsApp,
+      consentPublicList,
+      consentPhotography,
+      howDidYouHear,
+      howDidYouHearOther,
+      additionalComments,
+      status,
+      "qrCodeUrl": qrCode.asset->url,
+      _createdAt
+    }`,
+    "registration",
+  );
 
 // Submission info
 export const submissionInfoQuery = tagQuery(

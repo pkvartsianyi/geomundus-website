@@ -5,49 +5,87 @@ import { client } from "@/lib/sanity.client";
 import QRCode from "qrcode";
 
 export async function submitRegistration(formData: {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
-  affiliation?: string;
-  role: string;
-  dietaryRequirements?: string;
+  affiliation: string;
+  country: string;
+  position: string;
+  positionOther?: string;
+  website: string;
+  attendanceReason: string;
+  attendanceReasonOther?: string;
+  presenting?: string;
+  mapChallenge: boolean;
   attendingDinner: boolean;
-  abstract?: string;
+  dietaryRestrictions: string;
+  dietaryRestrictionsOther?: string;
+  alcoholConsumption: string;
+  drinkPreferences: string[];
+  drinkRestrictions?: string;
+  workshopPreferences: {
+    disasterManagement: number;
+    digitalTwins: number;
+    participatoryMapping: number;
+  };
+  needsAccommodationHelp: boolean;
+  joinWhatsApp: boolean;
+  consentPublicList: boolean;
+  consentPhotography: boolean;
+  howDidYouHear?: string;
+  howDidYouHearOther?: string;
+  additionalComments?: string;
 }) {
   const guestUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://geomundus.org"}/guests/${encodeURIComponent(formData.email)}`;
-  const qrBuffer = await QRCode.toBuffer(guestUrl);
-  const qrImageAsset = await client.assets.upload("image", qrBuffer, {
-    filename: `qr-${formData.email}.png`,
-    contentType: "image/png",
-  });
+  // const qrBuffer = await QRCode.toBuffer(guestUrl)
+  // const qrImageAsset = await client.assets.upload("image", qrBuffer, {
+  //   filename: `qr-${formData.email}.png`,
+  //   contentType: "image/png",
+  // })
 
   const result = await client.create({
     _type: "registration",
-    firstName: formData.firstName,
-    lastName: formData.lastName,
+    fullName: formData.fullName,
     email: formData.email,
-    affiliation: formData.affiliation || "",
-    role: formData.role,
-    dietaryRequirements: formData.dietaryRequirements || "",
+    affiliation: formData.affiliation,
+    country: formData.country,
+    position: formData.position,
+    positionOther: formData.positionOther || "",
+    website: formData.website,
+    attendanceReason: formData.attendanceReason,
+    attendanceReasonOther: formData.attendanceReasonOther || "",
+    presenting: formData.presenting || "no",
+    mapChallenge: formData.mapChallenge,
     attendingDinner: formData.attendingDinner,
-    abstract: formData.abstract || "",
+    dietaryRestrictions: formData.dietaryRestrictions,
+    dietaryRestrictionsOther: formData.dietaryRestrictionsOther || "",
+    alcoholConsumption: formData.alcoholConsumption,
+    drinkPreferences: formData.drinkPreferences,
+    drinkRestrictions: formData.drinkRestrictions || "",
+    workshopPreferences: formData.workshopPreferences,
+    needsAccommodationHelp: formData.needsAccommodationHelp,
+    joinWhatsApp: formData.joinWhatsApp,
+    consentPublicList: formData.consentPublicList,
+    consentPhotography: formData.consentPhotography,
+    howDidYouHear: formData.howDidYouHear || "",
+    howDidYouHearOther: formData.howDidYouHearOther || "",
+    additionalComments: formData.additionalComments || "",
     status: "pending",
-    qrCode: {
-      _type: "image",
-      asset: {
-        _type: "reference",
-        _ref: qrImageAsset._id,
-      },
-    },
+    // qrCode: {
+    //   _type: "image",
+    //   asset: {
+    //     _type: "reference",
+    //     _ref: qrImageAsset._id,
+    //   },
+    // },
   });
 
   // Send notification to Teams/Discord
   await sendWebhookNotification({
-    firstName: formData.firstName,
-    lastName: formData.lastName,
+    fullName: formData.fullName,
     email: formData.email,
-    affiliation: formData.affiliation || "Not specified",
-    role: formData.role,
+    affiliation: formData.affiliation,
+    country: formData.country,
+    position: formData.position,
   });
 
   revalidatePath("/admin/registrations");
@@ -66,11 +104,11 @@ export async function verifyAdminToken(token: string) {
 
 // Function to send webhook notification to Teams/Discord
 async function sendWebhookNotification(registrationData: {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   affiliation: string;
-  role: string;
+  country: string;
+  position: string;
 }) {
   const webhookUrl = process.env.NOTIFICATION_WEBHOOK_URL;
 
@@ -90,15 +128,15 @@ async function sendWebhookNotification(registrationData: {
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",
         themeColor: "0076D7",
-        summary: "New GeoMundus Registration",
+        summary: "New GeoMundus 2025 Registration",
         sections: [
           {
             activityTitle: "🎉 New Conference Registration",
-            activitySubtitle: `${registrationData.firstName} ${registrationData.lastName} has registered for GeoMundus`,
+            activitySubtitle: `${registrationData.fullName} has registered for GeoMundus 2025`,
             facts: [
               {
                 name: "Name",
-                value: `${registrationData.firstName} ${registrationData.lastName}`,
+                value: registrationData.fullName,
               },
               {
                 name: "Email",
@@ -109,8 +147,12 @@ async function sendWebhookNotification(registrationData: {
                 value: registrationData.affiliation,
               },
               {
-                name: "Role",
-                value: registrationData.role,
+                name: "Country",
+                value: registrationData.country,
+              },
+              {
+                name: "Position",
+                value: registrationData.position,
               },
             ],
             markdown: true,
@@ -144,7 +186,7 @@ async function sendWebhookNotification(registrationData: {
         embeds: [
           {
             title: "🎉 New Conference Registration",
-            description: `**${registrationData.firstName} ${registrationData.lastName}** has registered for GeoMundus`,
+            description: `**${registrationData.fullName}** has registered for GeoMundus 2025`,
             color: 3447003, // Blue color
             fields: [
               {
@@ -158,14 +200,19 @@ async function sendWebhookNotification(registrationData: {
                 inline: true,
               },
               {
-                name: "Role",
-                value: registrationData.role,
+                name: "Country",
+                value: registrationData.country,
+                inline: true,
+              },
+              {
+                name: "Position",
+                value: registrationData.position,
                 inline: true,
               },
             ],
             timestamp: new Date().toISOString(),
             footer: {
-              text: "GeoMundus Registration System",
+              text: "GeoMundus 2025 Registration System",
             },
           },
         ],

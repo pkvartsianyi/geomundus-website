@@ -37,8 +37,8 @@ export default async function SubmissionsPage() {
     : null;
 
   const isDeadlinePast = submissionInfo?.submissionDeadline
-  ? isPast(new Date(submissionInfo.submissionDeadline))
-  : false;
+    ? isPast(new Date(submissionInfo.submissionDeadline))
+    : false;
 
   return (
     <main className="flex min-h-screen flex-col">

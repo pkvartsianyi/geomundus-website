@@ -1,12 +1,13 @@
 import { createClient } from "next-sanity";
 import { cache } from "react";
-import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
+import { apiVersion, dataset, projectId, useCdn, token } from "@/sanity/env";
 
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn,
+  token,
   stega: { studioUrl: process.env.NEXT_PUBLIC_SITE_URL + "/studio" },
 });
 
