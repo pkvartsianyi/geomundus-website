@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { usePostHog } from "posthog-js/react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -36,6 +37,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/hooks/use-toast";
 import { submitRegistration } from "@/lib/actions";
 import { Label } from "@/components/ui/label";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -180,7 +183,6 @@ const countries = [
   "Portugal",
   "Qatar",
   "Romania",
-  "Russia",
   "Saudi Arabia",
   "Serbia",
   "Singapore",
@@ -204,7 +206,10 @@ const countries = [
 
 export default function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState(1);
   const router = useRouter();
+  const posthog = usePostHog();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -241,8 +246,53 @@ export default function RegistrationForm() {
   const watchDietaryRestrictions = form.watch("dietaryRestrictions");
   const watchHowDidYouHear = form.watch("howDidYouHear");
 
+  // Track form progression
+  const trackFormStep = (step: number) => {
+    posthog?.capture("registration_form_step", {
+      step,
+      step_name: getStepName(step),
+    });
+  };
+
+  const getStepName = (step: number) => {
+    switch (step) {
+      case 1:
+        return "basic_information";
+      case 2:
+        return "participation_details";
+      case 3:
+        return "dinner_preferences";
+      case 4:
+        return "workshop_preferences";
+      case 5:
+        return "additional_information";
+      default:
+        return "unknown";
+    }
+  };
+
+  // Track field interactions
+  const trackFieldInteraction = (fieldName: string, value: any) => {
+    posthog?.capture("registration_field_interaction", {
+      field_name: fieldName,
+      field_type: typeof value,
+      has_value: !!value,
+    });
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
+    setSubmitError(null);
+
+    // Track registration attempt
+    posthog?.capture("registration_attempt_started", {
+      email: values.email,
+      country: values.country,
+      position: values.position,
+      attendance_reason: values.attendanceReason,
+      presenting: values.presenting,
+      attending_dinner: values.attendingDinner,
+    });
 
     try {
       // Validate workshop preferences are unique
@@ -253,6 +303,15 @@ export default function RegistrationForm() {
       ];
       const uniquePreferences = new Set(preferences);
       if (uniquePreferences.size !== 3) {
+        const error =
+          "Invalid workshop preferences: Please assign unique ranks (1, 2, 3) to each workshop.";
+        setSubmitError(error);
+
+        posthog?.capture("registration_validation_error", {
+          error_type: "workshop_preferences_not_unique",
+          preferences: preferences,
+        });
+
         toast({
           title: "Invalid workshop preferences",
           description: "Please assign unique ranks (1, 2, 3) to each workshop.",
@@ -262,6 +321,30 @@ export default function RegistrationForm() {
       }
 
       await submitRegistration(values);
+
+      // Track successful registration
+      posthog?.capture("registration_completed", {
+        email: values.email,
+        country: values.country,
+        position: values.position,
+        attendance_reason: values.attendanceReason,
+        presenting: values.presenting,
+        attending_dinner: values.attendingDinner,
+        map_challenge: values.mapChallenge,
+        join_whatsapp: values.joinWhatsApp,
+        consent_public_list: values.consentPublicList,
+        consent_photography: values.consentPhotography,
+        how_did_you_hear: values.howDidYouHear,
+      });
+
+      // Identify user in PostHog
+      posthog?.identify(values.email, {
+        email: values.email,
+        name: values.fullName,
+        affiliation: values.affiliation,
+        country: values.country,
+        position: values.position,
+      });
 
       toast({
         title: "Registration successful!",
@@ -275,16 +358,69 @@ export default function RegistrationForm() {
       router.push("/registration/confirmation");
     } catch (error) {
       console.error("Registration error:", error);
+
+      let errorMessage =
+        "There was a problem with your registration. Please try again.";
+      let errorType = "unknown_error";
+
+      if (error instanceof Error) {
+        if (error.message === "EMAIL_ALREADY_REGISTERED") {
+          errorMessage =
+            "This email address is already registered. Please use a different email or contact support if you believe this is an error.";
+          errorType = "email_already_registered";
+        } else if (error.message === "REGISTRATION_FAILED") {
+          errorMessage =
+            "Registration failed due to a server error. Please try again in a few minutes.";
+          errorType = "server_error";
+        }
+      }
+
+      setSubmitError(errorMessage);
+
+      // Track registration error
+      posthog?.capture("registration_error", {
+        error_type: errorType,
+        error_message: error instanceof Error ? error.message : "Unknown error",
+        email: values.email,
+        step: "submission",
+      });
+
       toast({
         title: "Registration failed",
-        description:
-          "There was a problem with your registration. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
   }
+
+  // Track when user starts filling the form
+  const handleFormStart = () => {
+    posthog?.capture("registration_form_started");
+  };
+
+  // Track form abandonment
+  const handleFormAbandon = () => {
+    const formData = form.getValues();
+    const filledFields = Object.entries(formData).filter(([_, value]) => {
+      if (typeof value === "string") return value.trim() !== "";
+      if (typeof value === "boolean") return value;
+      if (Array.isArray(value)) return value.length > 0;
+      if (typeof value === "object" && value !== null)
+        return Object.values(value).some((v) => v);
+      return false;
+    }).length;
+
+    posthog?.capture("registration_form_abandoned", {
+      filled_fields_count: filledFields,
+      total_fields: Object.keys(formData).length,
+      completion_percentage: Math.round(
+        (filledFields / Object.keys(formData).length) * 100,
+      ),
+      last_step: currentStep,
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -310,6 +446,13 @@ export default function RegistrationForm() {
           </div>
         </CardHeader>
         <CardContent>
+          {submitError && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{submitError}</AlertDescription>
+            </Alert>
+          )}
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               {/* Basic Information */}
@@ -323,7 +466,18 @@ export default function RegistrationForm() {
                     <FormItem>
                       <FormLabel>Full Name *</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input
+                          placeholder="John Doe"
+                          {...field}
+                          onFocus={() => {
+                            handleFormStart();
+                            trackFieldInteraction("fullName", field.value);
+                          }}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            trackFieldInteraction("fullName", e.target.value);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -341,6 +495,10 @@ export default function RegistrationForm() {
                           type="email"
                           placeholder="john.doe@example.com"
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            trackFieldInteraction("email", e.target.value);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -357,7 +515,17 @@ export default function RegistrationForm() {
                         Affiliation (University / Organization) *
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="University of Lisbon" {...field} />
+                        <Input
+                          placeholder="University of Lisbon"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            trackFieldInteraction(
+                              "affiliation",
+                              e.target.value,
+                            );
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -372,7 +540,10 @@ export default function RegistrationForm() {
                       <FormLabel>Country of Residence *</FormLabel>
                       <FormControl>
                         <Select
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("country", value);
+                          }}
                           defaultValue={field.value}
                         >
                           <SelectTrigger>
@@ -400,7 +571,10 @@ export default function RegistrationForm() {
                       <FormLabel>Position / Role *</FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("position", value);
+                          }}
                           defaultValue={field.value}
                           className="flex flex-col space-y-2"
                         >
@@ -486,6 +660,10 @@ export default function RegistrationForm() {
                           type="url"
                           placeholder="https://linkedin.com/in/johndoe"
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            trackFieldInteraction("website", e.target.value);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -508,7 +686,10 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("attendanceReason", value);
+                          }}
                           defaultValue={field.value}
                           className="flex flex-col space-y-2"
                         >
@@ -577,7 +758,10 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("presenting", value);
+                          }}
                           defaultValue={field.value}
                           className="flex flex-col space-y-2"
                         >
@@ -612,7 +796,10 @@ export default function RegistrationForm() {
                       <FormControl>
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("mapChallenge", value);
+                          }}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
@@ -621,7 +808,7 @@ export default function RegistrationForm() {
                           Challenge?
                         </FormLabel>
                         <FormDescription>
-                          <a href="https://drive.google.com/file/d/1vnhaJYTAdU8iFC78bMjdh6KV9PQMqLKl/view?usp=sharing" className="text-blue-600 hover:underline" target="_blank">
+                          <a href="#" className="text-blue-600 hover:underline">
                             See guidelines of participation here
                           </a>
                         </FormDescription>
@@ -647,9 +834,11 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={(value) =>
-                            field.onChange(value === "yes")
-                          }
+                          onValueChange={(value) => {
+                            const boolValue = value === "yes";
+                            field.onChange(boolValue);
+                            trackFieldInteraction("attendingDinner", boolValue);
+                          }}
                           defaultValue={field.value ? "yes" : "no"}
                           className="flex flex-col space-y-2"
                         >
@@ -678,7 +867,10 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("dietaryRestrictions", value);
+                          }}
                           defaultValue={field.value}
                           className="flex flex-col space-y-2"
                         >
@@ -750,7 +942,10 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("alcoholConsumption", value);
+                          }}
                           defaultValue={field.value}
                           className="flex flex-col space-y-2"
                         >
@@ -813,16 +1008,16 @@ export default function RegistrationForm() {
                                   <Checkbox
                                     checked={field.value?.includes(item.id)}
                                     onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([
-                                            ...field.value,
-                                            item.id,
-                                          ])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id,
-                                            ),
+                                      const newValue = checked
+                                        ? [...field.value, item.id]
+                                        : field.value?.filter(
+                                            (value) => value !== item.id,
                                           );
+                                      field.onChange(newValue);
+                                      trackFieldInteraction(
+                                        "drinkPreferences",
+                                        newValue,
+                                      );
                                     }}
                                   />
                                 </FormControl>
@@ -887,9 +1082,14 @@ export default function RegistrationForm() {
                           </p>
                           <FormControl>
                             <Select
-                              onValueChange={(value) =>
-                                field.onChange(Number.parseInt(value))
-                              }
+                              onValueChange={(value) => {
+                                const numValue = Number.parseInt(value);
+                                field.onChange(numValue);
+                                trackFieldInteraction(
+                                  "workshopPreferences.disasterManagement",
+                                  numValue,
+                                );
+                              }}
                               defaultValue={field.value?.toString()}
                             >
                               <SelectTrigger className="w-48">
@@ -932,9 +1132,14 @@ export default function RegistrationForm() {
                           </p>
                           <FormControl>
                             <Select
-                              onValueChange={(value) =>
-                                field.onChange(Number.parseInt(value))
-                              }
+                              onValueChange={(value) => {
+                                const numValue = Number.parseInt(value);
+                                field.onChange(numValue);
+                                trackFieldInteraction(
+                                  "workshopPreferences.digitalTwins",
+                                  numValue,
+                                );
+                              }}
                               defaultValue={field.value?.toString()}
                             >
                               <SelectTrigger className="w-48">
@@ -977,9 +1182,14 @@ export default function RegistrationForm() {
                           </p>
                           <FormControl>
                             <Select
-                              onValueChange={(value) =>
-                                field.onChange(Number.parseInt(value))
-                              }
+                              onValueChange={(value) => {
+                                const numValue = Number.parseInt(value);
+                                field.onChange(numValue);
+                                trackFieldInteraction(
+                                  "workshopPreferences.participatoryMapping",
+                                  numValue,
+                                );
+                              }}
                               defaultValue={field.value?.toString()}
                             >
                               <SelectTrigger className="w-48">
@@ -1024,7 +1234,13 @@ export default function RegistrationForm() {
                       <FormControl>
                         <Checkbox
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction(
+                              "needsAccommodationHelp",
+                              value,
+                            );
+                          }}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
@@ -1055,9 +1271,11 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={(value) =>
-                            field.onChange(value === "yes")
-                          }
+                          onValueChange={(value) => {
+                            const boolValue = value === "yes";
+                            field.onChange(boolValue);
+                            trackFieldInteraction("joinWhatsApp", boolValue);
+                          }}
                           defaultValue={field.value ? "yes" : "no"}
                           className="flex flex-col space-y-2"
                         >
@@ -1087,9 +1305,14 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={(value) =>
-                            field.onChange(value === "yes")
-                          }
+                          onValueChange={(value) => {
+                            const boolValue = value === "yes";
+                            field.onChange(boolValue);
+                            trackFieldInteraction(
+                              "consentPublicList",
+                              boolValue,
+                            );
+                          }}
                           defaultValue={field.value ? "yes" : "no"}
                           className="flex flex-col space-y-2"
                         >
@@ -1119,9 +1342,14 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={(value) =>
-                            field.onChange(value === "yes")
-                          }
+                          onValueChange={(value) => {
+                            const boolValue = value === "yes";
+                            field.onChange(boolValue);
+                            trackFieldInteraction(
+                              "consentPhotography",
+                              boolValue,
+                            );
+                          }}
                           defaultValue={field.value ? "yes" : "no"}
                           className="flex flex-col space-y-2"
                         >
@@ -1157,7 +1385,10 @@ export default function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            trackFieldInteraction("howDidYouHear", value);
+                          }}
                           defaultValue={field.value}
                           className="flex flex-col space-y-2"
                         >
@@ -1235,6 +1466,13 @@ export default function RegistrationForm() {
                           placeholder="Optional - Please share any additional information, special requirements, or comments"
                           className="min-h-[100px]"
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            trackFieldInteraction(
+                              "additionalComments",
+                              e.target.value,
+                            );
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -1243,7 +1481,14 @@ export default function RegistrationForm() {
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isSubmitting}
+                onClick={() => {
+                  posthog?.capture("registration_submit_clicked");
+                }}
+              >
                 {isSubmitting
                   ? "Submitting Registration..."
                   : "Submit Registration"}
