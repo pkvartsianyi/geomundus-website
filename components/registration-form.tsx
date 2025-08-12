@@ -621,7 +621,7 @@ export default function RegistrationForm() {
                           Challenge?
                         </FormLabel>
                         <FormDescription>
-                          <a href="#" className="text-blue-600 hover:underline">
+                          <a href="https://drive.google.com/file/d/1vnhaJYTAdU8iFC78bMjdh6KV9PQMqLKl/view?usp=sharing" className="text-blue-600 hover:underline" target="_blank">
                             See guidelines of participation here
                           </a>
                         </FormDescription>
