@@ -19,7 +19,6 @@ export default async function SpeakersPage() {
   const workshopLeaders = currentConference.workshopLeaders || [];
   const siteSettings = await cachedClient(siteSettingsQuery.query);
 
-  console.log(workshopLeaders);
   return (
     <main className="flex min-h-screen flex-col">
       {/* Header */}
