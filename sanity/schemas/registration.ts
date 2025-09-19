@@ -162,7 +162,7 @@ export default defineType({
     }),
     defineField({
       name: "workshopPreferences",
-      title: "Workshop Preferences (Ranked 1-3)",
+      title: "Workshop Preferences (Ranked 1-4)",
       type: "object",
       fields: [
         defineField({
@@ -174,10 +174,11 @@ export default defineType({
             list: [
               { title: "1 (Most preferred)", value: 1 },
               { title: "2", value: 2 },
-              { title: "3 (Least preferred)", value: 3 },
+              { title: "3", value: 3 },
+              { title: "4 (Least preferred)", value: 4 },
             ],
           },
-          validation: (Rule) => Rule.required().min(1).max(3),
+          validation: (Rule) => Rule.required().min(1).max(4),
         }),
         defineField({
           name: "digitalTwins",
@@ -187,10 +188,11 @@ export default defineType({
             list: [
               { title: "1 (Most preferred)", value: 1 },
               { title: "2", value: 2 },
-              { title: "3 (Least preferred)", value: 3 },
+              { title: "3", value: 3 },
+              { title: "4 (Least preferred)", value: 4 },
             ],
           },
-          validation: (Rule) => Rule.required().min(1).max(3),
+          validation: (Rule) => Rule.required().min(1).max(4),
         }),
         defineField({
           name: "participatoryMapping",
@@ -200,10 +202,26 @@ export default defineType({
             list: [
               { title: "1 (Most preferred)", value: 1 },
               { title: "2", value: 2 },
-              { title: "3 (Least preferred)", value: 3 },
+              { title: "3", value: 3 },
+              { title: "4 (Least preferred)", value: 4 },
             ],
           },
-          validation: (Rule) => Rule.required().min(1).max(3),
+          validation: (Rule) => Rule.required().min(1).max(4),
+        }),
+        defineField({
+          name: "participatoryMappingChallenge",
+          title:
+            "Participatory Mapping and the Smart Lisbon Cartographic Challenge (Solenn Reeves Long)",
+          type: "number",
+          options: {
+            list: [
+              { title: "1 (Most preferred)", value: 1 },
+              { title: "2", value: 2 },
+              { title: "3", value: 3 },
+              { title: "4 (Least preferred)", value: 4 },
+            ],
+          },
+          validation: (Rule) => Rule.required().min(1).max(4),
         }),
       ],
       validation: (Rule) => Rule.required(),

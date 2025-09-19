@@ -96,9 +96,10 @@ const formSchema = z.object({
   }),
   drinkRestrictions: z.string().optional(),
   workshopPreferences: z.object({
-    disasterManagement: z.number().min(1).max(3),
-    digitalTwins: z.number().min(1).max(3),
-    participatoryMapping: z.number().min(1).max(3),
+    disasterManagement: z.number().min(1).max(4),
+    digitalTwins: z.number().min(1).max(4),
+    participatoryMapping: z.number().min(1).max(4),
+    participatoryMappingChallenge: z.number().min(1).max(4),
   }),
   needsAccommodationHelp: z.boolean(),
   joinWhatsApp: z.boolean(),
@@ -231,6 +232,7 @@ export default function RegistrationForm() {
         disasterManagement: 1,
         digitalTwins: 2,
         participatoryMapping: 3,
+        participatoryMappingChallenge: 4,
       },
       needsAccommodationHelp: false,
       joinWhatsApp: false,
@@ -300,11 +302,12 @@ export default function RegistrationForm() {
         values.workshopPreferences.disasterManagement,
         values.workshopPreferences.digitalTwins,
         values.workshopPreferences.participatoryMapping,
+        values.workshopPreferences.participatoryMappingChallenge,
       ];
       const uniquePreferences = new Set(preferences);
-      if (uniquePreferences.size !== 3) {
+      if (uniquePreferences.size !== 4) {
         const error =
-          "Invalid workshop preferences: Please assign unique ranks (1, 2, 3) to each workshop.";
+          "Invalid workshop preferences: Please assign unique ranks (1, 2, 3, 4) to each workshop.";
         setSubmitError(error);
 
         posthog?.capture("registration_validation_error", {
@@ -314,7 +317,8 @@ export default function RegistrationForm() {
 
         toast({
           title: "Invalid workshop preferences",
-          description: "Please assign unique ranks (1, 2, 3) to each workshop.",
+          description:
+            "Please assign unique ranks (1, 2, 3, 4) to each workshop.",
           variant: "destructive",
         });
         return;
@@ -808,7 +812,11 @@ export default function RegistrationForm() {
                           Challenge?
                         </FormLabel>
                         <FormDescription>
-                          <a href="https://drive.google.com/file/d/1vnhaJYTAdU8iFC78bMjdh6KV9PQMqLKl/view?usp=sharing" className="text-blue-600 hover:underline" target="_blank">
+                          <a
+                            href="https://drive.google.com/file/d/1vnhaJYTAdU8iFC78bMjdh6KV9PQMqLKl/view?usp=sharing"
+                            className="text-blue-600 hover:underline"
+                            target="_blank"
+                          >
                             See guidelines of participation here
                           </a>
                         </FormDescription>
@@ -1059,7 +1067,7 @@ export default function RegistrationForm() {
                 <p className="text-sm text-muted-foreground">
                   Please rank the following workshops in order of interest for
                   attendance on Saturday 18th. Assign a rank from 1 (most
-                  preferred) to 3 (least preferred).
+                  preferred) to 4 (least preferred).
                 </p>
 
                 <div className="space-y-4">
@@ -1100,8 +1108,9 @@ export default function RegistrationForm() {
                                   1 (Most preferred)
                                 </SelectItem>
                                 <SelectItem value="2">2</SelectItem>
-                                <SelectItem value="3">
-                                  3 (Least preferred)
+                                <SelectItem value="3">3</SelectItem>
+                                <SelectItem value="4">
+                                  4 (Least preferred)
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -1150,8 +1159,9 @@ export default function RegistrationForm() {
                                   1 (Most preferred)
                                 </SelectItem>
                                 <SelectItem value="2">2</SelectItem>
-                                <SelectItem value="3">
-                                  3 (Least preferred)
+                                <SelectItem value="3">3</SelectItem>
+                                <SelectItem value="4">
+                                  4 (Least preferred)
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -1200,8 +1210,68 @@ export default function RegistrationForm() {
                                   1 (Most preferred)
                                 </SelectItem>
                                 <SelectItem value="2">2</SelectItem>
-                                <SelectItem value="3">
-                                  3 (Least preferred)
+                                <SelectItem value="3">3</SelectItem>
+                                <SelectItem value="4">
+                                  4 (Least preferred)
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="workshopPreferences.participatoryMappingChallenge"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          <FormLabel className="text-base font-medium">
+                            Participatory Mapping and the Smart Lisbon
+                            Cartographic Challenge (Solenn Reeves Long)
+                          </FormLabel>
+                          <p className="text-sm text-muted-foreground">
+                            This workshop explores how participatory mapping can
+                            bring Erasmus Mundus students and the Lisbon
+                            community together to address urban challenges such
+                            as sustainability and inclusivity. Participants will
+                            take part in a hands-on session on “Mapping Smart
+                            and Inclusive Lisbon,” guided by Erasmus students
+                            acting as mentors and facilitators. A special
+                            community category in the Smart Lisbon Cartographic
+                            Challenge will invite locals to submit maps
+                            reflecting their own perspectives. Outcomes include
+                            at least 20 community-created maps, showcased at the
+                            GeoMundus conference and compiled into an
+                            open-access digital portfolio to ensure lasting
+                            visibility and impact.
+                          </p>
+                          <FormControl>
+                            <Select
+                              onValueChange={(value) => {
+                                const numValue = Number.parseInt(value);
+                                field.onChange(numValue);
+                                trackFieldInteraction(
+                                  "workshopPreferences.participatoryMappingChallenge",
+                                  numValue,
+                                );
+                              }}
+                              defaultValue={field.value?.toString()}
+                            >
+                              <SelectTrigger className="w-48">
+                                <SelectValue placeholder="Select rank" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1">
+                                  1 (Most preferred)
+                                </SelectItem>
+                                <SelectItem value="2">2</SelectItem>
+                                <SelectItem value="3">3</SelectItem>
+                                <SelectItem value="4">
+                                  4 (Least preferred)
                                 </SelectItem>
                               </SelectContent>
                             </Select>
