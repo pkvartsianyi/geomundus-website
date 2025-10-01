@@ -15,5 +15,6 @@ sanity.cli.ts
 schema.json
 website.zip
 public_html_legacy
+data
 
 certificates

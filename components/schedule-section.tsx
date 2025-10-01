@@ -13,10 +13,14 @@ interface ScheduleSectionProps {
 
 export default function ScheduleSection({ schedule }: ScheduleSectionProps) {
   const [activeTab, setActiveTab] = useState<string>(
-    schedule.days[0]?.date || "",
+    schedule.days?.[0]?.date || "",
   );
 
-  const getEventTypeColor = (type: string) => {
+  const getEventTypeColor = (type: string | null | undefined) => {
+    if (!type) {
+      return "bg-emerald-100 text-emerald-800 hover:bg-emerald-200";
+    }
+
     switch (type) {
       case "keynote":
         return "bg-amber-100 text-amber-800 hover:bg-amber-200";
@@ -33,7 +37,8 @@ export default function ScheduleSection({ schedule }: ScheduleSectionProps) {
     }
   };
 
-  const formatEventDate = (dateString: string) => {
+  const formatEventDate = (dateString: string | undefined) => {
+    if (!dateString) return "";
     try {
       const date = new Date(dateString);
       return format(date, "EEEE, MMMM d, yyyy");
@@ -42,21 +47,36 @@ export default function ScheduleSection({ schedule }: ScheduleSectionProps) {
     }
   };
 
+  if (!schedule.days || schedule.days.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">No schedule available.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-2 mb-8">
           {schedule.days.map((day) => (
-            <TabsTrigger key={day.date} value={day.date}>
+            <TabsTrigger
+              key={day.date || "unknown"}
+              value={day.date || "unknown"}
+            >
               {formatEventDate(day.date)}
             </TabsTrigger>
           ))}
         </TabsList>
 
         {schedule.days.map((day) => (
-          <TabsContent key={day.date} value={day.date} className="space-y-4">
-            {day.events.map((event, index) => (
-              <Card key={index} className="overflow-hidden">
+          <TabsContent
+            key={day.date || "unknown"}
+            value={day.date || "unknown"}
+            className="space-y-4"
+          >
+            {day.events?.map((event, index) => (
+              <Card key={`${day.date}-${index}`} className="overflow-hidden">
                 <CardContent className="p-0">
                   <div className="flex flex-col md:flex-row">
                     <div className="bg-gray-50 p-4 md:w-1/4 flex flex-col justify-center items-center md:items-start">
@@ -66,12 +86,14 @@ export default function ScheduleSection({ schedule }: ScheduleSectionProps) {
                           {event.location}
                         </div>
                       )}
-                      <Badge
-                        className={`mt-2 ${getEventTypeColor(event.type)}`}
-                      >
-                        {event.type.charAt(0).toUpperCase() +
-                          event.type.slice(1)}
-                      </Badge>
+                      {event.type && (
+                        <Badge
+                          className={`mt-2 ${getEventTypeColor(event.type)}`}
+                        >
+                          {event.type.charAt(0).toUpperCase() +
+                            event.type.slice(1)}
+                        </Badge>
+                      )}
                     </div>
                     <div className="p-4 md:w-3/4">
                       <h3 className="text-lg font-bold">{event.title}</h3>

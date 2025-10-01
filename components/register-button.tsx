@@ -22,7 +22,7 @@ export function RegisterButton({
       variant="outline"
       className="border-white  bg-emerald-700 text-white hover:bg-white/20 disabled cursor-not-allowed"
     >
-      <Link href="#">Registration Opens Soon</Link>
+      <Link href="#">Registration is closed</Link>
     </Button>
   );
 }

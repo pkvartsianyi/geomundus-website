@@ -23,14 +23,63 @@ import YouTubeSection from "@/components/video-section";
 import { SocialLinks } from "@/components/socialLinks";
 import { FeaturedResource } from "@/components/featured-resources";
 
+// Extended types for the current conference query result
+interface KeynoteSpeaker {
+  name?: string;
+  organization?: string;
+  topic?: string;
+  imageUrl?: string;
+  websiteUrl?: string;
+}
+
+interface ConferenceAbout {
+  title?: string;
+  content?: any;
+}
+
+interface FocusTopic {
+  title?: string;
+  description?: any;
+  topics?: string[];
+}
+
+interface Partner {
+  name?: string;
+  logoUrl?: string;
+  websiteUrl?: string;
+}
+
+interface Sponsor {
+  name?: string;
+  logoUrl?: string;
+  websiteUrl?: string;
+  tier?: string;
+}
+
+interface CurrentConference extends Conference {
+  about?: ConferenceAbout;
+  focusTopic?: FocusTopic;
+  keynoteSpeakers?: KeynoteSpeaker[];
+  workshopLeaders?: KeynoteSpeaker[];
+  partners?: Partner[];
+  sponsors?: Sponsor[];
+}
+
+// Helper function to get image URL from Sanity image object
+function getImageUrl(image: any): string {
+  if (typeof image === "string") return image;
+  return image?.asset?.url || "/placeholder.svg";
+}
+
 export default async function Home() {
   const siteSettings = await cachedClient<SiteSettings>(
     siteSettingsQuery.query,
   );
-  const currentConference = await cachedClient<Conference>(
+  const currentConference = await cachedClient<CurrentConference>(
     currentConferenceQuery.query,
   );
   const schedule = await cachedClient<Schedule>(scheduleQuery.query);
+
   const faqs = await cachedClient<Faq[]>(faqsQuery.query);
   const currentYear = await cachedClient<Conference>(
     currentConferenceYearQuery.query,
@@ -57,7 +106,7 @@ export default async function Home() {
             <div className="mb-8">
               {siteSettings?.logo && (
                 <Image
-                  src={siteSettings.logo || "/placeholder.svg"}
+                  src={getImageUrl(siteSettings.logo)}
                   alt={siteSettings.title || "GeoMundus Logo"}
                   width={300}
                   height={150}
@@ -238,7 +287,6 @@ export default async function Home() {
                     websiteUrl={speaker.websiteUrl}
                     keynoteTitle={speaker.topic}
                     keynoteDescription=""
-                    _id={""}
                   />
                 ))}
               </div>
@@ -280,7 +328,6 @@ export default async function Home() {
                     websiteUrl={leader.websiteUrl}
                     keynoteTitle={leader.topic}
                     keynoteDescription=""
-                    _id={""}
                   />
                 ))}
               </div>
@@ -332,8 +379,8 @@ export default async function Home() {
             </div>
 
             <SponsorSection
-              sponsors={currentConference.sponsors}
-              partners={currentConference.partners}
+              sponsors={currentConference.sponsors as any}
+              partners={currentConference.partners as any}
             />
           </div>
         </section>
@@ -373,9 +420,11 @@ export default async function Home() {
         </section>
       )}
 
-      <section className="py-16 md:py-24 bg-white">
-        <FeaturedResource link={siteSettings?.arrivalInfoPdfUrl} />
-      </section>
+      {siteSettings?.arrivalInfoPdfUrl && (
+        <section className="py-16 md:py-24 bg-white">
+          <FeaturedResource link={siteSettings.arrivalInfoPdfUrl} />
+        </section>
+      )}
 
       {/* Location & Contact */}
       {siteSettings && (
