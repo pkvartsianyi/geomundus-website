@@ -17,12 +17,12 @@ export function RegisterButton({
     </Button>
   ) : (
     <Button
-      asChild
       size="lg"
       variant="outline"
-      className="border-white  bg-emerald-700 text-white hover:bg-white/20 disabled cursor-not-allowed"
+      className="border-white bg-gray-500 text-white cursor-not-allowed"
+      disabled
     >
-      <Link href="#">Registration is closed</Link>
+      Registration Closed
     </Button>
   );
 }
