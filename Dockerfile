@@ -1,6 +1,5 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
-# Install dependencies only when needed
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -13,23 +12,16 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-# Build stage with build-time secrets
 FROM base AS builder
 WORKDIR /app
 
 # Add build-time args
 ARG SANITY_PROJECT_ID
 ARG SANITY_DATASET
-ARG SANITY_AUTH_TOKEN
-ARG POSTHOG_KEY
 
 # Promote args to env so Next.js can read them
 ENV SANITY_PROJECT_ID=$SANITY_PROJECT_ID
 ENV SANITY_DATASET=$SANITY_DATASET
-ENV SANITY_AUTH_TOKEN=$SANITY_AUTH_TOKEN
-ENV NEXT_PUBLIC_SANITY_PROJECT_ID=$SANITY_PROJECT_ID
-ENV NEXT_PUBLIC_SANITY_DATASET=$SANITY_DATASET
-ENV NEXT_PUBLIC_POSTHOG_KEY=$POSTHOG_KEY
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
