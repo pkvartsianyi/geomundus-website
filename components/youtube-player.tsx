@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
 import { cn } from "@/lib/utils";
 import { Play } from "lucide-react";
 
@@ -141,7 +141,7 @@ export default function ReactPlayerWrapper({
         {isClient ? (
           <ReactPlayer
             ref={playerRef}
-            url={url}
+            src={url}
             className="react-player"
             width={width}
             height={height}
@@ -159,14 +159,10 @@ export default function ReactPlayerWrapper({
             playIcon={renderPlayIcon()}
             config={{
               youtube: {
-                playerVars: {
-                  modestbranding: 1, // Removes YouTube logo in the control bar
-                  rel: 0, // Prevents related videos from other channels
-                  showinfo: 0, // Deprecated, but doesn't hurt
-                  iv_load_policy: 3, // Hides video annotations
-                  fs: 0, // Hides fullscreen button (optional)
-                  disablekb: 1, // Disables keyboard controls (optional)
-                },
+                rel: 0, // Prevents related videos from other channels
+                iv_load_policy: 3, // Hides video annotations
+                fs: 0, // Hides fullscreen button (optional)
+                disablekb: 1, // Disables keyboard controls (optional)
               },
             }}
           />
